@@ -28,6 +28,8 @@ namespace TA.Inventory
                 playerSlots[i].slotIndex = i;
             }
             bagOpened = bagUI.activeInHierarchy;
+
+            UpdateSlotHighlight(-1);
         }
 
         private void Update()
@@ -59,11 +61,34 @@ namespace TA.Inventory
             }
         }
 
+        /// <summary>
+        /// 打开关闭背包UI,Button调用事件
+        /// </summary>
         public void OpenBagUI()
         {
             bagOpened = !bagOpened;
 
             bagUI.SetActive(bagOpened);
+        }
+
+        /// <summary>
+        /// 更新Slot高亮显示
+        /// </summary>
+        /// <param name="index">序号</param>
+        public void UpdateSlotHighlight(int index)
+        {
+            foreach (var slot in playerSlots)
+            {
+                if (slot.isSelected && slot.slotIndex == index)
+                {
+                    slot.slotHighlight.gameObject.SetActive(true);
+                }
+                else
+                {
+                    slot.isSelected = false;
+                    slot.slotHighlight.gameObject.SetActive(false);
+                }
+            }
         }
     }
 }
