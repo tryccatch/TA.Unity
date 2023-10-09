@@ -8,7 +8,7 @@ namespace TA.Inventory
 
         private SpriteRenderer spriteRenderer;
         private BoxCollider2D coll;
-        private ItemDetails itemDetails;
+        public ItemDetails itemDetails;
 
         private void Awake()
         {

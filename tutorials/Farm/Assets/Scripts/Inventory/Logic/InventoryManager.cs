@@ -15,5 +15,19 @@ namespace TA.Inventory
         {
             return itemDataList_SO.itemDetailsList.Find(i => i.itemID == ID);
         }
+
+        /// <summary>
+        /// 添加物品到Player背包
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="toDestroy">是否要销毁物品</param>
+        public void AddItem(Item item, bool toDestroy)
+        {
+            Debug.Log(item.itemDetails.itemID + "\tName:" + item.itemDetails.itemName);
+            if (toDestroy)
+            {
+                Destroy(item.gameObject);
+            }
+        }
     }
 }
