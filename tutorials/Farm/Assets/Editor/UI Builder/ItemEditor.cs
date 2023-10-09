@@ -1,10 +1,10 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEditor.UIElements;
 using System.Collections.Generic;
 using System;
-
+using UnityEditor.UIElements;
+using System.Linq;
 
 public class ItemEditor : EditorWindow
 {
@@ -15,6 +15,12 @@ public class ItemEditor : EditorWindow
     // 获取VisualElement
     private ListView itemListView;
 
+    private ScrollView itemDetailsSection;
+    private ItemDetails activeItem;
+
+    // 默认预览图片
+    private Sprite defaultIcon;
+    private VisualElement iconPreview;
 
     [MenuItem("TA/ItemEditor")]
     public static void ShowExample()
@@ -47,9 +53,13 @@ public class ItemEditor : EditorWindow
         // 拿到模板数据
         itemRowTemplate = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Editor/UI Builder/ItemRowTemplate.uxml");
 
+        // 默认Icon图片
+        defaultIcon = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/M Studio/Art/Items/Icons/icon_M.png");
+
         // 变量赋值
         itemListView = root.Q<VisualElement>("ItemList").Q<ListView>("ListView");
-
+        itemDetailsSection = root.Q<ScrollView>("ItemDetails");
+        iconPreview = itemDetailsSection.Q<VisualElement>("Icon");
         // 加载数据
         LoadDataBase();
 
@@ -87,9 +97,50 @@ public class ItemEditor : EditorWindow
             }
         };
 
-        // itemListView.fixedItemHeight = 60;
+        itemListView.fixedItemHeight = 60;
         itemListView.itemsSource = itemList;
         itemListView.makeItem = makeItem;
         itemListView.bindItem = bindItem;
+
+        itemListView.onSelectionChange += OnListSelectionChange;
+
+        // 右侧信息面板不可见
+        itemDetailsSection.visible = false;
+    }
+
+    private void OnListSelectionChange(IEnumerable<object> selectedItem)
+    {
+        activeItem = (ItemDetails)selectedItem.First();
+        GetItemDetails();
+        itemDetailsSection.visible = true;
+    }
+
+    private void GetItemDetails()
+    {
+        itemDetailsSection.MarkDirtyRepaint();
+
+        itemDetailsSection.Q<IntegerField>("ItemID").value = activeItem.itemID;
+        itemDetailsSection.Q<IntegerField>("ItemID").RegisterValueChangedCallback(evt =>
+        {
+            activeItem.itemID = evt.newValue;
+        });
+
+        itemDetailsSection.Q<TextField>("ItemName").value = activeItem.itemName;
+        itemDetailsSection.Q<TextField>("ItemName").RegisterValueChangedCallback(evt =>
+        {
+            activeItem.itemName = evt.newValue;
+            itemListView.Rebuild();
+        });
+
+        iconPreview.style.backgroundImage = activeItem.itemIcon == null ? defaultIcon.texture : activeItem.itemIcon.texture;
+        itemDetailsSection.Q<ObjectField>("ItemIcon").value = activeItem.itemIcon;
+        itemDetailsSection.Q<ObjectField>("ItemIcon").RegisterValueChangedCallback(evt =>
+        {
+            Sprite newIcon = evt.newValue as Sprite;
+            activeItem.itemIcon = newIcon;
+
+            iconPreview.style.backgroundImage = newIcon == null ? defaultIcon.texture : newIcon.texture;
+            itemListView.Rebuild();
+        });
     }
 }
