@@ -7,3 +7,8 @@ public enum ItemType
     // 被割杂草
     ReapableScenery,
 }
+
+public enum SlotType
+{
+    Bag, Box, Shop,
+}
