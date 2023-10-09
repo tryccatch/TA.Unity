@@ -174,6 +174,14 @@ public class ItemEditor : EditorWindow
             Sprite newIcon = evt.newValue as Sprite;
             activeItem.itemIcon = newIcon;
 
+            if (newIcon != null && (activeItem.itemName == null || activeItem.itemName == "NEW ITEM"))
+            {
+                var names = newIcon.name.Split('_');
+                if (names.Length > 1)
+                    activeItem.itemName = names[1];
+                itemDetailsSection.Q<TextField>("ItemName").value = activeItem.itemName;
+            }
+
             iconPreview.style.backgroundImage = newIcon == null ? defaultIcon.texture : newIcon.texture;
             itemListView.Rebuild();
         });
