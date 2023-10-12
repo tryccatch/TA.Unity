@@ -73,6 +73,11 @@ namespace TA.Inventory
             inventoryUI.UpdateSlotHighlight(slotIndex);
 
             // slotHighlight.gameObject.SetActive(isSelected);
+            if (slotType == SlotType.Bag)
+            {
+                // 通知物品被选中状态和信息
+                EventHandler.CallItemSelectedEvent(itemDetails, isSelected);
+            }
         }
 
         public void OnBeginDrag(PointerEventData eventData)

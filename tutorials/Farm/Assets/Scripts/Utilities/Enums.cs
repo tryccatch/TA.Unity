@@ -17,3 +17,13 @@ public enum InventoryLocation
 {
     Player, Box, Shop
 }
+
+public enum PartType
+{
+    None, Carry, Hoe, Break,
+}
+
+public enum PartName
+{
+    Body, Hair, Arm, Tool,
+}
