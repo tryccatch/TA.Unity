@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace TA.Inventory
 {
     public class InventoryUI : MonoBehaviour
     {
+        [Header("拖拽图片")]
+        public Image dragItem;
         [Header("玩家背包UI")]
         [SerializeField] private GameObject bagUI;
         private bool bagOpened;
@@ -30,6 +33,9 @@ namespace TA.Inventory
             bagOpened = bagUI.activeInHierarchy;
 
             UpdateSlotHighlight(-1);
+
+            // 物品拖拽图标默认关闭
+            dragItem.enabled = false;
         }
 
         private void Update()

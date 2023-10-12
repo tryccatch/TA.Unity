@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace TA.Inventory
 {
-    public class SlotUI : MonoBehaviour, IPointerClickHandler
+    public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [Header("组件获取")]
         [SerializeField] private Image slotImage;
@@ -71,6 +71,29 @@ namespace TA.Inventory
             inventoryUI.UpdateSlotHighlight(slotIndex);
 
             // slotHighlight.gameObject.SetActive(isSelected);
+        }
+
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            if (itemAmount != 0)
+            {
+                inventoryUI.dragItem.enabled = true;
+                inventoryUI.dragItem.sprite = slotImage.sprite;
+                inventoryUI.dragItem.SetNativeSize();
+                isSelected = true;
+                inventoryUI.UpdateSlotHighlight(slotIndex);
+            }
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            inventoryUI.dragItem.transform.position = Input.mousePosition;
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            inventoryUI.dragItem.enabled = false;
+            Debug.Log(eventData.pointerCurrentRaycast.gameObject);
         }
     }
 }
