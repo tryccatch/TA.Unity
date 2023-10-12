@@ -6,6 +6,8 @@ namespace TA.Inventory
 {
     public class InventoryUI : MonoBehaviour
     {
+        public ItemTooltip itemTooltip;
+
         [Header("拖拽图片")]
         public Image dragItem;
         [Header("玩家背包UI")]
