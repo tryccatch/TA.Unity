@@ -54,7 +54,7 @@ public class ItemEditor : EditorWindow
         itemRowTemplate = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Editor/UI Builder/ItemRowTemplate.uxml");
 
         // 默认Icon图片
-        defaultIcon = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/M Studio/Art/Items/Icons/icon_M.png");
+        defaultIcon = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/TA/Art/Items/Icons/icon_M.png");
 
         // 变量赋值
         itemListView = root.Q<VisualElement>("ItemList").Q<ListView>("ListView");

@@ -113,6 +113,7 @@ namespace TA.Inventory
 
                 inventoryUI.UpdateSlotHighlight(-1);
             }
+            /* 
             else    // 测试扔在地上
             {
                 if (itemDetails.canDropped)
@@ -123,6 +124,7 @@ namespace TA.Inventory
                     EventHandler.CallInstantiateItemInScene(itemDetails.itemID, pos);
                 }
             }
+            // */
         }
     }
 }
