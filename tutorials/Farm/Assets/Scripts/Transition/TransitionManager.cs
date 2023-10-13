@@ -47,9 +47,9 @@ namespace TA.Transition
         /// <returns></returns>
         private IEnumerator Transition(string sceneName, Vector3 targetPosition)
         {
-            EventHandler.CallBeforeSceneUnloadEvent();
-
             yield return Fade(1);
+
+            EventHandler.CallBeforeSceneUnloadEvent();
 
             yield return SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
 
@@ -58,9 +58,10 @@ namespace TA.Transition
             // 移动人物坐标
             EventHandler.CallMoveToPositionEvent(targetPosition);
 
+            EventHandler.CallAfterSceneLoadedEvent();
+
             yield return Fade(0);
 
-            EventHandler.CallAfterSceneLoadedEvent();
         }
 
         /// <summary>
