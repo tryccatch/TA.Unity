@@ -4,6 +4,7 @@ namespace TA.Inventory
 {
     public class Item : MonoBehaviour
     {
+        [ItemID]
         public int itemID;
 
         private SpriteRenderer spriteRenderer;

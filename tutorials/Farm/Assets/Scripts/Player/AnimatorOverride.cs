@@ -61,7 +61,7 @@ public class AnimatorOverride : MonoBehaviour
         {
             if (currentType == PartType.Carry)
             {
-                holdItem.sprite = itemDetails.itemOnWorldSprite;
+                holdItem.sprite = itemDetails.itemOnWorldSprite != null ? itemDetails.itemOnWorldSprite : itemDetails.itemIcon;
                 holdItem.enabled = true;
             }
             else

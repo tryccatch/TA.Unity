@@ -84,7 +84,7 @@ namespace TA.Inventory
         /// </summary>
         private void RecreateAllSceneItems()
         {
-            List<SceneItem> currentSceneItems = new List<SceneItem>();
+            List<SceneItem> currentSceneItems;
 
             if (sceneItemDict.TryGetValue(SceneManager.GetActiveScene().name, out currentSceneItems))
             {

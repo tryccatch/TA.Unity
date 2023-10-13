@@ -118,8 +118,9 @@ public class ItemEditor : EditorWindow
         {
             if (itemList.Count > 0)
             {
-                if (itemList[i].itemIcon != null)
-                    e.Q<VisualElement>("Icon").style.backgroundImage = itemList[i].itemIcon.texture;
+                // if (itemList[i].itemIcon != null)
+                // e.Q<VisualElement>("Icon").style.backgroundImage = itemList[i].itemIcon.texture;
+                e.Q<VisualElement>("Icon").style.backgroundImage = itemList[i].itemIcon == null ? null : itemList[i].itemIcon.texture;
                 e.Q<Label>("Name").text = itemList[i] == null ? "NO ITEM" : itemList[i].itemName;
             }
         };
@@ -167,7 +168,8 @@ public class ItemEditor : EditorWindow
             activeItem.itemType = (ItemType)evt.newValue;
         });
 
-        iconPreview.style.backgroundImage = activeItem.itemIcon == null ? defaultIcon.texture : activeItem.itemIcon.texture;
+        // iconPreview.style.backgroundImage = activeItem.itemIcon == null ? defaultIcon.texture : activeItem.itemIcon.texture;
+        iconPreview.style.backgroundImage = activeItem.itemIcon == null ? null : activeItem.itemIcon.texture;
         itemDetailsSection.Q<ObjectField>("ItemIcon").value = activeItem.itemIcon;
         itemDetailsSection.Q<ObjectField>("ItemIcon").RegisterValueChangedCallback(evt =>
         {
@@ -182,7 +184,8 @@ public class ItemEditor : EditorWindow
                 itemDetailsSection.Q<TextField>("ItemName").value = activeItem.itemName;
             }
 
-            iconPreview.style.backgroundImage = newIcon == null ? defaultIcon.texture : newIcon.texture;
+            // iconPreview.style.backgroundImage = newIcon == null ? defaultIcon.texture : newIcon.texture;
+            iconPreview.style.backgroundImage = newIcon == null ? null : newIcon.texture;
             itemListView.Rebuild();
         });
 
