@@ -33,4 +33,10 @@ public static class EventHandler
     {
         GameDateEvent?.Invoke(hour, day, month, year, season);
     }
+
+    public static event Action<string, Vector3> TransitionEvent;
+    public static void CallTransitionEvent(string sceneName, Vector3 pos)
+    {
+        TransitionEvent?.Invoke(sceneName, pos);
+    }
 }
