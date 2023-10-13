@@ -6,6 +6,7 @@ namespace TA.Transition
 {
     public class TransitionManager : MonoBehaviour
     {
+        [SceneName]
         public string startScene = string.Empty;
 
         private void OnEnable()
