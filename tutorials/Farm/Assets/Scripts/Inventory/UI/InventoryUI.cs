@@ -18,12 +18,14 @@ namespace TA.Inventory
 
         private void OnEnable()
         {
-            EventHandler.UpdateInventoryUI += OnUpdateInventoryUI;
+            EventHandler.UpdateInventoryUIEvent += OnUpdateInventoryUI;
+            EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
         }
 
         private void OnDisable()
         {
-            EventHandler.UpdateInventoryUI -= OnUpdateInventoryUI;
+            EventHandler.UpdateInventoryUIEvent -= OnUpdateInventoryUI;
+            EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
         }
 
         private void Start()
@@ -46,6 +48,11 @@ namespace TA.Inventory
             {
                 OpenBagUI();
             }
+        }
+
+        private void OnBeforeSceneUnloadEvent()
+        {
+            UpdateSlotHighlight(-1);
         }
 
         private void OnUpdateInventoryUI(InventoryLocation location, List<InventoryItem> list)
@@ -82,7 +89,7 @@ namespace TA.Inventory
         /// <summary>
         /// 更新Slot高亮显示
         /// </summary>
-        /// <param name="index">序号</param>
+        /// <param name="index">序号(-1:取消高亮)</param>
         public void UpdateSlotHighlight(int index)
         {
             foreach (var slot in playerSlots)

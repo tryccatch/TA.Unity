@@ -12,16 +12,49 @@ public class Player : MonoBehaviour
 
     private Animator[] animators;
     private bool isMoving;
+    private bool inputDisable;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animators = GetComponentsInChildren<Animator>();
+
+        transform.position = Vector3.zero;
+    }
+
+    private void OnEnable()
+    {
+        EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
+        EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
+        EventHandler.MoveToPositionEvent += OnMoveToPositionEvent;
+    }
+
+    private void OnDisable()
+    {
+        EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
+        EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+        EventHandler.MoveToPositionEvent -= OnMoveToPositionEvent;
+    }
+
+    private void OnBeforeSceneUnloadEvent()
+    {
+        inputDisable = true;
+    }
+
+    private void OnAfterSceneLoadedEvent()
+    {
+        inputDisable = false;
+    }
+
+    private void OnMoveToPositionEvent(Vector3 targetPosition)
+    {
+        transform.position = targetPosition;
     }
 
     private void Update()
     {
-        PlayerInput();
+        if (!inputDisable)
+            PlayerInput();
         SwitchAnimation();
     }
 

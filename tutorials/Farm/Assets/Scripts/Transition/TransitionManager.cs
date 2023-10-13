@@ -20,6 +20,11 @@ namespace TA.Transition
 
         private void Start()
         {
+            for (int i = SceneManager.sceneCount - 1; i > 1; i--)
+            {
+                SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i));
+            }
+
             StartCoroutine(LoadSceneSetActive(startScene));
         }
 
@@ -36,9 +41,16 @@ namespace TA.Transition
         /// <returns></returns>
         private IEnumerator Transition(string sceneName, Vector3 targetPosition)
         {
+            EventHandler.CallBeforeSceneUnloadEvent();
+
             yield return SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
 
             yield return LoadSceneSetActive(sceneName);
+
+            // 移动人物坐标
+            EventHandler.CallMoveToPositionEvent(targetPosition);
+
+            EventHandler.CallAfterSceneLoadedEvent();
         }
 
         /// <summary>

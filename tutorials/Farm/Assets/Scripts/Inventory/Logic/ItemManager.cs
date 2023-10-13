@@ -8,18 +8,27 @@ namespace TA.Inventory
         private Transform itemParent;
         private void OnEnable()
         {
-            EventHandler.InstantiateItemInScene += OnInstantiateItemInScene;
+            EventHandler.InstantiateItemInSceneEvent += OnInstantiateItemInScene;
+            EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
         }
 
         private void OnDisable()
         {
-            EventHandler.InstantiateItemInScene -= OnInstantiateItemInScene;
+            EventHandler.InstantiateItemInSceneEvent -= OnInstantiateItemInScene;
+            EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
         }
 
+        private void OnAfterSceneLoadedEvent()
+        {
+            itemParent = GameObject.FindWithTag("ItemParent").transform;
+        }
+
+        /* 
         private void Start()
         {
             itemParent = GameObject.FindWithTag("ItemParent").transform;
         }
+        // */
 
         private void OnInstantiateItemInScene(int ID, Vector3 pos)
         {

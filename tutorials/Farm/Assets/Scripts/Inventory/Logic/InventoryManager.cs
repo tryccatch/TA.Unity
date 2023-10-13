@@ -11,7 +11,7 @@ namespace TA.Inventory
 
         private void Start()
         {
-            EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemList);
+            EventHandler.CallUpdateInventoryUIEvent(InventoryLocation.Player, playerBag.itemList);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace TA.Inventory
             }
 
             // 更新UI
-            EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemList);
+            EventHandler.CallUpdateInventoryUIEvent(InventoryLocation.Player, playerBag.itemList);
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace TA.Inventory
                 playerBag.itemList[fromIndex] = new InventoryItem();
             }
 
-            EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemList);
+            EventHandler.CallUpdateInventoryUIEvent(InventoryLocation.Player, playerBag.itemList);
         }
     }
 }

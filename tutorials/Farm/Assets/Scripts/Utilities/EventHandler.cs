@@ -4,16 +4,16 @@ using UnityEngine;
 
 public static class EventHandler
 {
-    public static event Action<InventoryLocation, List<InventoryItem>> UpdateInventoryUI;
-    public static void CallUpdateInventoryUI(InventoryLocation location, List<InventoryItem> list)
+    public static event Action<InventoryLocation, List<InventoryItem>> UpdateInventoryUIEvent;
+    public static void CallUpdateInventoryUIEvent(InventoryLocation location, List<InventoryItem> list)
     {
-        UpdateInventoryUI?.Invoke(location, list);
+        UpdateInventoryUIEvent?.Invoke(location, list);
     }
 
-    public static event Action<int, Vector3> InstantiateItemInScene;
-    public static void CallInstantiateItemInScene(int ID, Vector3 pos)
+    public static event Action<int, Vector3> InstantiateItemInSceneEvent;
+    public static void CallInstantiateItemInSceneEvent(int ID, Vector3 pos)
     {
-        InstantiateItemInScene?.Invoke(ID, pos);
+        InstantiateItemInSceneEvent?.Invoke(ID, pos);
     }
 
     public static event Action<ItemDetails, bool> ItemSelectedEvent;
@@ -38,5 +38,23 @@ public static class EventHandler
     public static void CallTransitionEvent(string sceneName, Vector3 pos)
     {
         TransitionEvent?.Invoke(sceneName, pos);
+    }
+
+    public static event Action BeforeSceneUnloadEvent;
+    public static void CallBeforeSceneUnloadEvent()
+    {
+        BeforeSceneUnloadEvent?.Invoke();
+    }
+
+    public static event Action AfterSceneLoadedEvent;
+    public static void CallAfterSceneLoadedEvent()
+    {
+        AfterSceneLoadedEvent?.Invoke();
+    }
+
+    public static event Action<Vector3> MoveToPositionEvent;
+    public static void CallMoveToPositionEvent(Vector3 targetPosition)
+    {
+        MoveToPositionEvent?.Invoke(targetPosition);
     }
 }
