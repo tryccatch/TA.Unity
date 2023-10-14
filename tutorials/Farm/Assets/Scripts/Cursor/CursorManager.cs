@@ -19,7 +19,7 @@ public class CursorManager : MonoBehaviour
     private Vector3Int mouseGridPos;
 
     private bool cursorEnable;
-    private bool currentPositionValid;
+    private bool cursorPositionValid;
 
     private ItemDetails currentItem;
 
@@ -59,10 +59,20 @@ public class CursorManager : MonoBehaviour
         {
             SetCursorSprite(currentSprite);
             CheckCursorValid();
+            CheckPlayerInput();
         }
         else
         {
             SetCursorSprite(normal);
+        }
+    }
+
+    private void CheckPlayerInput()
+    {
+        if (Input.GetMouseButtonDown(0) && cursorPositionValid)
+        {
+            // 执行方法
+            EventHandler.CallMouseClickedEvent(mouseWorldPos, currentItem);
         }
     }
 
@@ -93,7 +103,7 @@ public class CursorManager : MonoBehaviour
     /// </summary>
     private void SetCursorValid()
     {
-        currentPositionValid = true;
+        cursorPositionValid = true;
         cursorImage.color = new Color(1, 1, 1, 1);
     }
 
@@ -102,7 +112,7 @@ public class CursorManager : MonoBehaviour
     /// </summary>
     private void SetCursorInValid()
     {
-        currentPositionValid = false;
+        cursorPositionValid = false;
         cursorImage.color = new Color(1, 0, 0, 0.5f);
     }
     #endregion

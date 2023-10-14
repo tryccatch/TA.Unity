@@ -28,7 +28,8 @@ namespace TA.Inventory
         private void Start()
         {
             isSelected = false;
-            if (itemDetails.itemID == 0)
+            // if (itemDetails.itemID == 0)
+            if (itemDetails == null)
             {
                 UpdateEmptySlot();
             }
@@ -43,9 +44,9 @@ namespace TA.Inventory
         {
             itemDetails = item;
             slotImage.sprite = item.itemIcon;
+            slotImage.enabled = true;
             itemAmount = amount;
             amountText.text = amount.ToString();
-            slotImage.enabled = true;
             button.interactable = true;
         }
 
@@ -57,8 +58,11 @@ namespace TA.Inventory
             if (isSelected)
             {
                 isSelected = false;
-            }
 
+                inventoryUI.UpdateSlotHighlight(-1);
+                EventHandler.CallItemSelectedEvent(itemDetails, isSelected);
+            }
+            itemDetails = null;
             slotImage.enabled = false;
             itemAmount = 0;
             amountText.text = string.Empty;
@@ -67,7 +71,7 @@ namespace TA.Inventory
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (itemAmount == 0) return;
+            if (itemDetails == null) return;
             isSelected = !isSelected;
 
             inventoryUI.UpdateSlotHighlight(slotIndex);
@@ -82,7 +86,7 @@ namespace TA.Inventory
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (itemAmount != 0)
+            if (itemDetails != null)
             {
                 inventoryUI.dragItem.enabled = true;
                 inventoryUI.dragItem.sprite = slotImage.sprite;

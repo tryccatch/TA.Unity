@@ -9,7 +9,21 @@ namespace TA.Map
         [Header("地图信息")]
         public List<MapData_SO> mapDataList;
 
+        private Grid currentGrid;
+
         private Dictionary<string, TileDetails> tileDetailsDict = new Dictionary<string, TileDetails>();
+
+        private void OnEnable()
+        {
+            EventHandler.ExecuteActionAfterAnimation += OnExecuteActionAfterAnimation;
+            EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
+        }
+
+        private void OnDisable()
+        {
+            EventHandler.ExecuteActionAfterAnimation -= OnExecuteActionAfterAnimation;
+            EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+        }
 
         private void Start()
         {
@@ -17,6 +31,11 @@ namespace TA.Map
             {
                 InitTileDetailsDict(mapData);
             }
+        }
+
+        private void OnAfterSceneLoadedEvent()
+        {
+            currentGrid = FindObjectOfType<Grid>();
         }
 
         private void InitTileDetailsDict(MapData_SO mapData)
@@ -83,6 +102,28 @@ namespace TA.Map
         {
             string key = mouseGridPos.x + "x" + mouseGridPos.y + "y" + SceneManager.GetActiveScene().name;
             return GetTileDetails(key);
+        }
+
+        /// <summary>
+        /// 执行实际工具或物品功能
+        /// </summary>
+        /// <param name="mouseWorldPos">鼠标坐标</param>
+        /// <param name="itemDetails">物品信息</param>
+        private void OnExecuteActionAfterAnimation(Vector3 mouseWorldPos, ItemDetails itemDetails)
+        {
+            var mouseGridPos = currentGrid.WorldToCell(mouseWorldPos);
+            var currentTile = GetTileDetailsOnMousePosition(mouseGridPos);
+
+            if (currentTile != null)
+            {
+                // WORKFLOW:物品使用实际功能
+                switch (itemDetails.itemType)
+                {
+                    case ItemType.Commodity:
+                        EventHandler.CallDropItemEvent(itemDetails.itemID, mouseWorldPos);
+                        break;
+                }
+            }
         }
     }
 }

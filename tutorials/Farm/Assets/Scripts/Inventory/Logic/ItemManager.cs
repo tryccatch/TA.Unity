@@ -17,6 +17,7 @@ namespace TA.Inventory
             EventHandler.InstantiateItemInSceneEvent += OnInstantiateItemInScene;
             EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
             EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
+            EventHandler.DropItemEvent += OnDropItemEvent;
         }
 
         private void OnDisable()
@@ -24,6 +25,7 @@ namespace TA.Inventory
             EventHandler.InstantiateItemInSceneEvent -= OnInstantiateItemInScene;
             EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
             EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+            EventHandler.DropItemEvent -= OnDropItemEvent;
         }
 
         private void OnBeforeSceneUnloadEvent()
@@ -44,10 +46,21 @@ namespace TA.Inventory
         }
         // */
 
+        /// <summary>
+        /// 在指定坐标位置生成物品
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <param name="pos"></param>
         private void OnInstantiateItemInScene(int ID, Vector3 pos)
         {
             var item = Instantiate(itemPrefab, pos, Quaternion.identity, itemParent);
             item.itemID = ID;
+        }
+
+        private void OnDropItemEvent(int ID, Vector3 pos)
+        {
+            // TODO:扔东西的效果
+            OnInstantiateItemInScene(ID, pos);
         }
 
         /// <summary>
