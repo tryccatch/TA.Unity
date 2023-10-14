@@ -7,7 +7,11 @@ namespace TA.Inventory
     public class ItemManager : MonoBehaviour
     {
         public Item itemPrefab;
+        public Item bouncePrefab;
+
         private Transform itemParent;
+
+        private Transform PlayerTransform => FindObjectOfType<Player>().transform;
 
         // 记录场景Item
         private Dictionary<string, List<SceneItem>> sceneItemDict = new Dictionary<string, List<SceneItem>>();
@@ -57,10 +61,15 @@ namespace TA.Inventory
             item.itemID = ID;
         }
 
-        private void OnDropItemEvent(int ID, Vector3 pos)
+        private void OnDropItemEvent(int ID, Vector3 mousePos)
         {
             // TODO:扔东西的效果
-            OnInstantiateItemInScene(ID, pos);
+            // OnInstantiateItemInScene(ID, pos);
+            var item = Instantiate(bouncePrefab, PlayerTransform.position, Quaternion.identity, itemParent);
+            item.itemID = ID;
+
+            var dir = (mousePos - PlayerTransform.position).normalized;
+            item.GetComponent<ItemBounce>().InitBounceItem(mousePos, dir);
         }
 
         /// <summary>
