@@ -171,10 +171,17 @@ public class CursorManager : MonoBehaviour
 
         if (currentTile != null)
         {
+            // WORKFLOW:补充所有物品类型的判断
             switch (currentItem.itemType)
             {
                 case ItemType.Commodity:
                     if (currentTile.canDropItem && currentItem.canDropped) SetCursorValid();
+                    break;
+                case ItemType.HoeTool:
+                    if (currentTile.canDig) SetCursorValid(); else SetCursorInValid();
+                    break;
+                case ItemType.WaterTool:
+                    if (currentTile.daysSinceDug > -1 && currentTile.daysSinceWatered == -1) SetCursorValid(); else SetCursorInValid();
                     break;
             }
         }
