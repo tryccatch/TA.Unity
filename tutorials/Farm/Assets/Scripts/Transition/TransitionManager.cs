@@ -21,16 +21,16 @@ namespace TA.Transition
             EventHandler.TransitionEvent -= OnTransitionEvent;
         }
 
-        private void Start()
+        private IEnumerator Start()
         {
             for (int i = SceneManager.sceneCount - 1; i > 1; i--)
             {
                 SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i));
             }
 
-            StartCoroutine(LoadSceneSetActive(startScene));
-
             fadeCanvasGroup = FindObjectOfType<CanvasGroup>();
+            yield return LoadSceneSetActive(startScene);
+            EventHandler.CallAfterSceneLoadedEvent();
         }
 
         private void OnTransitionEvent(string sceneToGo, Vector3 positionToGo)

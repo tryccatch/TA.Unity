@@ -10,13 +10,25 @@ public class CursorManager : MonoBehaviour
     private Image cursorImage;
     private RectTransform cursorCanvas;
 
+    // 鼠标检测
+    private Camera mainCamera;
+    private Grid currentGrid;
+    private Vector3 mouseWorldPos;
+    private Vector3Int mouseGridPos;
+
+    private bool cursorEnable;
+
     private void OnEnable()
     {
+        EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
+        EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
         EventHandler.ItemSelectedEvent += OnItemSelectedEvent;
     }
 
     private void OnDisable()
     {
+        EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
+        EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
         EventHandler.ItemSelectedEvent -= OnItemSelectedEvent;
     }
 
@@ -26,6 +38,8 @@ public class CursorManager : MonoBehaviour
         cursorImage = cursorCanvas.GetChild(0).GetComponent<Image>();
         currentSprite = normal;
         SetCursorSprite(normal);
+
+        mainCamera = Camera.main;
     }
 
     private void Update()
@@ -34,10 +48,26 @@ public class CursorManager : MonoBehaviour
 
         cursorImage.transform.position = Input.mousePosition;
 
-        if (!InteractWithUI())
+        if (!InteractWithUI() && cursorEnable)
+        {
             SetCursorSprite(currentSprite);
+            CheckCursorValid();
+        }
         else
+        {
             SetCursorSprite(normal);
+        }
+    }
+
+    private void OnBeforeSceneUnloadEvent()
+    {
+        cursorEnable = false;
+    }
+
+    private void OnAfterSceneLoadedEvent()
+    {
+        currentGrid = FindObjectOfType<Grid>();
+        cursorEnable = true;
     }
 
     /// <summary>
@@ -67,6 +97,15 @@ public class CursorManager : MonoBehaviour
                 _ => normal
             };
         }
+    }
+
+    private void CheckCursorValid()
+    {
+        // mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        mouseWorldPos = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
+        mouseGridPos = currentGrid.WorldToCell(mouseWorldPos);
+
+        Debug.Log("WorldPos: " + mouseWorldPos + " GridPos: " + mouseGridPos);
     }
 
     /// <summary>
