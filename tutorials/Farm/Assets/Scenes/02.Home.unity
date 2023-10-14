@@ -1362,10 +1362,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &1458754247
-BoxCollider2D:
+--- !u!60 &1458754247
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1377,7 +1377,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 5, y: -6}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1387,9 +1387,12 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 50, y: 40}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: -20, y: 10}
+      - {x: -20, y: -12}
+      - {x: 20, y: -12}
+      - {x: 20, y: 10}
 --- !u!1 &1551127299
 GameObject:
   m_ObjectHideFlags: 0
@@ -1399,28 +1402,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1551127301}
-  - component: {fileID: 1551127300}
   m_Layer: 0
-  m_Name: ItemParent
+  m_Name: ~Item Parent
   m_TagString: ItemParent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1551127300
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1551127299}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b69b5709dc5c5dc4fbb995343c6d73bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  randomAmount: 0
-  itemBase: {fileID: 6810220303294206525, guid: 8e06dd315eaa96843a146f602da4c3f0, type: 3}
 --- !u!4 &1551127301
 Transform:
   m_ObjectHideFlags: 0
@@ -1434,7 +1422,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1772767860
 GameObject:
