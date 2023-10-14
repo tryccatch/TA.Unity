@@ -51,7 +51,7 @@ namespace TA.Inventory
 
             AddItemAtIndex(item.itemID, index, 1);
 
-            Debug.Log(item.itemDetails.itemID + "\tName:" + item.itemDetails.itemName);
+            // Debug.Log(item.itemDetails.itemID + "\tName:" + item.itemDetails.itemName);
             if (toDestroy)
             {
                 Destroy(item.gameObject);
