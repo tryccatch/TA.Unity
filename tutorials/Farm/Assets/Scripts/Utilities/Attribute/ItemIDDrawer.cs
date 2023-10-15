@@ -7,7 +7,8 @@ public class ItemIDDrawer : PropertyDrawer
 {
     private ItemDataList_SO dataBase;
     private List<ItemDetails> itemList = new();
-    int itemIndex = -1;
+    // int itemIndex = -1;
+    private bool initData = false;
     GUIContent[] itemIDs;
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
@@ -20,15 +21,47 @@ public class ItemIDDrawer : PropertyDrawer
             return;
         }
 
-        if (itemIndex == -1)
+        if (!initData)
             GetItemIDArray(property);
 
-        int oldIndex = itemIndex;
+        int oldIndex = GetCurrentIndex(property);
+        int newIndex = -1;
+        if (property.propertyType == SerializedPropertyType.Integer)
+            newIndex = EditorGUI.Popup(position, label, oldIndex, itemIDs);
+        else
+            EditorGUI.LabelField(position, label.text, "Use ItemID with int.");
 
-        itemIndex = EditorGUI.Popup(position, label, itemIndex, itemIDs);
+        if (oldIndex != newIndex)
+            property.intValue = itemList[newIndex].itemID;
+    }
 
-        if (oldIndex != itemIndex)
-            property.intValue = itemList[itemIndex].itemID;
+    private int GetCurrentIndex(SerializedProperty property)
+    {
+        int itemIndex = -1;
+
+        if (property.intValue >= -1)
+        {
+            bool nameFound = false;
+
+            for (int i = 0; i < itemList.Count; i++)
+            {
+                if (itemList[i].itemID == property.intValue)
+                {
+                    itemIndex = i;
+                    nameFound = true;
+                    break;
+                }
+            }
+
+            if (nameFound == false)
+                itemIndex = 0;
+        }
+        else
+        {
+            itemIndex = 0;
+        }
+
+        return itemIndex;
     }
 
     private void LoadDataBase()
@@ -59,28 +92,7 @@ public class ItemIDDrawer : PropertyDrawer
             itemIDs = new[] { new GUIContent("Check Your Build Settings") };
         }
 
-        if (property.intValue >= 1000)
-        {
-            bool nameFound = false;
-
-            for (int i = 0; i < itemList.Count; i++)
-            {
-                if (itemList[i].itemID == property.intValue)
-                {
-                    itemIndex = i;
-                    nameFound = true;
-                    break;
-                }
-            }
-
-            if (nameFound == false)
-                itemIndex = 0;
-        }
-        else
-        {
-            itemIndex = 0;
-        }
-
-        property.intValue = itemList[itemIndex].itemID;
+        initData = true;
+        property.intValue = itemList[GetCurrentIndex(property)].itemID;
     }
 }
