@@ -44,6 +44,8 @@ public class AnimatorOverride : MonoBehaviour
 
     private void OnItemSelectedEvent(ItemDetails itemDetails, bool isSelected)
     {
+        SwitchAnimator(PartType.None);
+
         // WORKFLOW:不同的工具返回不同的动画在这里补全
         PartType currentType = itemDetails.itemType switch
         {

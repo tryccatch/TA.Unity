@@ -168,6 +168,9 @@ namespace TA.Map
                 // WORKFLOW:物品使用实际功能
                 switch (itemDetails.itemType)
                 {
+                    case ItemType.Seed:
+                        EventHandler.CallPlantSeedEvent(itemDetails.itemID, currentTile);
+                        break;
                     case ItemType.Commodity:
                         EventHandler.CallDropItemEvent(itemDetails.itemID, mouseWorldPos);
                         break;

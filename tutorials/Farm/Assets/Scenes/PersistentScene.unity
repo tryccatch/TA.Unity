@@ -123,6 +123,51 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &96332925
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 96332926}
+  - component: {fileID: 96332927}
+  m_Layer: 0
+  m_Name: Crop Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &96332926
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 96332925}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1355656860}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &96332927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 96332925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9525e5ed13a5ea04584b87ab3ea7a676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cropData: {fileID: 11400000, guid: 0b0d59d500e6a3c49bcc65cd6a98cc43, type: 2}
 --- !u!1 &159170518
 GameObject:
   m_ObjectHideFlags: 3
@@ -222,7 +267,7 @@ GameObject:
   - component: {fileID: 166088570}
   - component: {fileID: 166088569}
   m_Layer: 0
-  m_Name: ItemManager
+  m_Name: Item Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -268,7 +313,7 @@ GameObject:
   - component: {fileID: 274437935}
   - component: {fileID: 274437936}
   m_Layer: 0
-  m_Name: GridMapManager
+  m_Name: GridMap Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -714,7 +759,7 @@ GameObject:
   - component: {fileID: 431223037}
   - component: {fileID: 431223036}
   m_Layer: 0
-  m_Name: TransitionManager
+  m_Name: Transition Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1217,7 +1262,7 @@ GameObject:
   - component: {fileID: 916268853}
   - component: {fileID: 916268852}
   m_Layer: 0
-  m_Name: InventoryManager
+  m_Name: Inventory Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1263,7 +1308,7 @@ GameObject:
   - component: {fileID: 1014845233}
   - component: {fileID: 1014845234}
   m_Layer: 0
-  m_Name: CursorManager
+  m_Name: Cursor Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1367,6 +1412,7 @@ Transform:
   - {fileID: 431223037}
   - {fileID: 1014845233}
   - {fileID: 274437935}
+  - {fileID: 96332926}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1413,7 +1459,7 @@ GameObject:
   - component: {fileID: 1698425028}
   - component: {fileID: 1698425029}
   m_Layer: 0
-  m_Name: TimeManager
+  m_Name: Time Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
