@@ -16,6 +16,8 @@ namespace TA.Map
         [Header("地图信息")]
         public List<MapData_SO> mapDataList;
 
+        private Season currentSeason;
+
         private Dictionary<string, TileDetails> tileDetailsDict = new Dictionary<string, TileDetails>();
         private Grid currentGrid;
 
@@ -23,12 +25,14 @@ namespace TA.Map
         {
             EventHandler.ExecuteActionAfterAnimation += OnExecuteActionAfterAnimation;
             EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
+            EventHandler.GameDayEvent += OnGameDayEvent;
         }
 
         private void OnDisable()
         {
             EventHandler.ExecuteActionAfterAnimation -= OnExecuteActionAfterAnimation;
             EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+            EventHandler.GameDayEvent -= OnGameDayEvent;
         }
 
         private void Start()
@@ -44,8 +48,45 @@ namespace TA.Map
             currentGrid = FindObjectOfType<Grid>();
             digTileMap = GameObject.FindWithTag("Dig").GetComponent<Tilemap>();
             waterTileMap = GameObject.FindWithTag("Water").GetComponent<Tilemap>();
+
+            // DisplayMap(SceneManager.GetActiveScene().name);
+            RefreshMap();
         }
 
+        /// <summary>
+        /// 每天执行1次
+        /// </summary>
+        /// <param name="day"></param>
+        /// <param name="season"></param>
+        private void OnGameDayEvent(int day, Season season)
+        {
+            currentSeason = season;
+
+            foreach (var tile in tileDetailsDict)
+            {
+                if (tile.Value.daysSinceWatered > -1)
+                {
+                    tile.Value.daysSinceWatered = -1;
+                }
+                if (tile.Value.daysSinceDug > -1)
+                {
+                    tile.Value.daysSinceDug++;
+                }
+                // 超期消除挖坑
+                if (tile.Value.daysSinceDug > 5 && tile.Value.seedItemID == -1)
+                {
+                    tile.Value.daysSinceDug = -1;
+                    tile.Value.canDig = true;
+                }
+            }
+
+            RefreshMap();
+        }
+
+        /// <summary>
+        /// 根据地图信息生成字典
+        /// </summary>
+        /// <param name="mapData"></param>
         private void InitTileDetailsDict(MapData_SO mapData)
         {
             foreach (TileProperty tileProperty in mapData.tileProperties)
@@ -143,9 +184,15 @@ namespace TA.Map
                         // 音效
                         break;
                 }
+
+                UpdateTileDetails(currentTile);
             }
         }
 
+        /// <summary>
+        /// 显示挖地瓦片
+        /// </summary>
+        /// <param name="tile"></param>
         private void SetDigGround(TileDetails tile)
         {
             Vector3Int pos = new Vector3Int(tile.gridX, tile.gridY, 0);
@@ -153,11 +200,63 @@ namespace TA.Map
                 digTileMap.SetTile(pos, digTile);
         }
 
+        /// <summary>
+        /// 显示浇水瓦片
+        /// </summary>
+        /// <param name="tile"></param>
         private void SetWaterGround(TileDetails tile)
         {
             Vector3Int pos = new Vector3Int(tile.gridX, tile.gridY, 0);
             if (waterTileMap != null)
                 waterTileMap.SetTile(pos, waterTile);
+        }
+
+        /// <summary>
+        /// 更新瓦片信息
+        /// </summary>
+        /// <param name="tileDetails"></param>
+        private void UpdateTileDetails(TileDetails tileDetails)
+        {
+            string key = tileDetails.gridX + "x" + tileDetails.gridY + "y" + SceneManager.GetActiveScene().name;
+            if (tileDetailsDict.ContainsKey(key))
+            {
+                tileDetailsDict[key] = tileDetails;
+            }
+        }
+
+        /// <summary>
+        /// 刷新当前地图
+        /// </summary>
+        private void RefreshMap()
+        {
+            if (digTileMap != null)
+                digTileMap.ClearAllTiles();
+            if (waterTileMap != null)
+                waterTileMap.ClearAllTiles();
+
+            DisplayMap(SceneManager.GetActiveScene().name);
+        }
+
+        /// <summary>
+        /// 显示地图瓦片
+        /// </summary>
+        /// <param name="sceneName"></param>
+        private void DisplayMap(string sceneName)
+        {
+            foreach (var title in tileDetailsDict)
+            {
+                var key = title.Key;
+                var tileDetails = title.Value;
+
+                if (key.Contains(sceneName))
+                {
+                    if (tileDetails.daysSinceDug > -1)
+                        SetDigGround(tileDetails);
+                    if (tileDetails.daysSinceWatered > -1)
+                        SetWaterGround(tileDetails);
+                    // TODO:种子
+                }
+            }
         }
     }
 }
