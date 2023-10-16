@@ -197,7 +197,7 @@ namespace TA.Map
                         // 执行收割方法
                         if (currentCrop != null)
                             Debug.Log(currentCrop.cropDetails.seedItemID);
-
+                        currentCrop.ProcessToolAction(itemDetails);
                         break;
                 }
 
