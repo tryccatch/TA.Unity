@@ -10,6 +10,7 @@ public class ItemIDDrawer : PropertyDrawer
     // int itemIndex = -1;
     private bool initData = false;
     GUIContent[] itemIDs;
+    int[] itemIDArray;
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         if (dataBase == null)
@@ -32,7 +33,7 @@ public class ItemIDDrawer : PropertyDrawer
             EditorGUI.LabelField(position, label.text, "Use ItemID with int.");
 
         if (oldIndex != newIndex)
-            property.intValue = itemList[newIndex].itemID;
+            property.intValue = itemIDArray[newIndex];
     }
 
     private int GetCurrentIndex(SerializedProperty property)
@@ -43,9 +44,9 @@ public class ItemIDDrawer : PropertyDrawer
         {
             bool nameFound = false;
 
-            for (int i = 0; i < itemList.Count; i++)
+            for (int i = 0; i < itemIDArray.Length; i++)
             {
-                if (itemList[i].itemID == property.intValue)
+                if (itemIDArray[i] == property.intValue)
                 {
                     itemIndex = i;
                     nameFound = true;
@@ -75,24 +76,33 @@ public class ItemIDDrawer : PropertyDrawer
         }
 
         itemList = dataBase.itemDetailsList;
-        // Debug.Log(itemList[0].itemID);
+
+        itemIDArray = new int[itemList.Count + 1];
+
+        itemIDArray[0] = 0;
+
+        for (int i = 1; i < itemIDArray.Length; i++)
+        {
+            itemIDArray[i] = itemList[i - 1].itemID;
+        }
+        // Debug.Log(itemIDArray.Length);
     }
 
     private void GetItemIDArray(SerializedProperty property)
     {
-        itemIDs = new GUIContent[itemList.Count];
+        itemIDs = new GUIContent[itemIDArray.Length];
 
-        for (int i = 0; i < itemList.Count; i++)
+        for (int i = 0; i < itemIDArray.Length; i++)
         {
-            itemIDs[i] = new GUIContent(itemList[i].itemID.ToString());
+            itemIDs[i] = new GUIContent(itemIDArray[i].ToString());
         }
-
+        // Debug.Log(itemIDs.Length);
         if (itemList.Count == 0)
         {
             itemIDs = new[] { new GUIContent("Check Your Build Settings") };
         }
 
         initData = true;
-        property.intValue = itemList[GetCurrentIndex(property)].itemID;
+        property.intValue = itemIDArray[GetCurrentIndex(property)];
     }
 }

@@ -3,9 +3,12 @@ using UnityEngine;
 public class Crop : MonoBehaviour
 {
     public CropDetails cropDetails;
+    private TileDetails tileDetails;
     private int harvestActionCount;
-    public void ProcessToolAction(ItemDetails tool)
+    public void ProcessToolAction(ItemDetails tool, TileDetails tile)
     {
+        tileDetails = tile;
+
         // 工具使用次数
         int requireActionCount = cropDetails.GetTotalRequireCount(tool.itemID);
         if (requireActionCount == -1) return;
@@ -50,7 +53,36 @@ public class Crop : MonoBehaviour
             for (int j = 0; j < amountToProduce; j++)
             {
                 if (cropDetails.generateAtPlayerPosition)
+                {
                     EventHandler.CallHarvestAtPlayerPosition(cropDetails.producedItemID[i]);
+                }
+                else    // 世界地图上生成物品
+                {
+
+                }
+            }
+
+            if (tileDetails != null)
+            {
+                tileDetails.daysSinceLastHarvest++;
+
+                // 是否可以重新生长
+                if (cropDetails.daysToRegrow > 0 && tileDetails.daysSinceLastHarvest < cropDetails.regrowTimes)
+                {
+                    tileDetails.growthDays = cropDetails.TotalGrowthDays - cropDetails.daysToRegrow;
+                    // 刷新种子
+                    EventHandler.CallRefreshCurrentMap();
+                }
+                else    // 不可重复生长
+                {
+                    tileDetails.daysSinceLastHarvest = -1;
+                    tileDetails.seedItemID = -1;
+
+                    // FIXME:自己设计
+                    tileDetails.daysSinceDug = -1;
+                }
+
+                Destroy(gameObject);
             }
         }
     }

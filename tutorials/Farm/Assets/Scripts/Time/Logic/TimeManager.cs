@@ -18,6 +18,7 @@ public class TimeManager : MonoBehaviour
     {
         EventHandler.CallGameMinuteEvent(gameMinute, gameHour);
         EventHandler.CallGameDateEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
+        EventHandler.CallGameDayEvent(gameDay, gameSeason);
     }
 
     private void Update()

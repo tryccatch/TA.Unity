@@ -26,6 +26,7 @@ namespace TA.Map
             EventHandler.ExecuteActionAfterAnimation += OnExecuteActionAfterAnimation;
             EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
             EventHandler.GameDayEvent += OnGameDayEvent;
+            EventHandler.RefreshCurrentMap += RefreshMap;
         }
 
         private void OnDisable()
@@ -33,6 +34,7 @@ namespace TA.Map
             EventHandler.ExecuteActionAfterAnimation -= OnExecuteActionAfterAnimation;
             EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
             EventHandler.GameDayEvent -= OnGameDayEvent;
+            EventHandler.RefreshCurrentMap -= RefreshMap;
         }
 
         private void Start()
@@ -195,9 +197,9 @@ namespace TA.Map
                     case ItemType.CollectTool:
                         Crop currentCrop = GetCropObject(mouseWorldPos);
                         // 执行收割方法
-                        if (currentCrop != null)
-                            Debug.Log(currentCrop.cropDetails.seedItemID);
-                        currentCrop.ProcessToolAction(itemDetails);
+                        // if (currentCrop != null)
+                        // Debug.Log(currentCrop.cropDetails.seedItemID);
+                        currentCrop.ProcessToolAction(itemDetails, currentTile);
                         break;
                 }
 
