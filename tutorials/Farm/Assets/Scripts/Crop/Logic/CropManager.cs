@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace TA.Crop
+namespace TA.CropPlant
 {
     public class CropManager : MonoBehaviour
     {

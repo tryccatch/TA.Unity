@@ -61,8 +61,10 @@ namespace TA.Inventory
             item.itemID = ID;
         }
 
-        private void OnDropItemEvent(int ID, Vector3 mousePos)
+        private void OnDropItemEvent(int ID, Vector3 mousePos, ItemType itemType)
         {
+            if (itemType == ItemType.Seed) return;
+
             // TODO:扔东西的效果
             // OnInstantiateItemInScene(ID, pos);
             var item = Instantiate(bouncePrefab, PlayerTransform.position, Quaternion.identity, itemParent);
@@ -92,7 +94,7 @@ namespace TA.Inventory
 
             if (sceneItemDict.ContainsKey(SceneManager.GetActiveScene().name))
             {
-                // 找到时间就更新item数据列表
+                // 找到直接就更新item数据列表
                 sceneItemDict[SceneManager.GetActiveScene().name] = currentSceneItems;
             }
             else    // 如果是新场景
