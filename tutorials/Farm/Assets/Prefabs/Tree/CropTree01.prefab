@@ -72,13 +72,38 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0, y: 7}
-      - {x: -2.4, y: 2.8}
-      - {x: -0.4, y: 2.1}
-      - {x: -0.5, y: 0.5}
-      - {x: 0.6, y: 0.5}
-      - {x: 0.45, y: 2.1}
-      - {x: 2.4, y: 2.8}
+    - - {x: 0, y: 6.82}
+      - {x: -0.55, y: 6.22}
+      - {x: -0.4, y: 6.12}
+      - {x: -1.05, y: 5.545}
+      - {x: -0.65, y: 5.32}
+      - {x: -1.4, y: 4.62}
+      - {x: -1.1, y: 4.47}
+      - {x: -1.85, y: 3.92}
+      - {x: -1.6, y: 3.57}
+      - {x: -2.15, y: 3.12}
+      - {x: -1.7, y: 2.62}
+      - {x: -1, y: 2.37}
+      - {x: -0.4, y: 2.3}
+      - {x: -0.4, y: 0.77}
+      - {x: -0.8003311, y: 0.07002592}
+      - {x: -0.44714808, y: -0.3807901}
+      - {x: 0.55878377, y: -0.3287189}
+      - {x: 0.90158737, y: 0.042333126}
+      - {x: 0.45, y: 0.77}
+      - {x: 0.45, y: 2.24}
+      - {x: 1.35, y: 2.37}
+      - {x: 1.65, y: 2.47}
+      - {x: 2, y: 2.62}
+      - {x: 2.25, y: 2.95}
+      - {x: 1.95, y: 3.42}
+      - {x: 2.1, y: 3.67}
+      - {x: 1.3, y: 4.47}
+      - {x: 1.55, y: 4.67}
+      - {x: 0.75, y: 5.42}
+      - {x: 1.05, y: 5.495}
+      - {x: 0.45, y: 6.07}
+      - {x: 0.55, y: 6.17}
 --- !u!114 &4619843298638415135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,6 +134,18 @@ MonoBehaviour:
     generateAtPlayerPosition: 0
     hasAnimation: 0
     hasParticleEffect: 0
+  tileDetails:
+    gridX: 0
+    gridY: 0
+    canDig: 0
+    canDropItem: 0
+    canPlaceFurniture: 0
+    isNPCObstacle: 0
+    daysSinceDug: -1
+    daysSinceWatered: -1
+    seedItemID: -1
+    growthDays: -1
+    daysSinceLastHarvest: -1
 --- !u!1 &6921536368081427245
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,7 +257,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.2}
+  m_Offset: {x: 0.075, y: 0.02}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.45}
@@ -231,7 +268,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.2, y: 0.8}
+  m_Size: {x: 1.85, y: 0.9}
   m_EdgeRadius: 0
 --- !u!1 &6921536369260994487
 GameObject:

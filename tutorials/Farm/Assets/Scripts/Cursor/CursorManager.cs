@@ -173,7 +173,7 @@ public class CursorManager : MonoBehaviour
         if (currentTile != null)
         {
             CropDetails currentCrop = CropManager.Instance.GetCropDetails(currentTile.seedItemID);
-
+            Crop crop = GridMapManager.Instance.GetCropObject(mouseWorldPos);
             // WORKFLOW:补充所有物品类型的判断
             switch (currentItem.itemType)
             {
@@ -190,6 +190,13 @@ public class CursorManager : MonoBehaviour
                     if (currentTile.daysSinceDug > -1 && currentTile.daysSinceWatered == -1) SetCursorValid(); else SetCursorInValid();
                     break;
                 case ItemType.ChopTool:
+                    if (crop != null)
+                    {
+                        if (crop.CanHarvest && crop.cropDetails.CheckToolAvailable(currentItem.itemID)) SetCursorValid(); else SetCursorInValid();
+                    }
+                    else
+                        SetCursorInValid();
+                    break;
                 case ItemType.CollectTool:
                     if (currentCrop != null)
                     {

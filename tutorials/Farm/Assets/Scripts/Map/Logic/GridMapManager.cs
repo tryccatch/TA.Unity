@@ -172,6 +172,8 @@ namespace TA.Map
 
             if (currentTile != null)
             {
+                Crop currentCrop = GetCropObject(mouseWorldPos);
+
                 // WORKFLOW:物品使用实际功能
                 switch (itemDetails.itemType)
                 {
@@ -195,8 +197,11 @@ namespace TA.Map
                         // 音效
                         break;
                     case ItemType.ChopTool:
+                        if (currentCrop != null)
+                            currentCrop.ProcessToolAction(itemDetails, currentCrop.tileDetails);
+                        break;
                     case ItemType.CollectTool:
-                        Crop currentCrop = GetCropObject(mouseWorldPos);
+                        // Crop currentCrop = GetCropObject(mouseWorldPos);
                         // 执行收割方法
                         if (currentCrop != null)
                             currentCrop.ProcessToolAction(itemDetails, currentTile);
@@ -213,7 +218,7 @@ namespace TA.Map
         /// </summary>
         /// <param name="mouseWorldPos"></param>
         /// <returns></returns>
-        private Crop GetCropObject(Vector3 mouseWorldPos)
+        public Crop GetCropObject(Vector3 mouseWorldPos)
         {
             Collider2D[] colliders = Physics2D.OverlapPointAll(mouseWorldPos);
 

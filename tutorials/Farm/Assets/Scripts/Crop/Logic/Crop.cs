@@ -3,9 +3,9 @@ using UnityEngine;
 public class Crop : MonoBehaviour
 {
     public CropDetails cropDetails;
-    private TileDetails tileDetails;
+    public TileDetails tileDetails;
     private int harvestActionCount;
-
+    public bool CanHarvest => tileDetails.growthDays >= cropDetails.TotalGrowthDays;
     private Animator anim;
     private Transform PlayerTransform => FindObjectOfType<Player>().transform;
     public void ProcessToolAction(ItemDetails tool, TileDetails tile)
