@@ -194,12 +194,13 @@ namespace TA.Map
                         currentTile.daysSinceWatered = 0;
                         // 音效
                         break;
+                    case ItemType.ChopTool:
                     case ItemType.CollectTool:
                         Crop currentCrop = GetCropObject(mouseWorldPos);
                         // 执行收割方法
-                        // if (currentCrop != null)
+                        if (currentCrop != null)
+                            currentCrop.ProcessToolAction(itemDetails, currentTile);
                         // Debug.Log(currentCrop.cropDetails.seedItemID);
-                        currentCrop.ProcessToolAction(itemDetails, currentTile);
                         break;
                 }
 

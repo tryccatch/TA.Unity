@@ -72,6 +72,7 @@ public class AnimatorOverride : MonoBehaviour
         {
             ItemType.Seed => PartType.Carry,
             ItemType.Commodity => PartType.Carry,
+            ItemType.ChopTool => PartType.Chop,
             ItemType.HoeTool => PartType.Hoe,
             ItemType.WaterTool => PartType.Water,
             ItemType.CollectTool => PartType.Collect,
