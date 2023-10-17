@@ -57,8 +57,11 @@ namespace TA.Inventory
         /// <param name="pos"></param>
         private void OnInstantiateItemInScene(int ID, Vector3 pos)
         {
-            var item = Instantiate(itemPrefab, pos, Quaternion.identity, itemParent);
+            // var item = Instantiate(itemPrefab, pos, Quaternion.identity, itemParent);
+            var item = Instantiate(bouncePrefab, pos, Quaternion.identity, itemParent);
             item.itemID = ID;
+
+            item.GetComponent<ItemBounce>().InitBounceItem(pos, Vector2.up);
         }
 
         private void OnDropItemEvent(int ID, Vector3 mousePos, ItemType itemType)
