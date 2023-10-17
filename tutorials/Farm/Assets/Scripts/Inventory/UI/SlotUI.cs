@@ -23,7 +23,7 @@ namespace TA.Inventory
         public ItemDetails itemDetails;
         public int itemAmount;
 
-        private InventoryUI inventoryUI => GetComponentInParent<InventoryUI>();
+        public InventoryUI inventoryUI => GetComponentInParent<InventoryUI>();
 
         private void Start()
         {
@@ -67,6 +67,7 @@ namespace TA.Inventory
             itemAmount = 0;
             amountText.text = string.Empty;
             button.interactable = false;
+            Debug.Log(slotIndex);
         }
 
         public void OnPointerClick(PointerEventData eventData)
