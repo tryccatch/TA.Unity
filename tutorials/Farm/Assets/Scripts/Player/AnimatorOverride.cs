@@ -76,6 +76,7 @@ public class AnimatorOverride : MonoBehaviour
             ItemType.HoeTool => PartType.Hoe,
             ItemType.WaterTool => PartType.Water,
             ItemType.CollectTool => PartType.Collect,
+            ItemType.BreakTool => PartType.Break,
             _ => PartType.None
         };
 

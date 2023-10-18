@@ -18,7 +18,9 @@ namespace TA.Map
 
         private Season currentSeason;
 
-        private Dictionary<string, TileDetails> tileDetailsDict = new Dictionary<string, TileDetails>();
+        private Dictionary<string, TileDetails> tileDetailsDict = new();
+        // 场景是否第一次加载
+        private Dictionary<string, bool> firstLoadDict = new Dictionary<string, bool>();
         private Grid currentGrid;
 
         private void OnEnable()
@@ -41,6 +43,7 @@ namespace TA.Map
         {
             foreach (var mapData in mapDataList)
             {
+                firstLoadDict.Add(mapData.sceneName, true);
                 InitTileDetailsDict(mapData);
             }
         }
@@ -52,6 +55,12 @@ namespace TA.Map
             waterTileMap = GameObject.FindWithTag("Water").GetComponent<Tilemap>();
 
             // DisplayMap(SceneManager.GetActiveScene().name);
+            if (firstLoadDict[SceneManager.GetActiveScene().name])
+            {
+                // 预先生成农作物
+                EventHandler.CallGenerateCropEvent();
+                firstLoadDict[SceneManager.GetActiveScene().name] = false;
+            }
             RefreshMap();
         }
 
@@ -196,15 +205,14 @@ namespace TA.Map
                         currentTile.daysSinceWatered = 0;
                         // 音效
                         break;
+                    case ItemType.BreakTool:
                     case ItemType.ChopTool:
-                        if (currentCrop != null)
-                            currentCrop.ProcessToolAction(itemDetails, currentCrop.tileDetails);
+                        currentCrop?.ProcessToolAction(itemDetails, currentCrop.tileDetails);
                         break;
                     case ItemType.CollectTool:
                         // Crop currentCrop = GetCropObject(mouseWorldPos);
                         // 执行收割方法
-                        if (currentCrop != null)
-                            currentCrop.ProcessToolAction(itemDetails, currentTile);
+                        currentCrop?.ProcessToolAction(itemDetails, currentTile);
                         // Debug.Log(currentCrop.cropDetails.seedItemID);
                         break;
                 }
@@ -258,12 +266,16 @@ namespace TA.Map
         /// 更新瓦片信息
         /// </summary>
         /// <param name="tileDetails"></param>
-        private void UpdateTileDetails(TileDetails tileDetails)
+        public void UpdateTileDetails(TileDetails tileDetails)
         {
             string key = tileDetails.gridX + "x" + tileDetails.gridY + "y" + SceneManager.GetActiveScene().name;
             if (tileDetailsDict.ContainsKey(key))
             {
                 tileDetailsDict[key] = tileDetails;
+            }
+            else
+            {
+                tileDetailsDict.Add(key, tileDetails);
             }
         }
 
