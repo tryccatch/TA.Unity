@@ -21,11 +21,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7502098331473317947, guid: 27ae85c8975a41b4e8a5ce564f858f13, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.438
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7502098331473317947, guid: 27ae85c8975a41b4e8a5ce564f858f13, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.824
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7502098331473317947, guid: 27ae85c8975a41b4e8a5ce564f858f13, type: 3}
       propertyPath: m_LocalPosition.z
@@ -79,7 +79,8 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3140865071394213727, guid: 27ae85c8975a41b4e8a5ce564f858f13, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 27ae85c8975a41b4e8a5ce564f858f13, type: 3}
 --- !u!1 &5307245336017103749 stripped
 GameObject:
@@ -117,6 +118,47 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7502098331473317956, guid: 27ae85c8975a41b4e8a5ce564f858f13, type: 3}
   m_PrefabInstance: {fileID: 2430766414821764777}
   m_PrefabAsset: {fileID: 0}
+--- !u!60 &3006896720544534005
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5307245336247549677}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.523098, y: -0.0029444695}
+      - {x: 0.42510128, y: 0.19527674}
+      - {x: 0.32914352, y: 0.2530899}
+      - {x: 0.22488403, y: 0.4982972}
+      - {x: 0.12133312, y: 0.597415}
+      - {x: -0.12908745, y: 0.60124254}
+      - {x: -0.22491455, y: 0.5009546}
+      - {x: -0.33218575, y: 0.2997961}
+      - {x: -0.52516174, y: -0.10610342}
+      - {x: -0.52280337, y: -0.2544448}
+      - {x: -0.42540306, y: -0.3992356}
+      - {x: -0.073776245, y: -0.45137787}
+      - {x: 0.22592127, y: -0.45084405}
+      - {x: 0.3710289, y: -0.34944296}
+      - {x: 0.47212887, y: -0.24585009}
+      - {x: 0.5240612, y: -0.15820938}
 --- !u!114 &5860292829017605565
 MonoBehaviour:
   m_ObjectHideFlags: 0

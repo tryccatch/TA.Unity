@@ -49,6 +49,8 @@ public class PoolManager : MonoBehaviour
         {
             ParticleEffectType.LeavesFalling01 => poolEffectList[0],
             ParticleEffectType.LeavesFalling02 => poolEffectList[1],
+            ParticleEffectType.Rock => poolEffectList[2],
+            ParticleEffectType.ReapableScenery => poolEffectList[3],
             _ => null,
         };
 
