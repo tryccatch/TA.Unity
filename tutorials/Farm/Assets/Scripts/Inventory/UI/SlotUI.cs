@@ -67,7 +67,7 @@ namespace TA.Inventory
             itemAmount = 0;
             amountText.text = string.Empty;
             button.interactable = false;
-            Debug.Log(slotIndex);
+            // Debug.Log(slotIndex);
         }
 
         public void OnPointerClick(PointerEventData eventData)

@@ -99,4 +99,10 @@ public static class EventHandler
     {
         RefreshCurrentMap?.Invoke();
     }
+
+    public static event Action<ParticleEffectType, Vector2> ParticleEffectEvent;
+    public static void CallParticleEffectEvent(ParticleEffectType effectType, Vector2 pos)
+    {
+        ParticleEffectEvent?.Invoke(effectType, pos);
+    }
 }
