@@ -15,4 +15,6 @@ public class Settings
     // Transition
     public const float fadeDuration = 1.5f;
 
+    // 割草数量限制
+    public const int reapAmount = 2;
 }
