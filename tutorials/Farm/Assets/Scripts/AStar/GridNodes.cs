@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace TA.AStar
 {
-    public class GridNodes : MonoBehaviour
+    public class GridNodes
     {
         private int width;
         private int height;
