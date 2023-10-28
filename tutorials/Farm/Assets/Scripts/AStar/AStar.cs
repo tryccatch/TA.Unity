@@ -97,7 +97,8 @@ namespace TA.AStar
             openNodeList.Add(startNode);
 
             while (openNodeList.Count > 0)
-            {// 节点排序，Node内含比较函数
+            {
+                // 节点排序，Node内含比较函数
                 openNodeList.Sort();
 
                 Node closeNode = openNodeList[0];
