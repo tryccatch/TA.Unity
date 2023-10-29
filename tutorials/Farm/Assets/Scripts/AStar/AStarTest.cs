@@ -19,6 +19,13 @@ namespace TA.AStar
 
         private Stack<MovementStep> npcMovementStepStack;
 
+        [Header("测试移动NPC")]
+        public NPCMovement npcMovement;
+        public bool moveNPC;
+        [SceneName] public string targetScene;
+        public Vector2Int targetPos;
+        public AnimationClip stopClip;
+
         private void Awake()
         {
             aStar = GetComponent<AStar>();
@@ -28,6 +35,13 @@ namespace TA.AStar
         private void Update()
         {
             ShowPathOnGridMap();
+
+            if (moveNPC)
+            {
+                moveNPC = false;
+                var schedule = new ScheduleDetails(0, 0, 0, 0, Season.春天, targetScene, targetPos, stopClip, true);
+                npcMovement.BuildPath(schedule);
+            }
         }
 
         private void ShowPathOnGridMap()

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TA.AStar;
 using UnityEngine;
@@ -16,6 +17,8 @@ public class NPCMovement : MonoBehaviour
     private string targetScene;
     private Vector3Int currentGridPosition;
     private Vector3Int targetGridPosition;
+    private Vector3Int nextGridPosition;
+    private Vector3 nextWorldPosition;
 
     public string StartScene { set => currentScene = value; }
 
@@ -35,6 +38,8 @@ public class NPCMovement : MonoBehaviour
     private Stack<MovementStep> movementSteps;
 
     private bool isInitialised;
+    private bool npcMove;
+    private bool sceneLoaded;
 
     private TimeSpan GameTime => TimeManager.Instance.GameTime;
     private void Awake()
@@ -43,16 +48,30 @@ public class NPCMovement : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         coll = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
+        movementSteps = new Stack<MovementStep>();
     }
 
     private void OnEnable()
     {
+        EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
         EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
     }
 
     private void OnDisable()
     {
+        EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
         EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+    }
+
+    private void FixedUpdate()
+    {
+        if (sceneLoaded)
+            Movement();
+    }
+
+    private void OnBeforeSceneUnloadEvent()
+    {
+        sceneLoaded = false;
     }
 
     private void OnAfterSceneLoadedEvent()
@@ -65,6 +84,8 @@ public class NPCMovement : MonoBehaviour
             InitNPC();
             isInitialised = true;
         }
+
+        sceneLoaded = true;
     }
 
     private void CheckVisible()
@@ -81,11 +102,77 @@ public class NPCMovement : MonoBehaviour
 
         // 保持在当前坐标的网格中心
         currentGridPosition = grid.WorldToCell(transform.position);
-        transform.position = new Vector3(currentGridPosition.x + Settings.gridCellSize / 2f, currentGridPosition.y + Settings.gridCellSize / 2f, 0);
+        // transform.position = new Vector3(currentGridPosition.x + Settings.gridCellSize / 2f, currentGridPosition.y + Settings.gridCellSize / 2f, 0);
+        transform.position = GetWorldPosition(currentGridPosition);
 
         targetGridPosition = currentGridPosition;
     }
 
+    private void Movement()
+    {
+        if (!npcMove)
+        {
+            if (movementSteps.Count > 0)
+            {
+                MovementStep step = movementSteps.Pop();
+
+                currentScene = step.sceneName;
+
+                CheckVisible();
+
+                nextGridPosition = (Vector3Int)step.gridCoordinate;
+
+                TimeSpan stepTime = new TimeSpan(step.hour, step.minute, step.second);
+
+                MoveToGridPosition(nextGridPosition, stepTime);
+            }
+        }
+    }
+
+    private void MoveToGridPosition(Vector3Int gridPos, TimeSpan stepTime)
+    {
+        StartCoroutine(MoveRoutine(gridPos, stepTime));
+    }
+
+    private IEnumerator MoveRoutine(Vector3Int gridPos, TimeSpan stepTime)
+    {
+        npcMove = true;
+        nextWorldPosition = GetWorldPosition(gridPos);
+
+        // 还有时间用来移动
+        if (stepTime > GameTime)
+        {
+            // 用来移动的时间差，以秒为单位
+            float timeToMove = (float)(stepTime.TotalSeconds - GameTime.TotalSeconds);
+            // 实际移动距离
+            float distance = Vector3.Distance(transform.position, nextWorldPosition);
+            // 实际移动速度
+            float speed = Mathf.Max(minSpeed, (distance / timeToMove / Settings.secondThreshold));
+
+            if (speed < maxSpeed)
+            {
+                while (Vector3.Distance(transform.position, nextWorldPosition) > Settings.pixelSize)
+                {
+                    dir = (nextWorldPosition - transform.position).normalized;
+
+                    Vector2 posOffset = new Vector2(dir.x * speed * Time.fixedDeltaTime, dir.y * speed * Time.fixedDeltaTime);
+                    rb.MovePosition(rb.position + posOffset);
+                    yield return new WaitForFixedUpdate();
+                }
+            }
+        }
+        // 如果时间已经到了就瞬移
+        rb.position = nextWorldPosition;
+        currentGridPosition = gridPos;
+        nextGridPosition = currentGridPosition;
+
+        npcMove = false;
+    }
+
+    /// <summary>
+    /// 构建Schedule构建路径
+    /// </summary>
+    /// <param name="schedule"></param>
     public void BuildPath(ScheduleDetails schedule)
     {
         movementSteps.Clear();
@@ -96,6 +183,7 @@ public class NPCMovement : MonoBehaviour
             AStar.Instance.BuildPath(schedule.targetScene, (Vector2Int)currentGridPosition, schedule.targetGridPosition, movementSteps);
         }
 
+        // TODO:跨场景移动
         if (movementSteps.Count > 1)
         {
             // 更新每一步对应的时间戳
@@ -141,6 +229,17 @@ public class NPCMovement : MonoBehaviour
     private bool MoveInDiagonal(MovementStep currentStep, MovementStep previousStep)
     {
         return (currentStep.gridCoordinate.x != previousStep.gridCoordinate.x && currentStep.gridCoordinate.y != previousStep.gridCoordinate.y);
+    }
+
+    /// <summary>
+    /// 网格坐标返回世界坐标中心点
+    /// </summary>
+    /// <param name="gridPos"></param>
+    /// <returns></returns>
+    private Vector3 GetWorldPosition(Vector3Int gridPos)
+    {
+        Vector3 worldPos = grid.CellToWorld(gridPos);
+        return new Vector3(worldPos.x + Settings.gridCellSize / 2f, worldPos.y + Settings.gridCellSize / 2f);
     }
 
     #region 设置NPC显示情况
