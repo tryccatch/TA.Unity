@@ -41,6 +41,13 @@ public class NPCMovement : MonoBehaviour
     private bool npcMove;
     private bool sceneLoaded;
 
+    // 动画计时器
+    private float animationBreakTime;
+    private bool canPlayStopAnimation;
+    private AnimationClip stopAnimationClip;
+    public AnimationClip blankAnimationClip;
+    private AnimatorOverrideController animOverride;
+
     private TimeSpan GameTime => TimeManager.Instance.GameTime;
     private void Awake()
     {
@@ -49,24 +56,72 @@ public class NPCMovement : MonoBehaviour
         coll = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
         movementSteps = new Stack<MovementStep>();
+
+        animOverride = new AnimatorOverrideController(anim.runtimeAnimatorController);
+        anim.runtimeAnimatorController = animOverride;
+
+        scheduleSet = new SortedSet<ScheduleDetails>();
+
+        foreach (var schedule in scheduleData.scheduleList)
+        {
+            scheduleSet.Add(schedule);
+        }
     }
 
     private void OnEnable()
     {
         EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
         EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
+
+        EventHandler.GameMinuteEvent += OnGameMinuteEvent;
     }
 
     private void OnDisable()
     {
         EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
         EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+
+        EventHandler.GameMinuteEvent -= OnGameMinuteEvent;
+    }
+
+    private void Update()
+    {
+        if (sceneLoaded)
+            SwitchAnimation();
+
+        // 计时器
+        animationBreakTime -= Time.deltaTime;
+        canPlayStopAnimation = animationBreakTime <= 0;
     }
 
     private void FixedUpdate()
     {
         if (sceneLoaded)
             Movement();
+    }
+
+    private void OnGameMinuteEvent(int minute, int hour, int day, Season season)
+    {
+        int time = (hour * 100) + minute;
+
+        ScheduleDetails matchSchedule = null;
+        foreach (var schedule in scheduleSet)
+        {
+            if (schedule.Time == time)
+            {
+                if (schedule.day != day && schedule.day != 0)
+                    continue;
+                if (schedule.season != season)
+                    continue;
+                matchSchedule = schedule;
+            }
+            else if (schedule.Time > time)
+            {
+                break;
+            }
+        }
+        if (matchSchedule != null)
+            BuildPath(matchSchedule);
     }
 
     private void OnBeforeSceneUnloadEvent()
@@ -108,6 +163,9 @@ public class NPCMovement : MonoBehaviour
         targetGridPosition = currentGridPosition;
     }
 
+    /// <summary>
+    /// 主要移动方法
+    /// </summary>
     private void Movement()
     {
         if (!npcMove)
@@ -125,6 +183,10 @@ public class NPCMovement : MonoBehaviour
                 TimeSpan stepTime = new TimeSpan(step.hour, step.minute, step.second);
 
                 MoveToGridPosition(nextGridPosition, stepTime);
+            }
+            else if (!isMoving && canPlayStopAnimation)
+            {
+                StartCoroutine(SetStopAnimation());
             }
         }
     }
@@ -147,9 +209,9 @@ public class NPCMovement : MonoBehaviour
             // 实际移动距离
             float distance = Vector3.Distance(transform.position, nextWorldPosition);
             // 实际移动速度
-            float speed = Mathf.Max(minSpeed, (distance / timeToMove / Settings.secondThreshold));
+            float speed = Mathf.Max(minSpeed, distance / timeToMove / Settings.secondThreshold);
 
-            if (speed < maxSpeed)
+            if (speed < maxSpeed)   //BUG:可能会导致瞬移
             {
                 while (Vector3.Distance(transform.position, nextWorldPosition) > Settings.pixelSize)
                 {
@@ -177,7 +239,8 @@ public class NPCMovement : MonoBehaviour
     {
         movementSteps.Clear();
         currentSchedule = schedule;
-
+        targetGridPosition = (Vector3Int)schedule.targetGridPosition;
+        stopAnimationClip = schedule.clipAtStop;
         if (schedule.targetScene == currentScene)
         {
             AStar.Instance.BuildPath(schedule.targetScene, (Vector2Int)currentGridPosition, schedule.targetGridPosition, movementSteps);
@@ -228,7 +291,7 @@ public class NPCMovement : MonoBehaviour
     /// <returns></returns>
     private bool MoveInDiagonal(MovementStep currentStep, MovementStep previousStep)
     {
-        return (currentStep.gridCoordinate.x != previousStep.gridCoordinate.x && currentStep.gridCoordinate.y != previousStep.gridCoordinate.y);
+        return currentStep.gridCoordinate.x != previousStep.gridCoordinate.x && currentStep.gridCoordinate.y != previousStep.gridCoordinate.y;
     }
 
     /// <summary>
@@ -240,6 +303,46 @@ public class NPCMovement : MonoBehaviour
     {
         Vector3 worldPos = grid.CellToWorld(gridPos);
         return new Vector3(worldPos.x + Settings.gridCellSize / 2f, worldPos.y + Settings.gridCellSize / 2f);
+    }
+
+    private void SwitchAnimation()
+    {
+        isMoving = transform.position != GetWorldPosition(targetGridPosition);
+
+        anim.SetBool("isMoving", isMoving);
+        if (isMoving)
+        {
+            // BUG:可能会导致动画跳动
+            anim.SetBool("Exit", true);
+            anim.SetFloat("DirX", dir.x);
+            anim.SetFloat("DirY", dir.y);
+        }
+        else
+        {
+            anim.SetBool("Exit", false);
+        }
+    }
+
+    private IEnumerator SetStopAnimation()
+    {
+        // 强制面向镜头
+        anim.SetFloat("DirX", 0);
+        anim.SetFloat("DirY", -1);
+
+        animationBreakTime = Settings.animationBreakTime;
+
+        if (stopAnimationClip != null)
+        {
+            animOverride[blankAnimationClip] = stopAnimationClip;
+            anim.SetBool("EventAnimation", true);
+            yield return null;
+            anim.SetBool("EventAnimation", false);
+        }
+        else
+        {
+            animOverride[blankAnimationClip] = blankAnimationClip;
+            anim.SetBool("EventAnimation", false);
+        }
     }
 
     #region 设置NPC显示情况

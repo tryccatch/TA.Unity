@@ -1380,17 +1380,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76afca6fdf13f0a4290d54ee7ed73c81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPos: {x: -16, y: -9}
-  finishPos: {x: 16, y: -9}
+  startPos: {x: 0, y: 0}
+  finishPos: {x: 3, y: -5}
   displayMap: {fileID: 1042401090}
   displayTile: {fileID: 11400000, guid: eebf8d21bbccf6c4a8dc4eb7fdf6f1bb, type: 2}
   displayStartAndFinish: 0
   displayPath: 0
-  npcMovement: {fileID: 0}
+  npcMovement: {fileID: 1633474222}
   moveNPC: 0
   targetScene: 01.Field
   targetPos: {x: 0, y: 0}
-  stopClip: {fileID: 0}
+  stopClip: {fileID: 7400000, guid: 54d560542c0284c169c56cddc7145ac6, type: 2}
 --- !u!114 &785976128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1417,7 +1417,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcPositionList:
   - npc: {fileID: 1633474217}
-    startScene: 02.Home
+    startScene: 01.Field
     position: {x: 0, y: 0, z: 0}
 --- !u!1 &916268851
 GameObject:
@@ -1944,6 +1944,7 @@ MonoBehaviour:
   currentScene: 01.Field
   normalSpeed: 2
   isMoving: 0
+  blankAnimationClip: {fileID: 7400000, guid: 500fefed8113b4f7e8f2dc728631a63d, type: 2}
 --- !u!1 &1698425027
 GameObject:
   m_ObjectHideFlags: 0

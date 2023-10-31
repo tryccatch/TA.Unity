@@ -28,10 +28,10 @@ public static class EventHandler
         ItemSelectedEvent?.Invoke(itemDetails, isSelected);
     }
 
-    public static event Action<int, int> GameMinuteEvent;
-    public static void CallGameMinuteEvent(int minute, int hour)
+    public static event Action<int, int, int, Season> GameMinuteEvent;
+    public static void CallGameMinuteEvent(int minute, int hour, int day, Season season)
     {
-        GameMinuteEvent?.Invoke(minute, hour);
+        GameMinuteEvent?.Invoke(minute, hour, day, season);
     }
 
     public static event Action<int, Season> GameDayEvent;
