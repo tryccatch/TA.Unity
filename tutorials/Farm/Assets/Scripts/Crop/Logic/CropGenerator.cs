@@ -35,7 +35,11 @@ namespace TA.CropPlant
 
                 if (tile == null)
                 {
-                    tile = new TileDetails();
+                    tile = new TileDetails
+                    {
+                        gridX = cropGridPos.x,
+                        gridY = cropGridPos.y
+                    };
                 }
 
                 tile.daysSinceDug = -1;

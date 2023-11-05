@@ -154,7 +154,7 @@ namespace TA.Map
         /// </summary>
         /// <param name="key">x+y+地图名字</param>
         /// <returns></returns>
-        private TileDetails GetTileDetails(string key)
+        public TileDetails GetTileDetails(string key)
         {
             if (tileDetailsDict.ContainsKey(key))
             {
