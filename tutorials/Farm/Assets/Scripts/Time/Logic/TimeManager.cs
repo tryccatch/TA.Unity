@@ -18,6 +18,28 @@ public class TimeManager : Singleton<TimeManager>
         NewGameTime();
     }
 
+    private void OnEnable()
+    {
+        EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
+        EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
+    }
+
+    private void OnDisable()
+    {
+        EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
+        EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+    }
+
+    private void OnAfterSceneLoadedEvent()
+    {
+        gameClockPause = false;
+    }
+
+    private void OnBeforeSceneUnloadEvent()
+    {
+        gameClockPause = true;
+    }
+
     private void Start()
     {
         EventHandler.CallGameMinuteEvent(gameMinute, gameHour, gameDay, gameSeason);

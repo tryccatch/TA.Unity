@@ -19,9 +19,9 @@ public class SceneNameDrawer : PropertyDrawer
         if (sceneIndex == -1)
             GetSceneNameArray(property);
 
-        int oldIndex = sceneIndex;
+        int oldIndex = GetSceneNameIndex(property);
 
-        sceneIndex = EditorGUI.Popup(position, label, sceneIndex, sceneNames);
+        sceneIndex = EditorGUI.Popup(position, label, oldIndex, sceneNames);
 
         if (oldIndex != sceneIndex)
             property.stringValue = sceneNames[sceneIndex].text;
@@ -56,6 +56,13 @@ public class SceneNameDrawer : PropertyDrawer
             sceneNames = new[] { new GUIContent("Check Your Build Settings") };
         }
 
+        property.stringValue = sceneNames[GetSceneNameIndex(property)].text;
+    }
+
+    private int GetSceneNameIndex(SerializedProperty property)
+    {
+        int index = -1;
+
         if (!string.IsNullOrEmpty(property.stringValue))
         {
             bool nameFound = false;
@@ -64,20 +71,20 @@ public class SceneNameDrawer : PropertyDrawer
             {
                 if (sceneNames[i].text == property.stringValue)
                 {
-                    sceneIndex = i;
+                    index = i;
                     nameFound = true;
                     break;
                 }
             }
 
             if (nameFound == false)
-                sceneIndex = 0;
+                index = 0;
         }
         else
         {
-            sceneIndex = 0;
+            index = 0;
         }
 
-        property.stringValue = sceneNames[sceneIndex].text;
+        return index;
     }
 }

@@ -7,10 +7,11 @@ public class ItemIDDrawer : PropertyDrawer
 {
     private ItemDataList_SO dataBase;
     private List<ItemDetails> itemList = new();
-    // int itemIndex = -1;
-    private bool initData = false;
+
+    int itemIndex = -1;
     GUIContent[] itemIDs;
     int[] itemIDArray;
+
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         if (dataBase == null)
@@ -22,47 +23,18 @@ public class ItemIDDrawer : PropertyDrawer
             return;
         }
 
-        if (!initData)
+        if (itemIndex == -1)
             GetItemIDArray(property);
 
-        int oldIndex = GetCurrentIndex(property);
-        int newIndex = -1;
+        int oldIndex = GetItemIDIndex(property);
+
         if (property.propertyType == SerializedPropertyType.Integer)
-            newIndex = EditorGUI.Popup(position, label, oldIndex, itemIDs);
+            itemIndex = EditorGUI.Popup(position, label, oldIndex, itemIDs);
         else
             EditorGUI.LabelField(position, label.text, "Use ItemID with int.");
 
-        if (oldIndex != newIndex)
-            property.intValue = itemIDArray[newIndex];
-    }
-
-    private int GetCurrentIndex(SerializedProperty property)
-    {
-        int itemIndex = -1;
-
-        if (property.intValue >= -1)
-        {
-            bool nameFound = false;
-
-            for (int i = 0; i < itemIDArray.Length; i++)
-            {
-                if (itemIDArray[i] == property.intValue)
-                {
-                    itemIndex = i;
-                    nameFound = true;
-                    break;
-                }
-            }
-
-            if (nameFound == false)
-                itemIndex = 0;
-        }
-        else
-        {
-            itemIndex = 0;
-        }
-
-        return itemIndex;
+        if (oldIndex != itemIndex)
+            property.intValue = itemIDArray[itemIndex];
     }
 
     private void LoadDataBase()
@@ -85,7 +57,6 @@ public class ItemIDDrawer : PropertyDrawer
         {
             itemIDArray[i] = itemList[i - 1].itemID;
         }
-        // Debug.Log(itemIDArray.Length);
     }
 
     private void GetItemIDArray(SerializedProperty property)
@@ -96,13 +67,41 @@ public class ItemIDDrawer : PropertyDrawer
         {
             itemIDs[i] = new GUIContent(itemIDArray[i].ToString());
         }
-        // Debug.Log(itemIDs.Length);
+
         if (itemList.Count == 0)
         {
             itemIDs = new[] { new GUIContent("Check Your Build Settings") };
         }
 
-        initData = true;
-        property.intValue = itemIDArray[GetCurrentIndex(property)];
+        property.intValue = itemIDArray[GetItemIDIndex(property)];
+    }
+
+    private int GetItemIDIndex(SerializedProperty property)
+    {
+        int index = -1;
+
+        if (property.intValue >= -1)
+        {
+            bool nameFound = false;
+
+            for (int i = 0; i < itemIDArray.Length; i++)
+            {
+                if (itemIDArray[i] == property.intValue)
+                {
+                    index = i;
+                    nameFound = true;
+                    break;
+                }
+            }
+
+            if (nameFound == false)
+                index = 0;
+        }
+        else
+        {
+            index = 0;
+        }
+
+        return index;
     }
 }

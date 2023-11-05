@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -93,4 +94,21 @@ public class NPCPosition
     [SceneName]
     public string startScene;
     public Vector3 position;
+}
+
+[System.Serializable]
+public class SceneRoute
+{
+    [SceneName] public string fromSceneName;
+    [SceneName] public string gotoSceneName;
+    public List<ScenePath> scenePathList;
+}
+
+// 场景路径
+[System.Serializable]
+public class ScenePath
+{
+    [SceneName] public string sceneName;
+    public Vector2Int fromGridCell;
+    public Vector2Int gotoGridCell;
 }
