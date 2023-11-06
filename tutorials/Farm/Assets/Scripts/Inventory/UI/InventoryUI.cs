@@ -14,18 +14,25 @@ namespace TA.Inventory
         [SerializeField] private GameObject bagUI;
         private bool bagOpened;
 
+        [Header("通用背包")]
+        [SerializeField] private GameObject baseBag;
+        public GameObject shopSlotPrefab;
+
         [SerializeField] private SlotUI[] playerSlots;
+        [SerializeField] private List<SlotUI> baseBagSlots;
 
         private void OnEnable()
         {
             EventHandler.UpdateInventoryUIEvent += OnUpdateInventoryUI;
             EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
+            EventHandler.BaseBagOpenEvent += OnBaseBagOpenEvent;
         }
 
         private void OnDisable()
         {
             EventHandler.UpdateInventoryUIEvent -= OnUpdateInventoryUI;
             EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
+            EventHandler.BaseBagOpenEvent -= OnBaseBagOpenEvent;
         }
 
         private void Start()
@@ -50,6 +57,31 @@ namespace TA.Inventory
             }
         }
 
+        private void OnBaseBagOpenEvent(SlotType slotType, InventoryBag_SO bagData)
+        {
+            // TODO:通用箱子prefab
+            GameObject prefab = slotType switch
+            {
+                SlotType.Shop => shopSlotPrefab,
+                _ => null,
+            };
+
+            // 生成背包UI
+            baseBag.SetActive(true);
+
+            baseBagSlots = new List<SlotUI>();
+
+            for (int i = 0; i < bagData.itemList.Count; i++)
+            {
+                var slot = Instantiate(prefab, baseBag.transform.GetChild(0)).GetComponent<SlotUI>();
+                slot.slotIndex = i;
+                baseBagSlots.Add(slot);
+            }
+            LayoutRebuilder.ForceRebuildLayoutImmediate(baseBag.GetComponent<RectTransform>());
+            // 更新UI显示
+            OnUpdateInventoryUI(InventoryLocation.Box, bagData.itemList);
+        }
+
         private void OnBeforeSceneUnloadEvent()
         {
             UpdateSlotHighlight(-1);
@@ -70,6 +102,20 @@ namespace TA.Inventory
                         else
                         {
                             playerSlots[i].UpdateEmptySlot();
+                        }
+                    }
+                    break;
+                case InventoryLocation.Box:
+                    for (int i = 0; i < baseBagSlots.Count; i++)
+                    {
+                        if (list[i].itemAmount > 0)
+                        {
+                            var item = InventoryManager.Instance.GetItemDetails(list[i].itemID);
+                            baseBagSlots[i].UpdateSlot(item, list[i].itemAmount);
+                        }
+                        else
+                        {
+                            baseBagSlots[i].UpdateEmptySlot();
                         }
                     }
                     break;

@@ -22,7 +22,7 @@ public class ItemDetails
 [System.Serializable]
 public struct InventoryItem
 {
-    public int itemID;
+    [ItemID] public int itemID;
     public int itemAmount;
 }
 
