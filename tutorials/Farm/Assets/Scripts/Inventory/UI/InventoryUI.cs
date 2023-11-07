@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +21,7 @@ namespace TA.Inventory
 
         [Header("交易UI")]
         public TradeUI tradeUI;
+        public TextMeshProUGUI playerMoneyText;
 
         [SerializeField] private SlotUI[] playerSlots;
         [SerializeField] private List<SlotUI> baseBagSlots;
@@ -44,6 +46,7 @@ namespace TA.Inventory
 
         private void Start()
         {
+            // 给每一个格子序号
             for (int i = 0; i < playerSlots.Length; i++)
             {
                 playerSlots[i].slotIndex = i;
@@ -54,6 +57,8 @@ namespace TA.Inventory
 
             // 物品拖拽图标默认关闭
             dragItem.enabled = false;
+
+            playerMoneyText.text = InventoryManager.Instance.playerMoney.ToString();
         }
 
         private void Update()
@@ -170,6 +175,8 @@ namespace TA.Inventory
                     }
                     break;
             }
+
+            playerMoneyText.text = InventoryManager.Instance.playerMoney.ToString();
         }
 
         /// <summary>
