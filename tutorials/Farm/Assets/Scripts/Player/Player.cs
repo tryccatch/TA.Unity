@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
         EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
         EventHandler.MoveToPositionEvent += OnMoveToPositionEvent;
         EventHandler.MouseClickedEvent += OnMouseClickedEvent;
+        EventHandler.UpdateGameStateEvent += OnUpdateGameStateEvent;
     }
 
     private void OnDisable()
@@ -42,6 +43,35 @@ public class Player : MonoBehaviour
         EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
         EventHandler.MoveToPositionEvent -= OnMoveToPositionEvent;
         EventHandler.MouseClickedEvent -= OnMouseClickedEvent;
+        EventHandler.UpdateGameStateEvent -= OnUpdateGameStateEvent;
+    }
+
+    private void Update()
+    {
+        if (!inputDisable)
+            PlayerInput();
+        else
+            isMoving = false;
+        SwitchAnimation();
+    }
+
+    private void FixedUpdate()
+    {
+        if (!inputDisable)
+            Movement();
+    }
+
+    private void OnUpdateGameStateEvent(GameState gameState)
+    {
+        switch (gameState)
+        {
+            case GameState.GamePlay:
+                inputDisable = false;
+                break;
+            case GameState.Pause:
+                inputDisable = true;
+                break;
+        }
     }
 
     private void OnMouseClickedEvent(Vector3 mouseWorldPos, ItemDetails itemDetails)
@@ -100,21 +130,6 @@ public class Player : MonoBehaviour
     private void OnMoveToPositionEvent(Vector3 targetPosition)
     {
         transform.position = targetPosition;
-    }
-
-    private void Update()
-    {
-        if (!inputDisable)
-            PlayerInput();
-        else
-            isMoving = false;
-        SwitchAnimation();
-    }
-
-    private void FixedUpdate()
-    {
-        if (!inputDisable)
-            Movement();
     }
 
     private void PlayerInput()

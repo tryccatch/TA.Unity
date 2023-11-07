@@ -6,15 +6,26 @@ public class ActionBarButton : MonoBehaviour
 {
     public KeyCode key;
     private SlotUI slotUI;
-
+    private bool canUse;
     private void Awake()
     {
         slotUI = GetComponent<SlotUI>();
+        canUse = true;
+    }
+
+    private void OnEnable()
+    {
+        EventHandler.UpdateGameStateEvent += OnUpdateGameStateEvent;
+    }
+
+    private void OnDisable()
+    {
+        EventHandler.UpdateGameStateEvent -= OnUpdateGameStateEvent;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(key))
+        if (canUse && Input.GetKeyDown(key))
         {
             if (slotUI.itemDetails != null)
             {
@@ -27,5 +38,10 @@ public class ActionBarButton : MonoBehaviour
                 EventHandler.CallItemSelectedEvent(slotUI.itemDetails, slotUI.isSelected);
             }
         }
+    }
+
+    private void OnUpdateGameStateEvent(GameState gameState)
+    {
+        canUse = gameState == GameState.GamePlay;
     }
 }
