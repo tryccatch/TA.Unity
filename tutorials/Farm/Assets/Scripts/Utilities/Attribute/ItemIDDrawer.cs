@@ -65,7 +65,7 @@ public class ItemIDDrawer : PropertyDrawer
 
         for (int i = 0; i < itemIDArray.Length; i++)
         {
-            itemIDs[i] = new GUIContent(itemIDArray[i].ToString());
+            itemIDs[i] = new GUIContent(itemIDArray[i] + "\t" + itemList.Find(t => t.itemID == itemIDArray[i])?.itemName);
         }
 
         if (itemList.Count == 0)
