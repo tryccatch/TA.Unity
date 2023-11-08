@@ -8,7 +8,7 @@ public class BluePrintDataList_SO : ScriptableObject
 
     public BluePrintDetails GetBluePrintDetails(int itemID)
     {
-        return bluePrintDataList.Find(x => x.ID == itemID);
+        return bluePrintDataList.Find(t => t.ID == itemID);
     }
 }
 

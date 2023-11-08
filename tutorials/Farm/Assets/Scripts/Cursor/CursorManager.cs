@@ -1,4 +1,5 @@
 using TA.CropPlant;
+using TA.Inventory;
 using TA.Map;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,6 +12,9 @@ public class CursorManager : MonoBehaviour
     private Sprite currentSprite;   // 存储当前图片
     private Image cursorImage;
     private RectTransform cursorCanvas;
+
+    // 建造图标跟随
+    private Image buildImage;
 
     // 鼠标检测
     private Camera mainCamera;
@@ -44,6 +48,10 @@ public class CursorManager : MonoBehaviour
     {
         cursorCanvas = GameObject.FindGameObjectWithTag("CursorCanvas").GetComponent<RectTransform>();
         cursorImage = cursorCanvas.GetChild(0).GetComponent<Image>();
+        // 拿到建造图标
+        buildImage = cursorCanvas.GetChild(1).GetComponent<Image>();
+        buildImage.gameObject.SetActive(false);
+
         currentSprite = normal;
         SetCursorSprite(normal);
 
@@ -65,6 +73,7 @@ public class CursorManager : MonoBehaviour
         else
         {
             SetCursorSprite(normal);
+            buildImage.gameObject.SetActive(false);
         }
     }
 
@@ -106,6 +115,8 @@ public class CursorManager : MonoBehaviour
     {
         cursorPositionValid = true;
         cursorImage.color = new Color(1, 1, 1, 1);
+
+        buildImage.color = new Color(1, 1, 1, 0.5f);
     }
 
     /// <summary>
@@ -115,6 +126,8 @@ public class CursorManager : MonoBehaviour
     {
         cursorPositionValid = false;
         cursorImage.color = new Color(1, 0, 0, 0.5f);
+
+        buildImage.color = new Color(1, 0, 0, 0.5f);
     }
     #endregion
 
@@ -134,7 +147,6 @@ public class CursorManager : MonoBehaviour
         else    // 物品被选中才切换图片
         {
             currentItem = itemDetails;
-            cursorEnable = true;
             // WORKFLOW:添加所有类型对应图片
             currentSprite = itemDetails.itemType switch
             {
@@ -145,9 +157,19 @@ public class CursorManager : MonoBehaviour
                 ItemType.BreakTool => tool,
                 ItemType.ReapTool => tool,
                 ItemType.WaterTool => tool,
+                ItemType.Furniture => tool,
                 ItemType.CollectTool => tool,
                 _ => normal
             };
+            cursorEnable = true;
+
+            // 显示建造图标
+            if (itemDetails.itemType == ItemType.Furniture)
+            {
+                buildImage.gameObject.SetActive(true);
+                buildImage.sprite = itemDetails.itemOnWorldSprite;
+                buildImage.SetNativeSize();
+            }
         }
     }
 
@@ -158,6 +180,9 @@ public class CursorManager : MonoBehaviour
         mouseGridPos = currentGrid.WorldToCell(mouseWorldPos);
 
         var playerGridPos = currentGrid.WorldToCell(PlayerTransform.position);
+
+        // 建造图标跟随移动
+        buildImage.rectTransform.position = Input.mousePosition;
 
         // 判断在使用范围内
         if (Mathf.Abs(mouseGridPos.x - playerGridPos.x) > currentItem.itemUseRadius || Mathf.Abs(mouseGridPos.y - playerGridPos.y) > currentItem.itemUseRadius)
@@ -209,6 +234,13 @@ public class CursorManager : MonoBehaviour
                     break;
                 case ItemType.ReapTool:
                     if (GridMapManager.Instance.HaveReapableItemsInRadius(mouseWorldPos, currentItem)) SetCursorValid(); else SetCursorInValid();
+                    break;
+                case ItemType.Furniture:
+                    buildImage.gameObject.SetActive(true);
+                    if (currentTile.canPlaceFurniture && InventoryManager.Instance.CheckStock(currentItem.itemID))
+                        SetCursorValid();
+                    else
+                        SetCursorInValid();
                     break;
             }
         }

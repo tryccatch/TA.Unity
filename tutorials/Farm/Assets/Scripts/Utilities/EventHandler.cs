@@ -144,4 +144,10 @@ public static class EventHandler
     {
         ShowTradeUI?.Invoke(item, isSell);
     }
+
+    public static event Action<int, Vector3> BuildFurnitureEvent;
+    public static void CallBuildFurnitureEvent(int ID, Vector3 pos)
+    {
+        BuildFurnitureEvent?.Invoke(ID, pos);
+    }
 }
