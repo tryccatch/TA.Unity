@@ -6,6 +6,8 @@ namespace TA.Inventory
     {
         [Header("物品数据")]
         public ItemDataList_SO itemDataList_SO;
+        [Header("建造蓝图")]
+        public BluePrintDataList_SO bluePrintData;
         [Header("背包数据")]
         public InventoryBag_SO playerBag;
         [Header("交易")]
