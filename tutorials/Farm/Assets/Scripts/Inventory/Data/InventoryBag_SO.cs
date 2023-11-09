@@ -8,6 +8,6 @@ public class InventoryBag_SO : ScriptableObject
 
     public InventoryItem GetInventoryItem(int ID)
     {
-        return itemList.Find(t => t.itemID == ID);
+        return itemList.Find(i => i.itemID == ID);
     }
 }

@@ -52,3 +52,14 @@ public enum LightShift
 {
     Morning, Night,
 }
+
+public enum SoundName
+{
+    None,
+    FootStepSoft = 01, FootStepHard,
+    Axe = 10, Pickaxe, Hoe, Reap, Water, Basket, Chop,
+    Pickup = 20, Plant, TreeFalling, Rustle,
+    AmbientCountryside1 = 30, AmbientCountryside2,
+    MusicCalm1 = 40, MusicCalm2, MusicCalm3, MusicCalm4, MusicCalm5, MusicCalm6,
+    AmbientIndoor1 = 50,
+}
