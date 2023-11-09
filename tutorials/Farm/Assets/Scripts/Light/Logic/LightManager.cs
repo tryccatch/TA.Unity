@@ -36,6 +36,7 @@ public class LightManager : MonoBehaviour
 
     private void OnAfterSceneLoadedEvent()
     {
+        GameObject.FindWithTag("Lights")?.transform.GetChild(0).gameObject.SetActive(true);
         sceneLights = FindObjectsOfType<LightControl>();
 
         foreach (LightControl light in sceneLights)
