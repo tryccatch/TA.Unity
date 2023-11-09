@@ -24,6 +24,5 @@ public class LightDetails
     public Season season;
     public LightShift lightShift;
     public Color lightColor;
-    [Range(0, 1)]
     public float lightAmount;
 }

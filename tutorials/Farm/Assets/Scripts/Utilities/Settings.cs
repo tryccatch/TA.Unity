@@ -1,3 +1,5 @@
+using System;
+
 public class Settings
 {
     public const float itemFadeDuration = 0.35f;
@@ -24,4 +26,9 @@ public class Settings
     public const float pixelSize = 0.05f;   // 20*20 占 1 unit
     public const float animationBreakTime = 5f; // 动画间隔时间
     public const float maxGridSize = 9999;  // 最大网格尺寸
+
+    // 灯光
+    public const float lightChangeDuration = 25f;
+    public static TimeSpan morningTime = new TimeSpan(5, 0, 0);
+    public static TimeSpan nightTime = new TimeSpan(19, 0, 0);
 }
