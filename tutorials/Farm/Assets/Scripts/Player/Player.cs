@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animators = GetComponentsInChildren<Animator>();
 
-        transform.position = Vector3.zero;
+        // transform.position = Vector3.zero;
     }
 
     private void OnEnable()
