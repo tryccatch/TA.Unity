@@ -11,6 +11,7 @@ namespace TA.Dialogue
     {
         private NPCMovement npc => GetComponent<NPCMovement>();
         public UnityEvent OnFinishEvent;
+        [Header("对话列表")]
         public List<DialoguePiece> dialogueList = new List<DialoguePiece>();
 
         private Stack<DialoguePiece> dialogueStack;
