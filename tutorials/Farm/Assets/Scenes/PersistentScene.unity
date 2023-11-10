@@ -470,6 +470,7 @@ GameObject:
   m_Component:
   - component: {fileID: 166088570}
   - component: {fileID: 166088569}
+  - component: {fileID: 166088571}
   m_Layer: 0
   m_Name: Item Manager
   m_TagString: Untagged
@@ -506,6 +507,19 @@ Transform:
   m_Father: {fileID: 1355656860}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &166088571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166088568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4098746867b963a4ea6656921c729994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: e5ea1dea-cd6f-4aa4-8eba-2654ce569e8b
 --- !u!1 &171236283
 GameObject:
   m_ObjectHideFlags: 0
@@ -755,6 +769,7 @@ GameObject:
   m_Component:
   - component: {fileID: 274437935}
   - component: {fileID: 274437936}
+  - component: {fileID: 274437937}
   m_Layer: 0
   m_Name: GridMap Manager
   m_TagString: Untagged
@@ -796,6 +811,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f7e6aa3af4342bf48b86a83931363f7f, type: 2}
   - {fileID: 11400000, guid: b5c4dc50a0464084a96478e1260458ee, type: 2}
   - {fileID: 11400000, guid: 319d692f28bdbde429930dc272075acc, type: 2}
+--- !u!114 &274437937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 274437934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4098746867b963a4ea6656921c729994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 89d01ed7-704b-4456-a190-187a6d1ad87b
 --- !u!1 &316278696
 GameObject:
   m_ObjectHideFlags: 0
@@ -888,6 +916,7 @@ GameObject:
   - component: {fileID: 334042200}
   - component: {fileID: 334042201}
   - component: {fileID: 334042202}
+  - component: {fileID: 334042203}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1082,6 +1111,19 @@ MonoBehaviour:
   - partName: 3
     partType: 4
     overrideController: {fileID: 22100000, guid: 860c2c89a14ef3b42bd67cb0294502b2, type: 2}
+--- !u!114 &334042203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 334042194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4098746867b963a4ea6656921c729994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 8152d954-a3a3-4ad3-a411-abe02341afca
 --- !u!1 &336112867
 GameObject:
   m_ObjectHideFlags: 0
@@ -1098,6 +1140,7 @@ GameObject:
   - component: {fileID: 336112869}
   - component: {fileID: 336112875}
   - component: {fileID: 336112874}
+  - component: {fileID: 336112876}
   m_Layer: 0
   m_Name: NPC_Girl02
   m_TagString: Untagged
@@ -1135,7 +1178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scheduleData: {fileID: 11400000, guid: 1f6e5fd194f1163498decc6b9bdf85bc, type: 2}
-  currentScene: 03.Stall
+  currentScene: 00.Start
   normalSpeed: 2
   isMoving: 0
   interactable: 0
@@ -1307,6 +1350,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopData: {fileID: 11400000, guid: f00c14046ec673d49960f582ed398740, type: 2}
+--- !u!114 &336112876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 336112867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4098746867b963a4ea6656921c729994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 5c1e6f44-44b7-45d6-b13f-fa202d97075c
 --- !u!1 &356549239
 GameObject:
   m_ObjectHideFlags: 0
@@ -1729,6 +1785,7 @@ GameObject:
   m_Component:
   - component: {fileID: 431223037}
   - component: {fileID: 431223036}
+  - component: {fileID: 431223038}
   m_Layer: 0
   m_Name: Transition Manager
   m_TagString: Untagged
@@ -1748,7 +1805,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84d6dcf20b2a8754480cbca2d030f9d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startScene: 00.Start
+  startScene: 01.Field
 --- !u!4 &431223037
 Transform:
   m_ObjectHideFlags: 0
@@ -1764,6 +1821,19 @@ Transform:
   m_Father: {fileID: 1355656860}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &431223038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431223035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4098746867b963a4ea6656921c729994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: f7e144c3-d12f-4d0f-a9ac-5c3b44dfbecb
 --- !u!1 &433887073
 GameObject:
   m_ObjectHideFlags: 0
@@ -3187,6 +3257,7 @@ GameObject:
   - component: {fileID: 771946416}
   - component: {fileID: 771946415}
   - component: {fileID: 771946420}
+  - component: {fileID: 771946421}
   m_Layer: 0
   m_Name: NPC_Girl01
   m_TagString: Untagged
@@ -3365,6 +3436,19 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   dialogueList: []
+--- !u!114 &771946421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 771946411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4098746867b963a4ea6656921c729994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 4870ec63-45c2-4fc2-8e94-7824f078bfb1
 --- !u!1 &785976125
 GameObject:
   m_ObjectHideFlags: 0
@@ -3909,6 +3993,7 @@ GameObject:
   m_Component:
   - component: {fileID: 916268853}
   - component: {fileID: 916268852}
+  - component: {fileID: 916268854}
   m_Layer: 0
   m_Name: Inventory Manager
   m_TagString: Untagged
@@ -3947,6 +4032,19 @@ Transform:
   m_Father: {fileID: 1355656860}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &916268854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 916268851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4098746867b963a4ea6656921c729994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: da96e183-8e21-4411-9790-ecdf9f21fa44
 --- !u!1 &933120441
 GameObject:
   m_ObjectHideFlags: 0
@@ -4330,7 +4428,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1147474640
 Transform:
   m_ObjectHideFlags: 0
@@ -4737,6 +4835,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startDirector: {fileID: 1147474641}
+--- !u!1 &1344394324
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1344394325}
+  - component: {fileID: 1344394326}
+  m_Layer: 0
+  m_Name: SaveLoad Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1344394325
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344394324}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1355656860}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1344394326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344394324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 555d4e25c88d8f0488cef33c5fc59a0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1355656859
 GameObject:
   m_ObjectHideFlags: 0
@@ -4777,6 +4919,7 @@ Transform:
   - {fileID: 434811039}
   - {fileID: 728867675}
   - {fileID: 1296611013}
+  - {fileID: 1344394325}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5089,6 +5232,7 @@ GameObject:
   - component: {fileID: 1633474221}
   - component: {fileID: 1633474222}
   - component: {fileID: 1633474223}
+  - component: {fileID: 1633474224}
   m_Layer: 0
   m_Name: NPC_Mayor
   m_TagString: Untagged
@@ -5246,7 +5390,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scheduleData: {fileID: 11400000, guid: f3e21faf8410bb244866e955e2e10e19, type: 2}
-  currentScene: 01.Field
+  currentScene: 00.Start
   normalSpeed: 2
   isMoving: 0
   interactable: 0
@@ -5279,6 +5423,19 @@ MonoBehaviour:
     dialogueText: "\u4F60\u597D\u5440~\u6211\u53EBTA"
     hasToPause: 1
     isDone: 0
+--- !u!114 &1633474224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1633474216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4098746867b963a4ea6656921c729994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: bd5c4872-dd94-4bdc-baa7-cbcf8f7d1223
 --- !u!1 &1684628328
 GameObject:
   m_ObjectHideFlags: 0
@@ -5365,6 +5522,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1698425028}
   - component: {fileID: 1698425029}
+  - component: {fileID: 1698425030}
   m_Layer: 0
   m_Name: Time Manager
   m_TagString: Untagged
@@ -5400,6 +5558,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameClockPause: 0
+--- !u!114 &1698425030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698425027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4098746867b963a4ea6656921c729994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 8c3e2b11-b361-4579-8f9d-6c31911fe4aa
 --- !u!1 &1712615831
 GameObject:
   m_ObjectHideFlags: 0

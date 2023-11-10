@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using TA.CropPlant;
+using TA.Save;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 namespace TA.Map
 {
-    public class GridMapManager : Singleton<GridMapManager>
+    public class GridMapManager : Singleton<GridMapManager>, ISaveable
     {
         [Header("种地瓦片切换信息")]
         public RuleTile digTile;
@@ -27,6 +28,8 @@ namespace TA.Map
         private List<ReapItem> itemsInRadius;
 
         private Grid currentGrid;
+
+        public string GUID => GetComponent<DataGUID>().guid;
 
         private void OnEnable()
         {
@@ -51,6 +54,9 @@ namespace TA.Map
                 firstLoadDict.Add(mapData.sceneName, true);
                 InitTileDetailsDict(mapData);
             }
+
+            ISaveable saveable = this;
+            saveable.RegisterSaveable();
         }
 
         private void OnAfterSceneLoadedEvent()
@@ -406,6 +412,22 @@ namespace TA.Map
                 }
             }
             return false;
+        }
+
+        public GameSaveData GenerateSaveData()
+        {
+            GameSaveData saveData = new GameSaveData();
+
+            saveData.titleDetailsDict = this.tileDetailsDict;
+            saveData.firstLoadDict = this.firstLoadDict;
+
+            return saveData;
+        }
+
+        public void RestoreSaveData(GameSaveData saveData)
+        {
+            this.tileDetailsDict = saveData.titleDetailsDict;
+            this.firstLoadDict = saveData.firstLoadDict;
         }
     }
 }

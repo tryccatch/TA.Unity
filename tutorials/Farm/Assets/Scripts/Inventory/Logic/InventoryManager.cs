@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using TA.Save;
 using UnityEngine;
 
 namespace TA.Inventory
 {
-    public class InventoryManager : Singleton<InventoryManager>
+    public class InventoryManager : Singleton<InventoryManager>, ISaveable
     {
         [Header("物品数据")]
         public ItemDataList_SO itemDataList_SO;
@@ -18,6 +19,9 @@ namespace TA.Inventory
 
         private Dictionary<string, List<InventoryItem>> boxDataDict = new Dictionary<string, List<InventoryItem>>();
         public int BoxDataAmount => boxDataDict.Count;
+
+        public string GUID => GetComponent<DataGUID>().guid;
+
         private void OnEnable()
         {
             EventHandler.DropItemEvent += OnDropItemEvent;
@@ -37,6 +41,9 @@ namespace TA.Inventory
         private void Start()
         {
             EventHandler.CallUpdateInventoryUIEvent(InventoryLocation.Player, playerBag.itemList);
+
+            ISaveable saveable = this;
+            saveable.RegisterSaveable();
         }
 
         private void OnBaseBagOpenEvent(SlotType slotType, InventoryBag_SO bag_SO)
@@ -338,6 +345,39 @@ namespace TA.Inventory
             var key = box.name + box.index;
             if (!boxDataDict.ContainsKey(key))
                 boxDataDict.Add(key, box.boxBagData.itemList);
+        }
+
+        public GameSaveData GenerateSaveData()
+        {
+            GameSaveData saveData = new GameSaveData();
+
+            saveData.playerMoney = this.playerMoney;
+
+            saveData.inventoryDict = new Dictionary<string, List<InventoryItem>>();
+            saveData.inventoryDict.Add(playerBag.name, playerBag.itemList);
+
+            foreach (var item in boxDataDict)
+            {
+                saveData.inventoryDict.Add(item.Key, item.Value);
+            }
+
+            return saveData;
+        }
+
+        public void RestoreSaveData(GameSaveData saveData)
+        {
+            this.playerMoney = saveData.playerMoney;
+            playerBag.itemList = saveData.inventoryDict[playerBag.name];
+
+            foreach (var item in saveData.inventoryDict)
+            {
+                if (boxDataDict.ContainsKey(item.Key))
+                {
+                    boxDataDict[item.Key] = item.Value;
+                }
+            }
+
+            EventHandler.CallUpdateInventoryUIEvent(InventoryLocation.Player, playerBag.itemList);
         }
     }
 }

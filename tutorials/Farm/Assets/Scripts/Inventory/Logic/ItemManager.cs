@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using TA.Save;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace TA.Inventory
 {
-    public class ItemManager : MonoBehaviour
+    public class ItemManager : MonoBehaviour, ISaveable
     {
         public Item itemPrefab;
         public Item bouncePrefab;
@@ -13,10 +14,13 @@ namespace TA.Inventory
 
         private Transform PlayerTransform => FindObjectOfType<Player>().transform;
 
+        public string GUID => GetComponent<DataGUID>().guid;
+
         // 记录场景Item
         private Dictionary<string, List<SceneItem>> sceneItemDict = new Dictionary<string, List<SceneItem>>();
         // 记录场景家具
         private Dictionary<string, List<SceneFurniture>> sceneFurnitureDict = new Dictionary<string, List<SceneFurniture>>();
+
         private void OnEnable()
         {
             EventHandler.InstantiateItemInSceneEvent += OnInstantiateItemInScene;
@@ -33,6 +37,12 @@ namespace TA.Inventory
             EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
             EventHandler.DropItemEvent -= OnDropItemEvent;
             EventHandler.BuildFurnitureEvent -= OnBuildFurnitureEvent;
+        }
+
+        private void Start()
+        {
+            ISaveable saveable = this;
+            saveable.RegisterSaveable();
         }
 
         private void OnBuildFurnitureEvent(int ID, Vector3 mousePos)
@@ -140,7 +150,8 @@ namespace TA.Inventory
 
                     foreach (var item in currentSceneItems)
                     {
-                        OnInstantiateItemInScene(item.itemID, item.position.ToVector3());
+                        // OnInstantiateItemInScene(item.itemID, item.position.ToVector3());
+                        Instantiate(bouncePrefab, item.position.ToVector3(), Quaternion.identity, itemParent).itemID = item.itemID;
                     }
                 }
             }
@@ -199,6 +210,28 @@ namespace TA.Inventory
                     }
                 }
             }
+        }
+
+        public GameSaveData GenerateSaveData()
+        {
+            GetAllSceneItems();
+            GetAllSceneFurniture();
+
+            GameSaveData saveData = new GameSaveData();
+
+            saveData.sceneItemDict = this.sceneItemDict;
+            saveData.sceneFurnitureDict = this.sceneFurnitureDict;
+
+            return saveData;
+        }
+
+        public void RestoreSaveData(GameSaveData saveData)
+        {
+            this.sceneItemDict = saveData.sceneItemDict;
+            this.sceneFurnitureDict = saveData.sceneFurnitureDict;
+
+            RecreateAllItems();
+            RebuildFurniture();
         }
     }
 }

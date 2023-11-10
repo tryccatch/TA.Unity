@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
+using TA.Save;
 using UnityEngine;
 
-public class TimeManager : Singleton<TimeManager>
+public class TimeManager : Singleton<TimeManager>, ISaveable
 {
     private int gameSecond, gameMinute, gameHour, gameDay, gameMonth, gameYear;
     private Season gameSeason = Season.春天;
+
     private int monthInSeason = 3;
 
     public bool gameClockPause;
@@ -14,6 +17,8 @@ public class TimeManager : Singleton<TimeManager>
     private float timeDifference;
 
     public TimeSpan GameTime => new TimeSpan(gameHour, gameMinute, gameSecond);
+
+    public string GUID => GetComponent<DataGUID>().guid;
 
     protected override void Awake()
     {
@@ -43,6 +48,11 @@ public class TimeManager : Singleton<TimeManager>
     private void OnAfterSceneLoadedEvent()
     {
         gameClockPause = false;
+
+        EventHandler.CallGameMinuteEvent(gameMinute, gameHour, gameDay, gameSeason);
+        EventHandler.CallGameDateEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
+        EventHandler.CallGameDayEvent(gameDay, gameSeason);
+        EventHandler.CallLightShiftChangeEvent(gameSeason, GetCurrentLightShift(), timeDifference);
     }
 
     private void OnBeforeSceneUnloadEvent()
@@ -56,6 +66,9 @@ public class TimeManager : Singleton<TimeManager>
         EventHandler.CallGameDateEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
         EventHandler.CallGameDayEvent(gameDay, gameSeason);
         EventHandler.CallLightShiftChangeEvent(gameSeason, GetCurrentLightShift(), timeDifference);
+
+        ISaveable saveable = this;
+        saveable.RegisterSaveable();
     }
 
     private void Update()
@@ -173,5 +186,31 @@ public class TimeManager : Singleton<TimeManager>
         }
 
         return LightShift.Morning;
+    }
+
+    public GameSaveData GenerateSaveData()
+    {
+        GameSaveData saveData = new GameSaveData();
+
+        saveData.timeDict = new Dictionary<string, int>();
+        saveData.timeDict.Add("gameYear", gameYear);
+        saveData.timeDict.Add("gameMonth", gameMonth);
+        saveData.timeDict.Add("gameDay", gameDay);
+        saveData.timeDict.Add("gameHour", gameHour);
+        saveData.timeDict.Add("gameMinute", gameMinute);
+        saveData.timeDict.Add("gameSecond", gameSecond);
+
+        return saveData;
+    }
+
+    public void RestoreSaveData(GameSaveData saveData)
+    {
+        gameYear = saveData.timeDict["gameYear"];
+        gameSeason = (Season)saveData.timeDict["gameSeason"];
+        gameMonth = saveData.timeDict["gameMonth"];
+        gameDay = saveData.timeDict["gameDay"];
+        gameHour = saveData.timeDict["gameHour"];
+        gameMinute = saveData.timeDict["gameMinute"];
+        gameSecond = saveData.timeDict["gameSecond"];
     }
 }
