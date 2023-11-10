@@ -45,6 +45,7 @@ public class Player : MonoBehaviour, ISaveable
         EventHandler.MoveToPositionEvent += OnMoveToPositionEvent;
         EventHandler.MouseClickedEvent += OnMouseClickedEvent;
         EventHandler.UpdateGameStateEvent += OnUpdateGameStateEvent;
+        EventHandler.StartNewGameEvent += OnStartNewGameEvent;
     }
 
     private void OnDisable()
@@ -54,6 +55,7 @@ public class Player : MonoBehaviour, ISaveable
         EventHandler.MoveToPositionEvent -= OnMoveToPositionEvent;
         EventHandler.MouseClickedEvent -= OnMouseClickedEvent;
         EventHandler.UpdateGameStateEvent -= OnUpdateGameStateEvent;
+        EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
     }
 
     private void Update()
@@ -69,6 +71,12 @@ public class Player : MonoBehaviour, ISaveable
     {
         if (!inputDisable)
             Movement();
+    }
+
+    private void OnStartNewGameEvent(int index)
+    {
+        inputDisable = false;
+        transform.position = Settings.playerStartPos;
     }
 
     private void OnUpdateGameStateEvent(GameState gameState)

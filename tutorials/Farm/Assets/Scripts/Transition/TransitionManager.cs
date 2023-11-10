@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace TA.Transition
 {
-    public class TransitionManager : MonoBehaviour, ISaveable
+    public class TransitionManager : Singleton<TransitionManager>, ISaveable
     {
         [SceneName]
         public string startScene = string.Empty;
@@ -15,35 +15,35 @@ namespace TA.Transition
 
         public string GUID => GetComponent<DataGUID>().guid;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             SceneManager.LoadScene("UI", LoadSceneMode.Additive);
         }
 
         private void OnEnable()
         {
             EventHandler.TransitionEvent += OnTransitionEvent;
+            EventHandler.StartNewGameEvent += OnStartNewGameEvent;
         }
 
         private void OnDisable()
         {
             EventHandler.TransitionEvent -= OnTransitionEvent;
+            EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
         }
 
-        // TODO:转换成开始新游戏
-        private IEnumerator Start()
+        private void OnStartNewGameEvent(int index)
         {
+            StartCoroutine(LoadSaveDataScene(startScene));
+        }
+
+        private void Start()
+        {
+            fadeCanvasGroup = FindObjectOfType<CanvasGroup>();
+
             ISaveable saveable = this;
             saveable.RegisterSaveable();
-
-            // for (int i = SceneManager.sceneCount - 1; i > 1; i--)
-            // {
-            //     SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i));
-            // }
-
-            fadeCanvasGroup = FindObjectOfType<CanvasGroup>();
-            yield return LoadSceneSetActive(startScene);
-            EventHandler.CallAfterSceneLoadedEvent();
         }
 
         private void OnTransitionEvent(string sceneToGo, Vector3 positionToGo)

@@ -20,17 +20,12 @@ public class TimeManager : Singleton<TimeManager>, ISaveable
 
     public string GUID => GetComponent<DataGUID>().guid;
 
-    protected override void Awake()
-    {
-        base.Awake();
-        NewGameTime();
-    }
-
     private void OnEnable()
     {
         EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
         EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
         EventHandler.UpdateGameStateEvent += OnUpdateGameStateEvent;
+        EventHandler.StartNewGameEvent += OnStartNewGameEvent;
     }
 
     private void OnDisable()
@@ -38,6 +33,13 @@ public class TimeManager : Singleton<TimeManager>, ISaveable
         EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
         EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
         EventHandler.UpdateGameStateEvent -= OnUpdateGameStateEvent;
+        EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
+    }
+
+    private void OnStartNewGameEvent(int index)
+    {
+        NewGameTime();
+        gameClockPause = false;
     }
 
     private void OnUpdateGameStateEvent(GameState gameState)
@@ -62,10 +64,11 @@ public class TimeManager : Singleton<TimeManager>, ISaveable
 
     private void Start()
     {
-        EventHandler.CallGameMinuteEvent(gameMinute, gameHour, gameDay, gameSeason);
-        EventHandler.CallGameDateEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
-        EventHandler.CallGameDayEvent(gameDay, gameSeason);
-        EventHandler.CallLightShiftChangeEvent(gameSeason, GetCurrentLightShift(), timeDifference);
+        gameClockPause = true;
+        // EventHandler.CallGameMinuteEvent(gameMinute, gameHour, gameDay, gameSeason);
+        // EventHandler.CallGameDateEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
+        // EventHandler.CallGameDayEvent(gameDay, gameSeason);
+        // EventHandler.CallLightShiftChangeEvent(gameSeason, GetCurrentLightShift(), timeDifference);
 
         ISaveable saveable = this;
         saveable.RegisterSaveable();

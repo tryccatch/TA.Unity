@@ -18,6 +18,17 @@ namespace TA.Save
         {
             base.Awake();
             jsonFolder = Application.persistentDataPath + "/SAVE DATA/";
+            ReadSaveData();
+        }
+
+        private void OnEnable()
+        {
+            EventHandler.StartNewGameEvent += OnStartNewGameEvent;
+        }
+
+        private void OnDisable()
+        {
+            EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
         }
 
         private void Update()
@@ -28,10 +39,32 @@ namespace TA.Save
                 Load(currentDataIndex);
         }
 
+        private void OnStartNewGameEvent(int index)
+        {
+            currentDataIndex = index;
+        }
+
         public void RegisterSaveable(ISaveable saveable)
         {
             if (!saveableList.Contains(saveable))
                 saveableList.Add(saveable);
+        }
+
+        private void ReadSaveData()
+        {
+            if (Directory.Exists(jsonFolder))
+            {
+                for (int i = 0; i < dataSlots.Count; i++)
+                {
+                    var resultPath = jsonFolder + "data" + i + ".json";
+                    if (File.Exists(resultPath))
+                    {
+                        var stringData = File.ReadAllText(resultPath);
+                        var jsonData = JsonConvert.DeserializeObject<DataSlot>(stringData);
+                        dataSlots[i] = jsonData;
+                    }
+                }
+            }
         }
 
         private void Save(int index)
@@ -52,11 +85,11 @@ namespace TA.Save
             {
                 Directory.CreateDirectory(jsonFolder);
             }
-
+            Debug.Log("DATA" + index + "SAVED!");
             File.WriteAllText(resultPath, jsonData);
         }
 
-        private void Load(int index)
+        public void Load(int index)
         {
             currentDataIndex = index;
 
@@ -74,6 +107,7 @@ namespace TA.Save
             {
                 saveable.RestoreSaveData(jsonData.dataDict[saveable.GUID]);
             }
+            Debug.Log("DATA" + index + "LOADED!");
         }
     }
 }

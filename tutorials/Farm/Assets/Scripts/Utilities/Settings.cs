@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class Settings
 {
@@ -31,4 +32,7 @@ public class Settings
     public const float lightChangeDuration = 25f;
     public static TimeSpan morningTime = new TimeSpan(5, 0, 0);
     public static TimeSpan nightTime = new TimeSpan(19, 0, 0);
+
+    public static Vector3 playerStartPos = new Vector3(0.5f, -3.5f, 0);
+    public static int playerStartMoney = 100;
 }

@@ -11,6 +11,7 @@ namespace TA.Inventory
         [Header("建造蓝图")]
         public BluePrintDataList_SO bluePrintData;
         [Header("背包数据")]
+        public InventoryBag_SO playerBagTemp;
         public InventoryBag_SO playerBag;
         private InventoryBag_SO currentBoxBag;
 
@@ -28,22 +29,32 @@ namespace TA.Inventory
             EventHandler.HarvestAtPlayerPosition += OnHarvestAtPlayerPosition;
             EventHandler.BuildFurnitureEvent += OnBuildFurnitureEvent;
             EventHandler.BaseBagOpenEvent += OnBaseBagOpenEvent;
+            EventHandler.StartNewGameEvent += OnStartNewGameEvent;
         }
 
         private void OnDisable()
         {
             EventHandler.DropItemEvent -= OnDropItemEvent;
             EventHandler.HarvestAtPlayerPosition -= OnHarvestAtPlayerPosition;
-            EventHandler.BuildFurnitureEvent += OnBuildFurnitureEvent;
+            EventHandler.BuildFurnitureEvent -= OnBuildFurnitureEvent;
             EventHandler.BaseBagOpenEvent -= OnBaseBagOpenEvent;
+            EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
         }
 
         private void Start()
         {
-            EventHandler.CallUpdateInventoryUIEvent(InventoryLocation.Player, playerBag.itemList);
+            // EventHandler.CallUpdateInventoryUIEvent(InventoryLocation.Player, playerBag.itemList);
 
             ISaveable saveable = this;
             saveable.RegisterSaveable();
+        }
+
+        private void OnStartNewGameEvent(int index)
+        {
+            playerBag = Instantiate(playerBagTemp);
+            playerMoney = Settings.playerStartMoney;
+            boxDataDict.Clear();
+            EventHandler.CallUpdateInventoryUIEvent(InventoryLocation.Player, playerBag.itemList);
         }
 
         private void OnBaseBagOpenEvent(SlotType slotType, InventoryBag_SO bag_SO)
@@ -367,6 +378,8 @@ namespace TA.Inventory
         public void RestoreSaveData(GameSaveData saveData)
         {
             this.playerMoney = saveData.playerMoney;
+
+            playerBag = Instantiate(playerBagTemp);
             playerBag.itemList = saveData.inventoryDict[playerBag.name];
 
             foreach (var item in saveData.inventoryDict)
