@@ -4,7 +4,7 @@ using UnityEngine;
 namespace TA.Save
 {
     [System.Serializable]
-    public class GameSaveData : MonoBehaviour
+    public class GameSaveData
     {
         public string dataSceneName;
         /// <summary>

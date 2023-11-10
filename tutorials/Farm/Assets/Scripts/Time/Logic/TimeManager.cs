@@ -194,6 +194,7 @@ public class TimeManager : Singleton<TimeManager>, ISaveable
 
         saveData.timeDict = new Dictionary<string, int>();
         saveData.timeDict.Add("gameYear", gameYear);
+        saveData.timeDict.Add("gameSeason", (int)gameSeason);
         saveData.timeDict.Add("gameMonth", gameMonth);
         saveData.timeDict.Add("gameDay", gameDay);
         saveData.timeDict.Add("gameHour", gameHour);

@@ -29,7 +29,7 @@ namespace TA.Dialogue
         {
             if (other.CompareTag("Player"))
             {
-                canTalk = !npc.isMoving && npc.interactable;
+                canTalk = !npc.isMoving && npc.interactable && dialogueList.Count > 0;
             }
         }
 
