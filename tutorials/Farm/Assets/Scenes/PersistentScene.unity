@@ -1182,6 +1182,7 @@ MonoBehaviour:
   normalSpeed: 2
   isMoving: 0
   interactable: 0
+  isFirstLoad: 0
   blankAnimationClip: {fileID: 7400000, guid: 500fefed8113b4f7e8f2dc728631a63d, type: 2}
 --- !u!95 &336112870
 Animator:
@@ -1805,7 +1806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84d6dcf20b2a8754480cbca2d030f9d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startScene: 01.Field
+  startScene: 00.Start
 --- !u!4 &431223037
 Transform:
   m_ObjectHideFlags: 0
@@ -3299,6 +3300,7 @@ MonoBehaviour:
   normalSpeed: 2
   isMoving: 0
   interactable: 0
+  isFirstLoad: 0
   blankAnimationClip: {fileID: 7400000, guid: 500fefed8113b4f7e8f2dc728631a63d, type: 2}
 --- !u!95 &771946416
 Animator:
@@ -3535,13 +3537,13 @@ MonoBehaviour:
   npcPositionList:
   - npc: {fileID: 1633474217}
     startScene: 01.Field
-    position: {x: 5, y: -3, z: 0}
+    position: {x: -1.5, y: -3.5, z: 0}
   - npc: {fileID: 771946412}
-    startScene: 01.Field
-    position: {x: 1, y: -3, z: 0}
+    startScene: 00.Start
+    position: {x: 0.5, y: -1.5, z: 0}
   - npc: {fileID: 336112868}
     startScene: 01.Field
-    position: {x: 1, y: -3, z: 0}
+    position: {x: 2.5, y: -3.5, z: 0}
 --- !u!1 &797967419
 GameObject:
   m_ObjectHideFlags: 0
@@ -5395,6 +5397,7 @@ MonoBehaviour:
   normalSpeed: 2
   isMoving: 0
   interactable: 0
+  isFirstLoad: 0
   blankAnimationClip: {fileID: 7400000, guid: 500fefed8113b4f7e8f2dc728631a63d, type: 2}
 --- !u!114 &1633474223
 MonoBehaviour:
