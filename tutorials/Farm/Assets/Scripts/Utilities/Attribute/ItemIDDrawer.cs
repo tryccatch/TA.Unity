@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 
+#if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(ItemIDAttribute))]
 public class ItemIDDrawer : PropertyDrawer
 {
@@ -105,3 +106,4 @@ public class ItemIDDrawer : PropertyDrawer
         return index;
     }
 }
+#endif
