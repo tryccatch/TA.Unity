@@ -5,6 +5,9 @@ using UnityEngine;
 public class ItemFader : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
+    private Tween tweenFadeIn;
+    private Tween tweenFadeOut;
+
 
     private void Awake()
     {
@@ -17,7 +20,7 @@ public class ItemFader : MonoBehaviour
     public void FadeIn()
     {
         Color targetColor = new(1, 1, 1, 1);
-        spriteRenderer.DOColor(targetColor, Settings.itemFadeDuration);
+        tweenFadeIn = spriteRenderer.DOColor(targetColor, Settings.itemFadeDuration);
     }
 
     /// <summary>
@@ -26,6 +29,12 @@ public class ItemFader : MonoBehaviour
     public void FadeOut()
     {
         Color targetColor = new(1, 1, 1, Settings.targetAlpha);
-        spriteRenderer.DOColor(targetColor, Settings.itemFadeDuration);
+        tweenFadeOut = spriteRenderer.DOColor(targetColor, Settings.itemFadeDuration);
+    }
+
+    private void OnDestroy()
+    {
+        tweenFadeIn?.Kill();
+        tweenFadeOut?.Kill();
     }
 }

@@ -18,7 +18,12 @@ namespace TA.Transition
         protected override void Awake()
         {
             base.Awake();
+
+#if UNITY_EDITOR
+            StartCoroutine(LoadSceneUI());
+#else
             SceneManager.LoadScene("UI", LoadSceneMode.Additive);
+#endif
         }
 
         private void OnEnable()
@@ -35,6 +40,14 @@ namespace TA.Transition
             EventHandler.EndGameEvent -= OnEndGameEvent;
         }
 
+        private void Start()
+        {
+            fadeCanvasGroup = FindObjectOfType<CanvasGroup>();
+
+            ISaveable saveable = this;
+            saveable.RegisterSaveable();
+        }
+
         private void OnEndGameEvent()
         {
             StartCoroutine(UnloadScene());
@@ -45,18 +58,25 @@ namespace TA.Transition
             StartCoroutine(LoadSaveDataScene(startScene));
         }
 
-        private void Start()
-        {
-            fadeCanvasGroup = FindObjectOfType<CanvasGroup>();
-
-            ISaveable saveable = this;
-            saveable.RegisterSaveable();
-        }
-
         private void OnTransitionEvent(string sceneToGo, Vector3 positionToGo)
         {
             if (!isFade)
                 StartCoroutine(Transition(sceneToGo, positionToGo));
+        }
+
+        /// <summary>
+        /// 加载UI场景
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator LoadSceneUI()
+        {
+            if (SceneManager.sceneCount == 1)
+                yield return SceneManager.LoadSceneAsync("UI", LoadSceneMode.Additive);
+
+            while (SceneManager.sceneCount > 2)
+                yield return SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(2));
+
+            Debug.Log(Time.time);
         }
 
         /// <summary>

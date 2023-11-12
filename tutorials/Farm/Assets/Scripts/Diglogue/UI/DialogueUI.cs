@@ -65,7 +65,8 @@ public class DialogueUI : MonoBehaviour
                 faceLeft.gameObject.SetActive(false);
                 faceRight.gameObject.SetActive(false);
             }
-            yield return dialogueText.DOText(piece.dialogueText, 1f).WaitForCompletion();
+            // yield return dialogueText.DOText(piece.dialogueText, 1f).WaitForCompletion();
+            yield return dialogueText.DOText(piece.dialogueText, piece.dialogueText.Length * 0.1f).WaitForCompletion();
 
             piece.isDone = true;
 
