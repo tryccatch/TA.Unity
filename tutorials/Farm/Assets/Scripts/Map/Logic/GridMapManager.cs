@@ -18,6 +18,7 @@ namespace TA.Map
         [Header("地图信息")]
         public List<MapData_SO> mapDataList;
 
+        private int currentDay;
         private Season currentSeason;
 
         private Dictionary<string, TileDetails> tileDetailsDict = new();
@@ -83,6 +84,13 @@ namespace TA.Map
         private void OnGameDayEvent(int day, Season season)
         {
             currentSeason = season;
+
+            if (currentDay == 0)
+                currentDay = day;
+
+            if (currentDay == day)
+                return;
+            currentDay = day;
 
             foreach (var tile in tileDetailsDict)
             {

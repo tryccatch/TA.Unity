@@ -61,7 +61,7 @@ public class TimeManager : Singleton<TimeManager>, ISaveable
 
         EventHandler.CallGameMinuteEvent(gameMinute, gameHour, gameDay, gameSeason);
         EventHandler.CallGameDateEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
-        EventHandler.CallGameDayEvent(gameDay, gameSeason);
+        // EventHandler.CallGameDayEvent(gameDay, gameSeason);
         EventHandler.CallLightShiftChangeEvent(gameSeason, GetCurrentLightShift(), timeDifference);
     }
 

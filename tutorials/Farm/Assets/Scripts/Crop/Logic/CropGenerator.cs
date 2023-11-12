@@ -7,7 +7,7 @@ namespace TA.CropPlant
     {
         private Grid currentGrid;
 
-        public int seedItemID;
+        [ItemID] public int seedItemID;
         public int growthDays;
 
         private void Awake()
