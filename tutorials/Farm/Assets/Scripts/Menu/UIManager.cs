@@ -69,4 +69,10 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         Instantiate(menuPrefab, menuCanvas.transform);
     }
+
+    public void QuitGame()
+    {
+        EventHandler.CallEndGameEvent();
+        Application.Quit();
+    }
 }
