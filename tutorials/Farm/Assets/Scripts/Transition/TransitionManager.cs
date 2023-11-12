@@ -25,12 +25,19 @@ namespace TA.Transition
         {
             EventHandler.TransitionEvent += OnTransitionEvent;
             EventHandler.StartNewGameEvent += OnStartNewGameEvent;
+            EventHandler.EndGameEvent += OnEndGameEvent;
         }
 
         private void OnDisable()
         {
             EventHandler.TransitionEvent -= OnTransitionEvent;
             EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
+            EventHandler.EndGameEvent -= OnEndGameEvent;
+        }
+
+        private void OnEndGameEvent()
+        {
+            StartCoroutine(UnloadScene());
         }
 
         private void OnStartNewGameEvent(int index)
@@ -126,6 +133,14 @@ namespace TA.Transition
 
             yield return LoadSceneSetActive(sceneName);
             EventHandler.CallAfterSceneLoadedEvent();
+            yield return Fade(0);
+        }
+
+        private IEnumerator UnloadScene()
+        {
+            EventHandler.CallBeforeSceneUnloadEvent();
+            yield return Fade(1);
+            yield return SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
             yield return Fade(0);
         }
 

@@ -51,6 +51,6 @@ public class DialogueBehaviour : PlayableBehaviour
     public override void OnGraphStop(Playable playable)
     {
         EventHandler.CallUpdateGameStateEvent(GameState.GamePlay);
-        director.gameObject.SetActive(false);
+        // director.gameObject.SetActive(false);
     }
 }

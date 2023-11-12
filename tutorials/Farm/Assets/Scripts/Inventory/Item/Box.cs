@@ -17,6 +17,7 @@ namespace TA.Inventory
             if (boxBagData == null)
             {
                 boxBagData = Instantiate(boxBagTemplate);
+                InitBox(index);
             }
         }
 

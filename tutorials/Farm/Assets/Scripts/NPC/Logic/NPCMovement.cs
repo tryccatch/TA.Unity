@@ -37,7 +37,7 @@ public class NPCMovement : MonoBehaviour, ISaveable
     private Animator anim;
     private Grid grid;
     private Stack<MovementStep> movementSteps;
-
+    private Coroutine npcMoveRoutine;
     private bool isInitialised;
     private bool npcMove;
     private bool sceneLoaded;
@@ -81,6 +81,8 @@ public class NPCMovement : MonoBehaviour, ISaveable
         EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
 
         EventHandler.GameMinuteEvent += OnGameMinuteEvent;
+        EventHandler.EndGameEvent += OnEndGameEvent;
+        EventHandler.StartNewGameEvent += OnStartNewGameEvent;
     }
 
     private void OnDisable()
@@ -89,6 +91,8 @@ public class NPCMovement : MonoBehaviour, ISaveable
         EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
 
         EventHandler.GameMinuteEvent -= OnGameMinuteEvent;
+        EventHandler.EndGameEvent -= OnEndGameEvent;
+        EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
     }
 
     private void Start()
@@ -111,6 +115,20 @@ public class NPCMovement : MonoBehaviour, ISaveable
     {
         if (sceneLoaded)
             Movement();
+    }
+
+    private void OnStartNewGameEvent(int index)
+    {
+        isInitialised = false;
+        isFirstLoad = true;
+    }
+
+    private void OnEndGameEvent()
+    {
+        sceneLoaded = false;
+        npcMove = false;
+        if (npcMoveRoutine != null)
+            StopCoroutine(npcMoveRoutine);
     }
 
     private void OnGameMinuteEvent(int minute, int hour, int day, Season season)
@@ -159,7 +177,7 @@ public class NPCMovement : MonoBehaviour, ISaveable
         if (!isFirstLoad)
         {
             currentGridPosition = grid.WorldToCell(transform.position);
-            var schedule = new ScheduleDetails(0, 0, 0, 0, currentSeason, currentScene, (Vector2Int)targetGridPosition, stopAnimationClip, interactable);
+            var schedule = new ScheduleDetails(0, 0, 0, 0, currentSeason, targetScene, (Vector2Int)targetGridPosition, stopAnimationClip, interactable);
             BuildPath(schedule);
             isFirstLoad = true;
         }
@@ -175,8 +193,8 @@ public class NPCMovement : MonoBehaviour, ISaveable
 
     private void InitNPC()
     {
+        movementSteps.Clear();
         targetScene = currentScene;
-
         // 保持在当前坐标的网格中心
         currentGridPosition = grid.WorldToCell(transform.position);
         // transform.position = new Vector3(currentGridPosition.x + Settings.gridCellSize / 2f, currentGridPosition.y + Settings.gridCellSize / 2f, 0);
@@ -215,7 +233,7 @@ public class NPCMovement : MonoBehaviour, ISaveable
 
     private void MoveToGridPosition(Vector3Int gridPos, TimeSpan stepTime)
     {
-        StartCoroutine(MoveRoutine(gridPos, stepTime));
+        npcMoveRoutine = StartCoroutine(MoveRoutine(gridPos, stepTime));
     }
 
     private IEnumerator MoveRoutine(Vector3Int gridPos, TimeSpan stepTime)
@@ -261,7 +279,7 @@ public class NPCMovement : MonoBehaviour, ISaveable
     {
         movementSteps.Clear();
         currentSchedule = schedule;
-        currentScene = schedule.targetScene;
+        targetScene = schedule.targetScene;
         targetGridPosition = (Vector3Int)schedule.targetGridPosition;
         stopAnimationClip = schedule.clipAtStop;
         interactable = schedule.interactable;

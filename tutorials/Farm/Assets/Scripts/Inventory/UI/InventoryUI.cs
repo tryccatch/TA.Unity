@@ -17,6 +17,7 @@ namespace TA.Inventory
 
         [Header("通用背包")]
         [SerializeField] private GameObject baseBag;
+        private bool baseBagOpened;
         public GameObject shopSlotPrefab;
         public GameObject boxSlotPrefab;
 
@@ -83,6 +84,10 @@ namespace TA.Inventory
         /// <param name="bagData"></param>
         private void OnBaseBagCloseEvent(SlotType slotType, InventoryBag_SO bagData)
         {
+            if (!baseBagOpened)
+                return;
+            baseBagOpened = false;
+
             baseBag.SetActive(false);
             itemTooltip.gameObject.SetActive(false);
             UpdateSlotHighlight(-1);
@@ -108,6 +113,10 @@ namespace TA.Inventory
         /// <param name="bagData"></param>
         private void OnBaseBagOpenEvent(SlotType slotType, InventoryBag_SO bagData)
         {
+            if (baseBagOpened)
+                return;
+            baseBagOpened = true;
+
             // TODO:通用箱子prefab
             GameObject prefab = slotType switch
             {

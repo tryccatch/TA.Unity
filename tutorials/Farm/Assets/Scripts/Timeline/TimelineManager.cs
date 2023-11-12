@@ -10,6 +10,7 @@ public class TimelineManager : Singleton<TimelineManager>
     private bool isDone;
     public bool IsDone { set => isDone = value; }
     private bool isPause;
+    private bool isNewGame;
 
     protected override void Awake()
     {
@@ -20,11 +21,13 @@ public class TimelineManager : Singleton<TimelineManager>
     private void OnEnable()
     {
         EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
+        EventHandler.StartNewGameEvent += OnStartNewGameEvent;
     }
 
     private void OnDisable()
     {
         EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+        EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
     }
 
     private void Update()
@@ -36,11 +39,19 @@ public class TimelineManager : Singleton<TimelineManager>
         }
     }
 
+    private void OnStartNewGameEvent(int index)
+    {
+        isNewGame = true;
+    }
+
     private void OnAfterSceneLoadedEvent()
     {
         currentDirector = FindObjectOfType<PlayableDirector>();
-        if (currentDirector != null)
+        if (currentDirector != null && isNewGame)
+        {
+            isNewGame = false;
             currentDirector.Play();
+        }
     }
 
     public void PauseTimeline(PlayableDirector director)

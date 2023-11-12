@@ -24,11 +24,13 @@ namespace TA.Save
         private void OnEnable()
         {
             EventHandler.StartNewGameEvent += OnStartNewGameEvent;
+            EventHandler.EndGameEvent += OnEndGameEvent;
         }
 
         private void OnDisable()
         {
             EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
+            EventHandler.EndGameEvent -= OnEndGameEvent;
         }
 
         private void Update()
@@ -37,6 +39,11 @@ namespace TA.Save
                 Save(currentDataIndex);
             if (Input.GetKeyDown(KeyCode.O))
                 Load(currentDataIndex);
+        }
+
+        private void OnEndGameEvent()
+        {
+            Save(currentDataIndex);
         }
 
         private void OnStartNewGameEvent(int index)
