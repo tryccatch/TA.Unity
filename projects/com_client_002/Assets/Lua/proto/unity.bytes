@@ -1,0 +1,384 @@
+
+ÄG
+unity.protoproto.Unity"K
+SelfUnityData
+id (Rid*
+requestJoinUnity (RrequestJoinUnity"ƒ
+	UnityInfo
+id (Rid
+lv (Rlv
+name (	Rname
+
+masterName (	R
+masterName
+	influence (R	influence
+power (Rpower 
+memberCount (RmemberCount
+adv (	Radv(
+allowRandomJoin	 (RallowRandomJoin
+exp
+ (Rexp"W
+C2S_createUnity
+name (	Rname
+adv (	Radv
+
+randomJoin (R
+randomJoin"P
+S2C_createUnity-
+code (2.proto.Unity.UnityErrCodeRcode
+id (Rid""
+C2S_requestUnity
+id (	Rid"n
+S2C_requestUnity*
+info (2.proto.Unity.UnityInfoRinfo.
+data (2.proto.Unity.SelfUnityDataRdata"!
+C2S_requestJoin
+id (Rid"V
+S2C_requestJoin-
+code (2.proto.Unity.UnityErrCodeRcode
+state (Rstate"#
+C2S_cancelJoinReq
+id (Rid"X
+S2C_cancelJoinReq-
+code (2.proto.Unity.UnityErrCodeRcode
+state (Rstate"s
+C2S_dealWithJoinReq$
+requestUserId (RrequestUserId
+unityId (RunityId
+	allowJoin (R	allowJoin"a
+RequestJoinData
+id (Rid
+level (Rlevel
+power (Rpower
+name (	Rname"v
+S2C_dealWithJoinReq-
+code (2.proto.Unity.UnityErrCodeRcode0
+list (2.proto.Unity.RequestJoinDataRlist"
+C2S_refuseAllJoinRequest"I
+S2C_refuseAllJoinRequest-
+code (2.proto.Unity.UnityErrCodeRcode"
+C2S_randomJoinUnity"/
+S2C_randomJoinUnity
+success (Rsuccess")
+C2S_changeUnityName
+name (	Rname"D
+S2C_changeUnityName-
+code (2.proto.Unity.UnityErrCodeRcode"
+C2S_getMyUnityInfo"X
+S2C_getMyUnityInfo*
+info (2.proto.Unity.UnityInfoRinfo
+isOpen (RisOpen"
+C2S_openJoinRequest"}
+joinRequestInfo
+userId (RuserId
+level (Rlevel
+power (Rpower
+name (	Rname
+time (Rtime"©
+S2C_openJoinRequest
+unityId (RunityId0
+list (2.proto.Unity.joinRequestInfoRlist
+	memberMax (R	memberMax(
+allowRandomJoin (RallowRandomJoin"{
+C2S_dealJoinRequest
+unityId (RunityId
+userId (RuserId
+agree (Ragree
+	refuseAll (R	refuseAll"Ø
+S2C_dealJoinRequest
+unityId (RunityId0
+list (2.proto.Unity.joinRequestInfoRlist
+	memberMax (R	memberMax(
+allowRandomJoin (RallowRandomJoin-
+code (2.proto.Unity.UnityErrCodeRcode"@
+C2S_changeRandomJoin(
+allowRandomJoin (RallowRandomJoin"m
+S2C_changeRandomJoin-
+code (2.proto.Unity.UnityErrCodeRcode&
+allowRandomJon (RallowRandomJon"
+C2S_openHall"f
+S2C_openHall-
+code (2.proto.Unity.UnityErrCodeRcode'
+job (2.proto.Unity.UnityJobRjob"
+C2S_openMember"ø
+S2C_openMember-
+code (2.proto.Unity.UnityErrCodeRcode
+unityId (RunityId2
+members (2.proto.Unity.UnityMemberRmembers
+	memberMax (R	memberMax'
+job (2.proto.Unity.UnityJobRjob"
+onlineMember (RonlineMember"´
+UnityMember
+id (Rid
+name (	Rname
+	buildType (R	buildType
+vipLevel (RvipLevel'
+job (2.proto.Unity.UnityJobRjob
+level (Rlevel
+	attribute (R	attribute
+power (Rpower
+online	 (Ronline 
+offlineTime
+ (RofflineTime
+joinTime (RjoinTime"#
+C2S_openChangeJob
+id (Rid"¾
+S2C_openChangeJob 
+memberCount (RmemberCount 
+elitesCount (RelitesCount&
+subLeaderCount (RsubLeaderCount
+
+unityLevel (R
+unityLevel
+userId (RuserId
+unityId (RunityId
+
+userHeadId (R
+userHeadId
+	userCloth (R	userCloth-
+code	 (2.proto.Unity.UnityErrCodeRcode"R
+C2S_changeUserJob
+id (Rid-
+newJob (2.proto.Unity.UnityJobRnewJob"µ
+S2C_changeUserJob-
+code (2.proto.Unity.UnityErrCodeRcode
+id (Rid4
+userData (2.proto.Unity.UnityMemberRuserData+
+myJob (2.proto.Unity.UnityJobRmyJob"
+C2S_kickOut
+id (Rid"<
+S2C_kickOut-
+code (2.proto.Unity.UnityErrCodeRcode""
+C2S_changeLeader
+id (Rid"A
+S2C_changeLeader-
+code (2.proto.Unity.UnityErrCodeRcode"
+C2S_openDetails"û
+S2C_openDetails+
+myJob (2.proto.Unity.UnityJobRmyJob
+id (Rid
+
+leaderName (	R
+leaderName
+level (Rlevel
+exp (Rexp
+	influence (R	influence
+wealth (Rwealth
+power (Rpower 
+memberCount	 (RmemberCount
+notice
+ (	Rnotice
+adv (	Radv
+	unityName (	R	unityName-
+code (2.proto.Unity.UnityErrCodeRcode"?
+C2S_changeUnityInfo
+adv (	Radv
+notice (	Rnotice"n
+S2C_changeUnityInfo-
+code (2.proto.Unity.UnityErrCodeRcode
+adv (	Radv
+notice (	Rnotice",
+C2S_dismissUnity
+unityId (RunityId"A
+S2C_dismissUnity-
+code (2.proto.Unity.UnityErrCodeRcode"Í
+UnityRankInfo
+id (Rid
+name (	Rname
+level (Rlevel
+
+hasRequest (R
+hasRequest
+leader (	Rleader
+member (Rmember
+power (Rpower
+	influence (R	influence"
+C2S_openUnityRank"›
+S2C_openUnityRank
+hasUnity (RhasUnity
+	unityName (	R	unityName
+	unityRank (R	unityRank.
+list (2.proto.Unity.UnityRankInfoRlist"
+C2S_openBuild"ª
+S2C_openBuild-
+code (2.proto.Unity.UnityErrCodeRcode
+gold (Rgold
+	qiangMeng (R	qiangMeng
+
+qiangMeng2 (R
+qiangMeng2
+buildId (RbuildId"*
+C2S_buildUnity
+buildId (RbuildId"H
+C2S_openSecret
+secretId (RsecretId
+openType (RopenType"[
+S2C_openSecret-
+code (2.proto.Unity.UnityErrCodeRcode
+secretId (RsecretId"
+C2S_showSecretList"†
+SecretLevelData
+lv (Rlv
+crtHp (RcrtHp
+crtTime (RcrtTime3
+state (2.proto.Unity.SecretLevelStateRstate"“
+S2C_showSecretList-
+code (2.proto.Unity.UnityErrCodeRcode0
+list (2.proto.Unity.SecretLevelDataRlist
+	closeTime (R	closeTime"'
+C2S_enterSecret
+level (Rlevel"Ù
+S2C_enterSecret-
+code (2.proto.Unity.UnityErrCodeRcode
+crtHp (RcrtHp
+heroId (RheroId
+heroAtk (RheroAtk
+level (Rlevel9
+killInfo (2.proto.Unity.secretKillerInfoRkillInfo"V
+secretKillerInfo
+killer (	Rkiller
+time (Rtime
+bossLv (RbossLv"*
+C2S_showOpenSecret
+level (Rlevel"À
+S2C_showOpenSecret-
+code (2.proto.Unity.UnityErrCodeRcode
+wealth (Rwealth
+gold (Rgold
+level (Rlevel9
+killInfo (2.proto.Unity.secretKillerInfoRkillInfo"+
+C2S_fightSecretBoss
+level (Rlevel"Æ
+S2C_fightSecretBoss-
+code (2.proto.Unity.UnityErrCodeRcode
+level (Rlevel
+crtHp (RcrtHp
+score (Rscore
+	isKillHit (R	isKillHit
+myLv (RmyLv
+myHead (RmyHead
+myCloth (RmyCloth
+heroId	 (RheroId
+heroAtk
+ (RheroAtk
+dmg (Rdmg
+myName (	RmyName"*
+C2S_showChangeHero
+level (Rlevel"¢
+fightBossHero
+id (Rid
+level (Rlevel"
+strengthGrow (RstrengthGrow
+atk (Ratk5
+state (2.proto.Unity.fightBossHeroStateRstate"¯
+S2C_showChangeHero-
+code (2.proto.Unity.UnityErrCodeRcode
+level (Rlevel6
+heroList (2.proto.Unity.fightBossHeroRheroList
+	fightHero (R	fightHero"(
+C2S_showKillList
+level (Rlevel"|
+S2C_showKillList-
+code (2.proto.Unity.UnityErrCodeRcode9
+killList (2.proto.Unity.secretKillerInfoRkillList"D
+C2S_changeSecretHero
+level (Rlevel
+heroId (RheroId"£
+S2C_changeSecretHero-
+code (2.proto.Unity.UnityErrCodeRcode
+level (Rlevel
+heroId (RheroId
+heroAtk (RheroAtk
+crtHp (RcrtHp"D
+C2S_reliveSecretHero
+level (Rlevel
+heroId (RheroId"°
+S2C_reliveSecretHero-
+code (2.proto.Unity.UnityErrCodeRcode
+level (Rlevel
+heroId (RheroId;
+newState (2.proto.Unity.fightBossHeroStateRnewState"
+C2S_QuitUnity"X
+S2C_QuitUnity
+success (Rsuccess-
+code (2.proto.Unity.UnityErrCodeRcode"
+C2S_QueryUnity"(
+S2C_QueryUnity
+result (Rresult"4
+C2S_QueryCanOpenSecret
+secretId (RsecretId"0
+S2C_QueryCanOpenSecret
+result (Rresult"5
+UnityShopItem
+id (Rid
+limit (Rlimit"
+C2S_ReqUnityShopInfo"£
+S2C_ResUnityShopInfo-
+code (2.proto.Unity.UnityErrCodeRcode
+devote (Rdevote
+level (Rlevel.
+item (2.proto.Unity.UnityShopItemRitem"%
+C2S_ReqBuyUnityItem
+id (Rid"D
+S2C_ResBuyUnityItem-
+code (2.proto.Unity.UnityErrCodeRcode*þ
+UnityErrCode
+ok 
+	nameExist
+
+noGold
+ownUnity
+
+memberFull
+noUnity
+noAuthority
+	noRequest
+playerHasUnity
+	notMember	
+
+noUser
+
+
+kickLeader
+noSubLeader
+noChange
+jobFull
+noBuildCount
+
+buildIdErr
+
+noItem
+validSecretId
+noWealth
+secretHasOpen
+secretHasClose
+secretBossDead
+secretHasUsed
+noSecretData
+wrongSecretLv
+fail
+noLimit
+noLevel
+noDevote
+maxBuildCount
+
+onRushLoop*=
+UnityJob
+
+Member 
+
+Elites
+	SubLeader
+
+Leader*5
+SecretLevelState	
+ready 
+opening	
+close*A
+fightBossHeroState	
+alive 
+dead
+
+relive
+
+reDeadbproto3

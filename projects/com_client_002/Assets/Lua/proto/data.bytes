@@ -1,0 +1,4096 @@
+syntax = "proto3";
+
+
+enum AccountErrorCode {
+  ok = 0;
+  error_pwd = 1001;   // 密码不对
+  invalid_pwd = 1002;    // 无效密码
+  invalid_account = 1003;    // 无效账号
+  exists_account = 1004;  // 账号已经存在
+  account_too_short = 1005; // 账号太短
+  exists_name = 1006; // 已经存在名字
+  short_name = 1007; // 名字太短
+  error_head = 1008; // 非法头像
+  error_disable = 1009; // 被禁止了
+  error_other_login = 1010; // 有其他玩家登录了
+  long_name = 1011; // 名字太长
+  error_name = 1012; // 非法名字
+}
+
+message C2S_register {
+  string account = 2;
+  string pwd = 3;
+}
+
+message S2C_register_ack {
+  AccountErrorCode error = 1; // 错误码，如果�? OK �? 代表登录成功
+  string token = 2;
+}
+
+message C2S_login {
+  string account = 1;
+  string pwd = 2;
+  string type = 3;
+}
+
+
+message S2C_login_ack {
+  AccountErrorCode error = 1; // 错误码，如果�? OK �? 代表登录成功
+  string token = 2; //
+}
+
+message C2S_bind {
+  string account = 1;
+  string pwd = 2;
+  string type = 3;
+}
+
+
+message C2S_get_server_list {
+}
+
+message SeverInfo {
+  int32 id = 1;
+  string name = 2;
+  int32    state = 3;
+  string playerName = 4;
+  string  ip = 5;
+  int32   port = 6;
+}
+
+message S2C_get_server_list {
+  int32 lastId = 1;
+  repeated SeverInfo data = 2;
+  int32 noticeId = 3;
+}
+
+message UserInfo {
+  int64 id = 1;
+  string name = 2;
+  int32 head = 3;
+  int64  money = 5;
+  int64  gold = 6;
+  int32 level = 7; // 官职
+  int32 vip = 8; // vip等级
+  int64 allValue = 9; // 势力�?
+  int32 curCloth = 10; // 当前时装
+  int32 guildId = 11; // 到第几个引导
+}
+
+
+message C2S_setEndGuide {
+  int32 id = 1;
+}
+
+enum AddValueType {
+  money = 0; // 银两
+  gold = 1;  // 元宝
+  allValue = 2; // 势力
+  vip = 3;		// vip
+  curCloth = 4;	// 时装
+  
+  kickout = 10; // 被其他玩家踢出线
+}
+
+// 数据增量变化
+message S2C_add_value {
+  AddValueType type = 1;  // 类型
+  int64       value = 2; // 变化�?
+}
+
+message C2S_enter {
+  string token = 2; //
+}
+
+message S2C_enter_ack {
+  AccountErrorCode error = 1; // 错误码，如果�? OK �? 代表登录成功
+  UserInfo  info = 2; //
+}
+
+message C2S_create_player {
+  string name = 1;
+  int32 head = 2;
+}
+
+
+message S2C_create_player_ack {
+  AccountErrorCode error = 1; // 错误码，如果�? OK �? 代表登录成功
+  UserInfo  info = 2; //
+}
+
+
+message C2S_rand_name {
+  bool male = 1; // 男的
+}
+
+message S2C_rand_name_ack {
+  string name = 1;
+}
+
+
+message C2S_getHelp {
+  string id = 1;
+}
+
+message S2C_getHelp_ack {
+  string text = 1;
+}
+
+
+message C2S_chargeInfo {
+  string  type = 1;
+  int32   value = 2;
+}
+
+message S2C_chargeInfo {
+  int32 money = 2;
+}
+
+
+message C2S_charge {
+  string  type = 1;
+  int32   value = 2;
+  string  gkId = 3;
+  string  gkToken = 4;
+}
+
+message S2C_charge {
+  string id = 1;
+  int32 money = 2;
+}
+
+message C2S_chargeTest {
+  string type = 1;
+  int32  value = 3;
+}
+
+message S2C_onChargeResult {
+  bool success = 1;
+  string id = 2;
+}
+
+//打开充�?�页�?
+message C2S_RechargeOO {
+
+}
+message S2C_RechargeOO {
+  int32 vip = 1;
+  int64 vipExp = 2;
+  int64 vipNextExp = 3;
+  int32 nextVipMoney = 4;
+  int32 vipNextLevel = 5;
+  repeated bool isFirstCharge = 8;
+}
+//询问打开哪个页面
+message C2S_ISOpenFristRecharge {
+}
+message S2C_ISOpenFristRecharge {
+  bool frist = 1;
+}
+
+message C2S_VIPFuli_Items {
+  int32 vipLevel = 1;
+  int32 isGetItem = 2;//0获取状�??  1领取
+}
+message S2C_VIPFuli_Items {
+  int32 state = 1;
+  repeated VIPFuliItem items = 2;
+  int32 gold = 3;
+  VIPFuliErrorCode code = 4;
+  int32 itemR = 5;//top显示领取了的物品 0�?  1 vip.itemid 1 vip.专属礼包
+  int32 heroID = 6;
+  int32 wifeID = 7;
+  repeated bool unRead = 8;
+}
+message VIPFuliItem {
+  int32 itemID = 1;
+  int32 icon = 2;
+  int32 num = 3;
+}
+enum VIPFuliErrorCode {
+  ok1 = 0;
+  fail = 1;
+  error_nogold = 1001;
+}
+
+
+// 公告
+message C2S_getNotice {
+}
+
+message S2C_getNotice {
+  string data = 1;
+}
+
+
+message C2S_setCurCloth {
+  int32 index = 1;
+}
+
+
+message C2S_getUserInfo {
+  int64 id = 1;
+}
+
+message S2C_getUserInfo {
+  int64  id = 1;
+  string name = 2;
+  int32  head = 3;
+  int64  money = 4;
+  int64  gold = 5;
+  int32 curCloth = 6; // 当前时装
+  int32 vip = 7; // vip等级
+
+  int64 allValue = 8; // 势力�?
+  int64 strength = 9; // 属�??
+  int64 wisdom = 10; // 属�??
+  int64 charm = 11; // 属�??
+  int64 politics = 12; // 属�??
+
+  int64 level = 13; // 官职
+  int64 score = 14; // 政绩
+  int64 intimacy = 15; // 亲密�?
+  string gameLevel = 16; // 关卡
+
+  int32 king = 17; // 称号
+}
+
+message C2S_openAchievement {}
+
+enum AchievementState{
+    Doing = 0;
+    Complete= 1;
+    Finish =2;  //该类型成就已做完
+}
+
+enum AchieveErr{
+    ok=0;
+    ErrId=1;
+    AchieveDoing=2;
+    AchieveFinish=3;
+}
+
+message AchievementInfo{
+    int32 id =1;
+    AchievementState state =2;
+    int64 crtValue=3;
+}
+
+message S2C_openAchievement{
+    repeated AchievementInfo list =1;
+}
+
+message RewardInfo{
+    int32 id = 1;
+    int64 count = 2;
+}
+
+message C2S_tryGetAchieveReward{
+    int32 id = 1;
+}
+
+message S2C_tryGetAchieveReward{
+    int32 id =1;
+    AchievementInfo achieve =2;
+    repeated RewardInfo rewards =3;
+    AchieveErr code =4;
+}
+
+
+
+// 宴会信息
+message BanquetInfo {
+	int64 id = 1;
+	string name = 2;
+	bool supper = 3;
+	int32 state = 4;
+	int32 count = 5;
+	int32 lastTime = 6; 
+	int64 score = 7;
+}
+
+message EndBanquetInfo {
+	bool supper = 1;
+	int64 score = 2;
+	int32 goCount1 = 3;
+	int32 goCount2 = 4;
+	repeated string names = 5;
+	repeated int64  scores = 6;
+}
+
+// 举办宴会物品信息
+message MakeBanquetItem {
+	int32 id = 1;
+	int32 count = 2;
+	int32 need = 3;
+}
+
+// 进入宴会功能，取得宴会信�?
+message C2S_getBanquetInfo {
+	int64 lastId = 1;
+}
+
+// 返回宴会信息
+message S2C_getBanquetInfo { 	
+	int64 score = 1;
+	bool hasSelf = 2;
+	repeated BanquetInfo other = 3;
+	int32 canGoCount=4;
+	int32 goMaxCount=5;
+	int32 goCount1 = 6;
+	int32 goCount2 = 7;
+	repeated MakeBanquetItem item = 8;
+	EndBanquetInfo endBanquet = 9;
+}
+
+
+// 举办宴会
+message C2S_makeBanquet {
+	bool supper = 1;
+	bool share = 2;
+}
+
+// 举办结果
+message S2C_makeBanquet { 	
+	bool success = 1; // 是不是成�?
+	string error = 2; // 错误提示
+	S2C_getBanquetDetal info = 3; // 
+}
+
+
+// 查询宴会
+message C2S_findBanquet {
+	int64 id = 1;
+}
+
+// 查询宴会结果
+message S2C_findBanquet { 	
+	bool success = 1; // 是不是成�?
+	BanquetInfo info = 2; // 查询结果
+}
+
+message ComeBanquetInfo {
+	int64 id = 1;
+	string name = 2;
+	int32 type = 3;	
+	int32 head = 4;
+	int32 level = 5;
+	int64 time = 6;
+	int32 pos = 7;
+}
+
+// 取得宴会详细信息
+message C2S_getBanquetDetal {
+	int64 id = 1;
+}
+
+// 返回宴会信息
+message S2C_getBanquetDetal { 		
+	int64 id = 1;
+	string name = 2;
+	int32 head = 3;
+	int32 level = 4;
+	int32 count = 5;
+	int32 maxCount = 6;
+	bool supper = 7;
+	int64 score = 8;
+	int32 lastTime = 9;	
+	repeated ComeBanquetInfo comeInfo = 10;	
+}
+
+// 取得宴会详细信息
+message C2S_updateBanquetDetal {
+	int64 id = 1;
+	int32 index = 2;
+}
+
+message S2C_updateBanquetDetal {
+	repeated ComeBanquetInfo comeInfo = 1;
+	int64 score = 2;
+	bool isEnd = 3;
+	EndBanquetInfo endBanquet = 4;
+}
+
+
+// 去宴�?
+message C2S_sitDown {
+	int64 id = 1;
+	int32 type = 2;
+	int32 pos = 3;
+}
+
+// 去宴会结�?
+message S2C_sitDown { 	
+	bool success = 1; // 是不是成�?
+	string error = 2; // 错误提示
+}
+
+// 排行榜信�?
+message BanquetTopInfo {
+	int64 id = 1;
+	string name = 2;
+	int64 score = 3;
+}
+
+
+// 请求排行榜信�?
+message C2S_getBanquetTopList {
+
+}
+
+// 返回请求排行榜信�?
+message S2C_getBanquetTopList {
+	repeated BanquetTopInfo infos = 1;
+	int32 myPos = 2;
+	int64 myScore = 3;
+}
+
+
+// 兑换奖励信息
+message BanquetBonus {
+	int32 id = 1;
+	int32 count = 2;
+	int32 score = 3;
+}
+
+
+// 取得兑换信息
+message C2S_getBanquetBonusInfo {
+
+}
+
+// 返回兑换信息
+message S2C_getBanquetBonusInfo { 	
+	repeated BanquetBonus bonus = 1;
+	int32 refreshCount = 2;
+	int32 refreshAllCount = 3;	
+	int32 refreshLastTime = 4;
+	int64 score = 5;
+	int64 needGold = 6;
+}
+
+// 刷新兑换信息
+message C2S_refreshBanquetBonusInfo {
+}
+
+// 返回刷新兑换信息
+message S2C_refreshBanquetBonusInfo {
+	bool success = 1;
+	string error = 2;
+	S2C_getBanquetBonusInfo info = 3;
+}
+
+// 兑换奖励
+message C2S_getBonus {
+	int32 index = 1;
+	int32 id = 2;
+}
+
+// 兑换奖励
+message S2C_getBonus {
+	bool success = 1;
+	string error = 2;
+}
+
+
+// 举办过的宴会
+message BanquetHis {
+	bool supper = 1;
+	int32 count1 = 2;
+	int32 count2 = 3;
+	int64 time = 4;
+	int64 score = 5;
+}
+
+// 愁人
+message BanquetEnemy {
+	int64 id = 1;
+	string name = 2;
+	int32 score = 4;
+	int64 time = 5;
+}
+
+
+// 取得兑换信息
+message C2S_getBanquetHis {
+
+}
+
+// 返回兑换信息
+message S2C_getBanquetHis { 	
+	repeated BanquetHis his = 1;
+	repeated BanquetEnemy enemy = 2;
+}
+
+
+
+
+
+message C2S_getBattleInfo {
+	
+}
+
+message BattlePlayerInfo {
+	int64 strength = 1;
+	int64 soldier = 2;
+	string name = 3;
+	int32 head = 4;
+	string speech = 5;
+	int64 soldierMax = 6;
+	int32 leaderId = 7;
+	repeated int32 soldierId = 8;
+	repeated int32 soldierCount = 9;
+}
+
+message S2C_getBattleInfo {
+	int64 levelExp = 1;
+	int64 levelNextExp = 2;
+	
+	BattlePlayerInfo self = 3;
+	BattlePlayerInfo other = 4;
+	
+	string name = 6;
+	string hint = 7;
+	int32 gameIndex = 8;
+	int32 gameStep = 9;
+	int32 gameStepMax = 10;
+	int32 background = 11;
+	int32 storyId = 12;
+}
+
+message BattleResultItem {
+	int32 id = 1;
+	int32 count = 2;
+}
+
+message C2S_fighting {
+	
+}
+
+message S2C_fighting {
+	int64 lostCountSelf = 1;
+	int64 lostCountOther = 2;	
+	S2C_getBattleInfo info = 3;	
+	repeated BattleResultItem items = 4;
+}
+
+
+message BossBattleHero {
+	int32 id = 1;
+	string name = 2;
+	int32 level = 3;
+	int64 strengthGrows = 4;
+	int64 strength = 5;
+	bool canBattle = 6;
+	bool canRelive = 7;
+}
+
+message C2S_getBossInfo {
+	
+}
+
+message S2C_getBossInfo {
+	int64 hp = 1;
+	int64 maxHP = 2;	
+	int32 head = 3;
+	string name = 4;
+	string hint = 5;
+	repeated BossBattleHero heroes = 6;
+}
+
+message C2S_fightingBoss {
+	int32 heroId = 1;
+}
+
+message S2C_fightingBoss {
+	int64 lostHP = 1;
+	S2C_getBattleInfo info = 3;	
+	repeated BattleResultItem items = 4;
+	int32 heroId = 5;
+	int32 wifeId = 6;
+
+}
+
+
+message BattleHallOpponent {
+	string name = 1;
+	int32  head = 2;
+	int32  level = 3;
+	int64  id = 4;
+	int64  value = 5;
+}
+
+message BattleHallHero {
+	int32  id = 1;
+	string name = 2;
+	int32  level = 3;
+	int32  promotion = 4;
+	int64  grows = 5;
+	int64  attribue = 6;
+	int32  state = 7;
+}
+
+
+message C2S_battleHallInfo {		
+}
+
+message S2C_battleHallInfo {	
+	int32 heroId = 1;
+	bool  hasGame = 2;	
+	BattleHallOpponent opponent = 3;
+	int64 lastTime = 4;
+	int32 item1 = 5;
+	int32 item2 = 6;
+		
+	bool canBuy = 7; // 购买次数
+}
+
+message C2S_battleHallGoInfo {
+}
+
+message S2C_battleHallGoInfo {
+	repeated BattleHallHero heros = 1;
+	int32 opLiveCount = 2;
+	int32 opAllCount = 3;
+	string opName = 4;
+	int64  opValue = 5;
+	
+	BattleHallHero self = 6;
+	int64 hp = 7;
+	int64 maxHp = 8;
+	int32 addAttack = 9;
+	int32 addSkill = 10;
+	
+	repeated int32 items = 11; // buff物品
+	int32 selectedItem = 12; //当前选择的buff物品
+	int32 itemValue = 13; // 购买物品的数�?
+	int64 value = 14; // 我的权威
+	
+	int32 continueWin = 15; // 连胜次数
+}
+
+message C2S_battleHallFight {
+	int32 type = 1;	
+	int32 oppoId = 2;
+	int32 heroId = 3;
+}
+
+message S2C_battleHallFight {
+	bool success = 1;
+	string error = 2;
+	S2C_battleHallGoInfo info = 3;
+	BattleHallOpponent opponent = 4;
+}
+	
+	
+message C2S_battleHallGo {
+	int32 selected = 1;	
+}
+
+message S2C_battleHallGo {
+	bool win = 1;
+	
+	int32 addValue = 2; // 加权�?
+	int32 addExp   = 3; // 资质经验
+	
+	int32 selectId = 4; // 连续获胜奖励
+	
+	int64    hp            = 6; // 敌人�?�?
+	repeated int64 attacks = 7; // 攻击
+	repeated bool  cirts = 8;   // 暴击	
+	
+	S2C_battleHallGoInfo nextInfo = 9; // 下次信息
+}
+
+message C2S_battleHallBuyItem {
+	int32 selected = 1;	
+}
+
+message S2C_battleHallBuyItem {
+	int32 selected = 1;
+}
+
+
+message C2S_battleHallTop6 {
+		
+}
+
+message S2C_battleHallTop6 {
+	repeated BattleHallHero heroes = 1;
+}
+
+
+
+
+message BattleHallTopScore {
+	int64 id = 1;
+	string name = 2;
+	int64 score = 3;	
+	int32 level = 4;
+}
+
+message C2S_battleHallDayTop {
+		
+}
+
+message S2C_battleHallDayTop {
+	repeated BattleHallTopScore datas = 1;	
+	BattleHallTopScore self = 3;
+}
+
+message C2S_battleHallAllTop {
+		
+}
+
+message S2C_battleHallAllTop {
+	repeated BattleHallTopScore datas = 1;	
+	BattleHallTopScore self = 3;
+}
+
+
+message C2S_battleHallLog {
+		
+}
+
+message BattleHallLog {
+	string name = 1;
+	int64 value = 2;
+	int32 heroId = 3;
+	int32 count = 4;
+	int32 score = 5;
+	int64 time = 6;
+}
+
+message BattleHallEnemy {
+	int64 id = 1;
+	string name = 2;
+	int32  level = 3;
+	int64  allValue = 4;
+	int32 head = 5;
+	int64 time = 6;
+}
+
+
+message S2C_battleHallLog {
+	repeated BattleHallLog logs = 1;	
+	repeated BattleHallEnemy enemys = 2;
+}
+
+
+message C2S_battleHallHeroes {
+		
+}
+
+message S2C_battleHallHeroes {
+	repeated BattleHallHero heroes = 1;
+}
+
+
+message C2S_battleHallFind {
+	int64 id = 1;	
+}
+
+message S2C_battleHallFind {
+	bool success = 1;
+	string name = 2;
+	int32 head = 3;
+	int64 allValue = 4;
+	int32 level = 5;
+}
+
+
+message BattleHallNotice {
+	int64 time = 1;
+	int64 userId = 2;
+	string name = 3;
+	int32 heroId = 4;
+	string oppoName = 6;
+	int32 count = 7;
+	bool isAll = 8;
+}
+
+message C2S_battleHallUpdateNotice {
+	int64 id = 1;
+}
+
+message S2C_battleHallUpdateNotice {
+	repeated BattleHallNotice notice = 1;
+}
+
+
+message BattleLevelOpponent {
+	string name = 1;
+	int32  head = 2;
+	int32  level = 3;
+	int64  id = 4;
+	int64  value = 5;
+}
+
+message BattleLevelHero {
+	int32  id = 1;
+	string name = 2;
+	int32  level = 3;
+	int32  promotion = 4;
+	int64  grows = 5;
+	int64  attribue = 6;
+	int32  state = 7;
+}
+
+
+message C2S_BattleLevelInfo {		
+}
+
+message S2C_BattleLevelInfo {	
+	int32 heroId = 1;
+	bool  hasGame = 2;	
+	BattleLevelOpponent opponent = 3;
+	
+	int32   bigLevel = 4;
+	int32   smallLevel = 5;
+	int32   levelCount = 6;
+	
+	int32 oppoCount = 7;
+	int32 oppoLive = 8;
+	
+	int32 maxBigLevel = 9;
+	int32 maxSmallLevel = 10;
+}
+
+message C2S_BattleLevelGoInfo {
+}
+
+message S2C_BattleLevelGoInfo {
+	repeated BattleLevelHero heros = 1;
+	int32 opLiveCount = 2;
+	int32 opAllCount = 3;
+	string opName = 4;
+	int64  opValue = 5;
+	
+	BattleLevelHero self = 6;
+	int64 hp = 7;
+	int64 maxHp = 8;
+	int32 addAttack = 9;
+	int32 addSkill = 10;
+	
+	repeated int32 items = 11; // buff物品
+	int32 selectedItem = 12; //当前选择的buff物品
+	int32 itemValue = 13; // 购买物品的数�?
+	int64 value = 14; // 我的权威
+	
+	int32 continueWin = 15; // 连胜次数
+}
+
+message C2S_BattleLevelFight {
+	int32 type = 1;	
+	int32 oppoId = 2;
+	int32 heroId = 3;
+}
+
+message S2C_BattleLevelFight {
+	bool success = 1;
+	string error = 2;
+	S2C_BattleLevelGoInfo info = 3;
+	BattleLevelOpponent opponent = 4;
+}
+	
+	
+message C2S_BattleLevelGo {
+	int32 selected = 1;	
+}
+
+message S2C_BattleLevelGo {
+	bool win = 1;
+	
+	int32 addValue = 2; // 加权�?
+	int32 addExp   = 3; // 资质经验
+	
+	int32 selectId = 4; // 连续获胜奖励
+	
+	int64    hp            = 6; // 敌人�?�?
+	repeated int64 attacks = 7; // 攻击
+	repeated bool  cirts = 8;   // 暴击	
+	
+	S2C_BattleLevelGoInfo nextInfo = 9; // 下次信息
+}
+
+message C2S_BattleLevelBuyItem {
+	int32 selected = 1;	
+}
+
+message S2C_BattleLevelBuyItem {
+	int32 selected = 1;
+}
+
+message BattleLevelTopScore {
+	int64 id = 1;
+	string name = 2;
+	int64 score = 3;	
+	int32 level = 4;
+}
+
+
+message C2S_BattleLevelAllTop {
+		
+}
+
+message S2C_BattleLevelAllTop {
+	repeated BattleLevelTopScore datas = 1;	
+	BattleLevelTopScore self = 3;
+}
+
+message C2S_BattleLevelHeroes {
+		
+}
+
+message S2C_BattleLevelHeroes {
+	repeated BattleLevelHero heroes = 1;
+}
+
+
+
+
+enum AssailantCode{
+  ok = 0;
+  configError = 1;
+  noCount =2;
+  noScore =3;
+  searchComplete =4;//已经完成搜索
+  repeatIndex =5;   //重复搜索已经搜索区域
+  notSearchTime =6; //不在搜索活动时间�?
+  notCatchTime =7;  //不在抓捕boss活动时间�?
+  noHeroes = 8;     //没有可出战的英雄
+}
+
+message C2S_GetTime{}
+
+message S2C_GetTime{
+  int64 searchStartTime = 1;
+  int64 searchEndTime = 2;
+  int64 catchStartTime = 3;
+  int64 catchEndTime = 4;
+  int64 waitTime = 5;
+  AssailantCode code = 6;
+}
+
+message KillItem{
+  int32 order = 1;
+  string name = 2;
+  string unity = 3;
+  int64 time = 4;
+}
+
+message C2S_GetKillRank{}
+
+message S2C_GetKillRank{
+  repeated KillItem items = 1;
+  string newestKiller = 2;
+  bool isEmpty = 3;
+}
+
+message ScoreItem{
+  int32 order = 1;
+  string name = 2;
+  string unity = 3;
+  int32 score = 4;
+}
+
+message C2S_GetScoreRank{}
+
+message S2C_GetScoreRank{
+  repeated ScoreItem items = 1;
+  int32 myRank = 2;
+  int32 myScore = 3;
+  bool isEmpty = 4;
+}
+
+message C2S_getExchangeInfo{}
+
+message ExchangeItem{
+  int32 id = 1;
+  int32 count =2;
+}
+message S2C_getExchangeInfo{
+  repeated  ExchangeItem items = 1;
+  int32 myScore =2;
+}
+
+message C2S_exchange{
+  int32 id =1;
+  int32 index =2;
+}
+
+message S2C_exchange{
+  int32 id =1;
+  int32 index =2;
+  AssailantCode code =3;
+  int32 myScore =4;
+  ExchangeItem item = 5;
+  int32 count =6;
+}
+
+message Search{
+  int32 id = 1;//worldBossDetect 中的id
+  repeated int32 searchedIndex = 2;//该关卡已经被搜寻过的�?
+  int32 keyManId = 3;//已经发现的关键人物id
+  int64 keyManHp = 4;//已经发现的关键人物剩余血�?
+  int32 attackHeroId =5;//发起攻击的豪�?
+}
+
+message FightBoss{
+
+}
+
+//用户点击�?�?
+message C2S_catchAssailant{}
+
+message S2C_catchAssailant{
+  int32 state = 1;  // 1- 侦查 2-缉凶 3-侦查完毕缉凶未开�?
+  Search search = 2;
+  FightBoss fight = 3;
+}
+
+//用户点击探索区域，发起侦查请�?
+message C2S_search{
+  int32 index = 1;
+}
+
+message S2C_search{
+  int32 index = 1;
+  int32 clueId =2;  //worldBossDetectAffair中的id
+  AssailantCode code =3;
+}
+
+message C2S_getFightKeyManInfo{}
+
+message S2C_getFightKeyManInfo{
+  int32 levelId= 1;
+  int64 keyManHp =2;
+  int32 score =3;
+  int32 attackHeroId =4;
+  int64 heroAtk =5;
+  int32 heroCount =6;
+}
+
+//用户点击严刑拷打，发送打架信�?
+message C2S_fightKeyMan{
+}
+
+//攻击返回�?
+message S2C_fightKeyMan{
+  int32 keyManId = 1;
+  int64 keyManHp = 2;
+  int32 attackHeroId =3;  //新的攻击者ID
+  int64 attackHeroAtk =4; //新的攻击者攻击力
+  AssailantCode code =5;
+  int32 totalScore = 6;
+  int32 addScore = 7;
+  int32 itemId = 8;
+  int32 itemCount = 9;
+  bool hasNextLevel = 10;
+  int32 heroCount =11;
+  int64 dmg = 12;
+}
+
+//通过�?关，前往下一�?
+message C2S_nextSearch{}
+
+message S2C_nextSearch{
+  Search search = 1;
+  AssailantCode code =2;
+}
+
+message C2S_rewardHeroes{}
+
+message RewardHeroInfo{
+  int32 id =1;
+  int32 exp =2;
+}
+message S2C_rewardHeroes{
+  repeated RewardHeroInfo info = 1;
+}
+
+message C2S_showRecover{}
+
+enum FightHeroState{
+  canFight = 0; //可以出战
+  inRest = 1;   //休息状�??
+  cantFight =2; //已经使用道具恢复过一次然后再次出战死亡的
+  Fighting =3;  //处于出战状�??
+}
+
+message RecoverInfo{
+  int32 id = 1;
+  int32 level =2;
+  int32 grow =3;
+  int64 allAtt =4;
+  FightHeroState state =5;
+}
+message S2C_showRecover{
+  repeated RecoverInfo info =1;
+}
+
+message C2S_changeFightHero{
+  int32 id=1;
+}
+
+message S2C_changeFightHero{
+  int32 id =1;
+  int64 atk =2;
+  bool succeed = 3;
+}
+
+message C2S_recoverHero{
+  int32 id =1;
+}
+
+message  S2C_recoverHero{
+  int32 id =1;
+  FightHeroState state =2;
+}
+
+message C2S_showBoss{
+}
+
+message S2C_showBoss{
+  AssailantCode code =1;
+  int64 bossBlood = 2;
+  int32 atkHeroId = 3;
+  int64 heroAtk = 4;
+  int32 myOrder = 5;  //0-未上�?
+  int64 myDmg =6;
+  int64 bossTotalBlood =7;
+  KillerInfo killer =8;
+  int32 score =9;
+}
+
+message KillerInfo{
+  string name = 1;
+  int32 headId =2;
+  int32 level =3;
+  string unity=4;
+  int64 id =5;
+  int32 cloth = 6;
+}
+
+message C2S_attackBoss{}
+
+message S2C_attackBoss{
+  int64 bossBlood =1;
+  int64 bossTotalBlood =2;
+  int32 newAtkHeroId =3;
+  int64 newHeroAtk =4;
+  int32 addScore=5;
+  int32 totalScore=6;
+  int64 dmg = 7;
+  int32 myOrder = 8;  //0-未上�?
+  int64 myDmg =9;
+  KillerInfo killer =10;
+  bool inCatchTime =11;
+
+}
+
+message C2S_getBossRank{}
+message BossRankInfo{
+  int32 order =1;
+  string name =2;
+  int64 atk =3;
+}
+message S2C_getBossRank{
+  repeated BossRankInfo info =1;
+}
+
+message C2S_getBossRecover{}
+
+message S2C_getBossRecover{
+  repeated RecoverInfo info =1;
+}
+
+message C2S_changeBossHero{
+  int32 id =1;
+}
+
+message S2C_changeBossHero{
+  int32 id =1;
+  int64 atk =2;
+  bool succeed = 3;
+}
+
+message C2S_recoverBossHero{
+  int32 id =1;
+}
+
+message  S2C_recoverBossHero{
+  int32 id =1;
+  FightHeroState state =2;
+}
+
+//孩子基本信息
+message ChildBase {
+	int32 id = 1;    //孩子id
+	string name = 2; // 名字
+	int32 intimacy = 3; // 亲密�?
+	int32 qua = 4;//资质
+	int32 level = 5;//等级
+	int32 attr = 6;//属�??
+	int32 strength = 7;//武力
+	int32 wisdom = 8;//智慧
+	int32 political = 9;//政治
+	int32 charm = 10; // 魅力	
+
+	int32 curExp = 11;//当前经验
+	int32 nextExp = 12;//下一等级经验
+	int32 teach = 13;//元气（可升级多少次）
+
+	//状�?�相�?
+	bool isRenamed = 14;//是否�?要改�?
+
+	int32 momID = 15;//母亲ID
+	int32 kejuLevel = 16;//科举等级
+	string quaName = 17;//品质名称
+	int32 pic = 18;//形象
+	string talk = 19;//对话内容
+	int32 teachMax = 20;//元气培养上限
+	int64 teachTime = 21; //元气恢复时间
+	string momName = 22;//母亲名字
+	string growName = 23;//身份名称
+	string fatherName = 24;//父亲名称（用户）
+	int64 marriedDay = 25;//结婚日期
+}
+//更改名称错误�?
+enum ChildCode{
+	ok = 0;
+	fail = 1;
+	error_noChinese = 101; //不是中文
+	error_count = 102;//名称太长或太�?
+	error_noGold = 103;//金币不够
+	error_seatMax = 104;//席位已满
+	error_noTeach = 105;//元气不够
+	error_noItem = 106;//物品不足
+	error_noVip = 107;//VIP等级不足
+	error_haveName = 201;//存在名称
+}
+//当打�?私塾
+message C2S_OnOpenSiShu{
+	int32 childID = 1;
+}
+//当打�?私塾服务器返回消�?
+message S2C_OnOpenSiShu{
+	repeated ChildBase childBase = 1;
+	int32 seat = 2;//席位
+	int32 childNum = 3;//孩子数量  �?大为7
+	int32 seatMax = 4;//�?大席�?
+	bool isAllChildUp = 5;//是否可以�?键培�?
+
+	int32 intimacy = 6; // 与孩子母亲亲密度
+	string momName = 7;//  孩子母亲名称
+}
+
+//客户端改�?
+message C2S_Renamed{
+	int32 childID = 1;
+	string name = 2;//要更改的名称
+}
+//服务器改名数�?
+message S2C_Renamed{
+	ChildCode code = 1;
+	int32 childID = 2;
+	string name = 3;
+	ChildBase childBase = 4;
+}
+
+message C2S_GetChildRdName {
+	int32 childID = 1;
+}
+message S2C_GetChildRdName {
+	string name = 1;
+}
+//客户端扩�?
+message C2S_AddSeat{
+	int32 state = 1;
+}
+//服务器扩�?
+message S2C_AddSeat{
+	ChildCode code = 1;
+	int32 subgold = 2;
+	int32 seat = 3;
+	int32 seatMax = 4;
+}
+//培养孩子
+message C2S_Teach {
+	int32 childID = 1;//孩子ID�?0的情况下  �?键培�?
+}
+message S2C_Teach {
+	ChildCode code = 1;
+	bool isUp = 2;
+	int32 seat = 3;
+	int32 level = 4;
+}
+//科举
+message C2S_Keju {
+	int32 childID = 1;
+}
+
+message S2C_Keju {
+	ChildCode code = 1;
+	ChildBase childBase = 2;
+}
+
+message C2S_UnMarriedChild {
+	int32 pageNum = 1;
+}
+message S2C_UnMarriedChild {
+	ChildCode code = 1;
+	repeated ChildBase childBase = 2;
+	int32 item53 = 3;
+	int32 item54 = 4;
+	int32 item55 = 5;
+}
+//客户端到服务器获取单独孩子的数据
+message C2S_YyChildState {
+	int32 childID = 1;
+}
+message S2C_YyChildState {
+	int64 mentionMarriedTime = 1;//提亲剩余时间（秒�?
+	string mentionMarriedUser = 2;//向提亲玩家的名字
+	int32 mentionMarriedUserID = 3;//提亲玩家ID
+	int32 level = 4;
+}
+//客户端到服务器终止联�?
+message C2S_StopMarriage {
+	int32 childID = 1;
+}
+
+message S2C_StopMarriage {
+	ChildBase childBase = 1;
+	int64 mentionMarriedTime = 2;//提亲剩余时间（秒�?
+	string mentionMarriedUser = 3;//向提亲玩家的名字
+	int32 mentionMarriedUserID = 4;//提亲玩家ID
+	int32 itemID = 5;
+	int32 itemSub = 6;
+}
+//客户端提亲功�?
+message C2S_Tiqin {
+	int32 childID = 1;
+	int32 uPlayerID = 2;
+}
+
+message S2C_Tiqin {
+	ChildCode code = 1;
+}
+//招亲用到的信息列�?
+message ZhaoqinInfo {
+	int32 id = 1;//子嗣ID
+	int64 cuID = 2;//父亲ID childUser
+	string name = 3;//子嗣名称G
+	string fatherName = 4;//父亲名称
+	int32 qua = 5;//品质等级
+	string quaName = 6;//品质名称
+	int32 itemID = 7;//�?消�?�物�?
+	int32 attr = 8;//子嗣总属�?
+	int32 pic = 9;//子嗣形象
+	int32 itemSub = 10;//消�??
+}
+//客户端招�?
+message C2S_ZhaoQin {
+	int32 childID = 1;
+	int32 ref = 2;//是否刷新招亲
+}
+message S2C_ZhaoQin {
+	ChildCode code = 1;
+	repeated ZhaoqinInfo info = 2;
+	int32 itemID = 3;//我拥有的  物品ID
+	int32 itemNum = 4;//我拥有的  物品数量
+	int32 subGold = 5;//刷新招亲列表�?  金币
+	int64 time = 7;//剩余刷新时间
+}
+
+//客户�?  提亲请求
+message C2S_ReqTiqin {
+	int32 pageNum = 1;
+}
+message S2C_ReqTiqin {
+	ChildCode code = 1;
+	repeated ZhaoqinInfo info = 2;
+	int32 item53 = 3;//我拥有的 物品数量
+	int32 item54= 4;//我拥有的  物品数量
+	int32 item55= 5;//我拥有的  物品数量
+	int32 pageMax = 6;
+}
+//客户�?  同意提亲
+message C2S_AgreeTiqin {
+	ZhaoqinInfo info = 1;
+	int32 state = 2;//0为同�? 1为拒�? 2为全部拒�? 3为同意联�?
+}
+message S2C_AgreeTiqin {
+	ChildCode code = 1;
+	repeated ZhaoqinInfo info = 2;
+	int32 itemID = 3;
+	int32 itemNum = 4;
+	int32 pageNubileMax = 5;
+}
+//客户�?  结婚
+message C2S_Married {
+	ZhaoqinInfo toChildInfo = 1;
+	ZhaoqinInfo myChildInfo = 2;
+}
+message S2C_Married {
+	ChildCode code = 1;
+	int32 mPic = 2;
+    int32 fPic = 3;
+    string mName = 4; 
+    string mFName = 5;
+    int32 mAttr = 6; 
+    string fName = 7;
+    string fFName = 8;
+    int32 fAttr = 9;
+    int64 allValue = 10;
+}
+message Married {
+	int32 id = 1;
+	int32 mPic = 2;
+    int32 fPic = 3;
+    string mName = 4; 
+    string mGrowName = 5;
+    int32 mAttr = 6; 
+    string fName = 7;
+    string fGrowName = 8;
+    int32 fAttr = 9;
+    int64 allValue = 10;
+	int32 uAttr = 11;
+	string uName = 12;
+	int64 marriedTime = 13;
+}
+//客户�? 已婚子嗣列表
+message C2S_MarriedChild {
+	int32 pageNum = 1;
+}
+message S2C_MarriedChild {
+	ChildCode code = 1;
+	repeated Married m = 2;//结婚子女属�??
+}
+
+//赐婚
+message C2S_Cihun {
+	ChildBase childBase = 1;
+}
+message S2C_Cihun {
+	ChildCode code = 1;
+	int32 mPic = 2;
+    int32 fPic = 3;
+    string mName = 4; 
+    string mFName = 5;
+    int32 mAttr = 6; 
+    string fName = 7;
+    string fFName = 8;
+    int32 fAttr = 9;
+    int64 allValue = 10;
+}
+
+
+
+message S2C_shengji { 
+	int32 id = 1;
+}
+
+
+message C2S_openDailyTask {}
+
+enum TaskState{
+    Doing = 0;
+    Complete= 1;
+    Got =2;
+}
+
+message DailyTaskInfo{
+    int32 id =1;
+    TaskState state =2;
+    int32 crtValue =3;
+}
+
+message S2C_openDailyTask{
+    int32 score =1;
+    repeated DailyTaskInfo list =2;
+    repeated TaskState boxes =3;
+}
+
+message C2S_treasureBoxClick{
+    int32 id = 1;
+}
+
+message DailyTaskReward{
+    int32 id = 1;
+    int64 count = 2;
+}
+message S2C_treasureBoxClick{
+    TaskState state = 1;
+    repeated DailyTaskReward rewards = 2;
+}
+
+message C2S_tryGetTaskReward{
+    int32 id = 1;
+}
+
+message S2C_tryGetTaskReward{
+    int32 id =1;
+    DailyTaskInfo task =2;
+    int64 politicsCount =3;
+    int32 activityCount =4;
+    int32 score = 5;
+    repeated TaskState boxes =6;
+}
+
+
+message C2S_getEmail {
+}
+
+message EmailInfo {
+	int64  id = 1;
+	string title = 2;
+	bool   hasItem = 3;
+	bool   hasRead = 4;
+	int64  time = 5;
+}
+
+message S2C_getEmail {
+	repeated EmailInfo emails = 1;
+}
+
+
+message C2S_getEmailDetail {
+	int64 id = 1;
+	int64 time = 2;
+}
+
+message EmailInfoItem {
+	int64  id = 1;
+	int64 count = 2;
+}
+
+message S2C_getEmailDetail {
+	string   text                = 1;
+	repeated EmailInfoItem items = 2;
+}
+
+
+message C2S_gotEmailItems {
+	int64 id = 1;
+	int64 time = 2;
+}
+
+message S2C_gotEmailItems {
+	bool success = 1;
+}
+//福利的protobuf
+//签到界面
+message C2S_FL_qiandao {
+
+}
+message S2C_FL_qiandao {
+    string txt02 = 1;
+    string txt01 = 2;
+    int32 dayQiandao = 3;
+    repeated FLItemInfo items = 4;
+    bool isQiandao = 5;
+}
+//福利物品信息
+message FLItemInfo {
+    int32 itemIcon = 1;//物品图片ID
+    int32 itemNum = 2;//物品数量
+    bool received = 3;//领取�?
+    int32 itemID = 4;
+}
+//签到领取奖励
+message C2S_FL_QDReceive {
+
+}
+message S2C_FL_QDReceive {
+    FLCode code = 1;
+    repeated FLItemInfo items = 2;
+}
+
+enum FLCode{
+    ok = 0;
+    fail = 1;
+}
+//打开月卡界面
+message C2S_FL_McOOP {
+
+}
+message S2C_FL_McOOP {
+    int64 monthCardTime = 1;
+    bool isRMD = 2;//是否领取过每日奖�?
+    bool isRMW = 3;//是否领取过每周奖�?
+    int32 monthCardDay = 4;
+    bool isBuyMC = 5;//只可购买�?�? 是否购买�?
+    repeated FLItemInfo items = 6;
+    int32 weekDay = 7;
+}
+
+//领取月卡每日与每周奖�?
+message C2S_FL_McR {
+
+}
+message S2C_FL_McR {
+    FLCode code = 1;
+    repeated FLItemInfo items = 2;
+}
+//打开年卡界面
+message C2S_FL_YcOOP {
+}
+message S2C_FL_YcOOP {
+    int64 yearCardTime = 1;
+    int32 RMB = 2;
+    int32 weekDay = 3;
+    int32 yearCardDay = 4;
+    bool isBuyYC = 5;//只可购买�?�? 是否购买�?
+    repeated FLItemInfo items = 6;  
+}
+//领取年卡每日与每周奖�?
+message C2S_FL_YcR {
+
+}
+message S2C_FL_YcR {
+    FLCode code = 1;
+    repeated FLItemInfo items = 2;
+}
+
+//小红�?
+message C2S_FL_UnRead {
+    int32 index = 1;
+}
+message S2C_FL_UnRead {
+    repeated bool unread = 1;
+}
+//首充
+message C2S_FL_FirstCharge {
+    int32 msgType = 1;//0:打开首充页面 1领取奖励
+}
+message S2C_FL_FirstCharge {
+    int32 firstCharge = 1;//0未首�? 1首充-未领�? 2首充-领取
+    repeated FLItemInfo items = 2;  
+    int32 heroID = 3;
+}
+//神迹
+message C2S_FL_Miracle {
+}
+message S2C_FL_Miracle {
+    //1十�?�商�? 2连升三级 3天资聪明 4天赐元宝 5红颜赐福
+    repeated string str = 1;// 5（神迹剩余次数）/5（神迹最大次数）    
+}
+//充�?�年卡获取红颜回�?
+message C2S_FLBYCCallBack {
+}
+message S2C_FLBYCCallBack {
+    int32 wifeID = 1;
+}
+
+
+message C2S_ReqGnHyInfo{
+
+}
+
+message S2C_ResGnHyInfo{
+  int32 value = 1;
+  int32 maxValue = 2;
+  int32 nextGetSecond = 3;
+  string statement = 4;
+  int32 getGold =5;
+}
+
+message C2S_ReqGetTribute{
+
+}
+
+//命名规范：C2S客户�? HD活动 Empress 调教女皇
+
+//打开活动页面
+message C2S_HD_EOnopen {
+}
+message S2C_HD_EOnopen {
+    string top = 1;//上方提示
+    int64 gold = 2;//玩家金币
+    int32 subGold = 3;//抽签金币
+    int32 tenSubGold = 4;//十连抽需要的金币
+    repeated HDEItem items = 5;//活动可以获得的物品信�?
+}
+//活动物品信息
+message HDEItem {
+    int32 qua = 1;
+    int32 item = 2;
+    int32 hero = 3;
+    int32 wife = 4;
+    int32 num = 5;
+    int32 id = 6;
+    int32 itemIcon = 7;
+}
+
+//活动  推�?�消�?
+message C2S_HD_EMsg {
+
+}
+message S2C_HD_EMsg {
+    repeated HDEMsg msgInfo = 1;
+}
+//活动  系统推�?�消息表
+message HDEMsg {
+    int32 vip = 1;//vip等级
+    int32 level = 2;//官品
+    string userName = 3;//用户名称
+    string item = 4;//获得�?么物�?*num
+    int32 qua = 5;//品质  根据品质来变换颜�?
+}
+//抽签
+message C2S_HD_EQiuqian {
+    int32 qiuqianType = 1;//是否十连�?  
+}
+
+message S2C_HD_EQiuqian {
+    HDECode code = 1;
+    repeated HDEItem items = 2;
+}
+enum HDECode {
+    ok = 0;
+    fail = 1;
+    error_noGold = 101;
+}
+
+//命名规范：C2S客户�? HD活动 LL情定终身
+
+//打开情定终身  获取活动时间
+message C2S_HD_LLOO {
+
+}
+
+message S2C_HD_LLOO {
+  int64 startopen = 1;//�?始时�?9�?
+  int64 endopen = 2;//结束时间22�?
+  int64 startday = 3;//�?始日�?
+  int64 endday = 4;//结束日期
+  int64 countdownTime = 5;//倒计�?
+}
+message C2S_HD_LLShop {
+  int32 shopType = 1;//0：打�?仓库 1:打开商店
+}
+message S2C_HD_LLShop {
+  repeated HDLLItems items = 1;
+}
+message HDLLItems {
+  int32 itemID = 1;
+  int32 icon = 2;
+  int32 num = 3;
+  int32 price = 4;
+  string point = 5;
+  string limit = 6;
+  int32 goldorMoney = 7;
+  string description = 8;
+  int32 btntype = 9;
+  string itemName = 10;
+  string name = 11;
+
+}
+
+message C2S_HDLL_BuyItem {
+  int32 itemID = 1;
+  int32 isExc = 2;//是否兑换物品  0：购买物�?  1：积分兑换物�?
+}
+message S2C_HDLL_BuyItem {
+  HDLL_ErrorCode code = 1;
+  int32 itemID = 2;
+  int32 itemNum = 3;
+  string limit = 4;
+  int32 point = 5;
+}
+
+enum HDLL_ErrorCode {
+  ok = 0;
+  fail = 1;
+  error_nogold = 1001;//元宝不足
+  error_noLimit = 1002;//次数不足
+  error_nomoney = 1003;//银币不足
+  error_noPoint = 1004;//积分不足
+  error_notime = 1005;//时间不足
+  error_noReceive = 1006;//已经领取过了
+}
+//客户�?  打开积分兑换页面
+message C2S_HDLL_OpenRedeem {
+
+}
+message S2C_HDLL_OpenRedeem {
+  repeated HDLLItems items = 1;
+  int32 point = 2;
+}
+//客户�?  进入活动
+message C2S_HDLL_Entrance {
+}
+
+message S2C_HDLL_Entrance {
+  repeated HDLLItems items = 1;
+  int32 point = 2;
+  int32 pointMax = 3;
+  HDLL_ErrorCode code = 4;
+}
+
+//进度100%
+message C2S_HDLL_GiftBox {
+  int32 index = 1;//0信息 1领取
+}
+message S2C_HDLL_GiftBox {
+  int32 hasGet = 1;//0 未领�? 1 已领�?
+  repeated HDLLItems items = 2;
+
+}
+
+//客户�?  使用活动物品
+message C2S_HDLL_UseItem {
+  HDLLItems item = 1;
+}
+message S2C_HDLL_UseItem {
+  HDLL_ErrorCode code = 1;
+  int32 point = 2;
+  int32 pointMax = 3;
+  repeated HDLLItems items = 4;
+}
+//客户�? 排行�?
+message C2S_HDLL_Leaderboard {
+  int32 isA = 1;//0 个人排行 1 联盟排行
+}
+message S2C_HDLL_Leaderboard {
+  repeated HDLL_LeaderboardDatas datas = 1;
+  string userName = 2;//我的昵称
+  int32 rank = 3;//我的排行
+  int64 points = 4;//我的总积�?
+}
+
+message HDLL_LeaderboardDatas {
+  int32 rank = 1;//排名
+  string name = 2;
+  int64 score = 3;//这里是累计积�?
+  //联盟排行�?要数据再�?
+}
+//客户�?  情定终身  排行榜领�?
+message C2S_HDLL_LBR {
+  int32 index = 1;//0：个人奖�?  1:联盟奖励
+}
+message S2C_HDLL_LBR {
+  HDLL_ErrorCode code = 1;
+  repeated HDLLItems items = 2;//奖励物品
+}
+
+message C2S_HDLL_LBSeeAwardOpen {
+  int32 index = 1;//0：个人奖�?  1:联盟奖励
+}
+
+message S2C_HDLL_LBSeeAwardOpen {
+  int32 state = 1;
+}
+
+message HdPItem{
+  int32 id = 1;
+  int32 icon = 2;
+  int32 count = 3;
+  string name = 4;
+  string des = 5;
+
+}
+
+message HdPHero{
+  int32 id = 1;
+  string name = 2;
+  int32 level = 3;
+  int32 grow = 4;
+  int64 strength = 5;
+  bool fighting = 6;
+
+}
+
+message HdPBoss{
+  int32 id = 1;
+  int32 pic = 2;
+  string name = 3;
+  int64 maxHP = 4;
+  repeated HdPItem item = 5;
+  bool remove = 6;
+  bool reward = 7;
+}
+
+message C2S_ReqHdPunishInfo{
+
+}
+
+message S2C_ResHdPunishInfo{
+  int32 superHeroId = 1;
+  string heroDes = 2;
+  bool getHero = 3;
+  repeated HdPBoss boss = 4;
+  repeated HdPHero heroes = 5;
+
+}
+
+message C2S_ReqGetHero{
+
+}
+
+message C2S_ReqPunishBoss{
+
+}
+
+message C2S_ReqBattle{
+  int32 bossId = 1;
+  int32 heroId = 2;
+}
+
+message S2C_ResBattleInfo{
+  int64 lostHP = 1;
+  int64 bossHP = 2;
+  repeated HdPHero heroes = 3;
+}
+
+message C2S_ReqGetBossReward{
+  int32 index = 1;
+}
+
+
+message HeroBase {
+	int32 id = 1;    // id
+	string name = 2; // 名字
+	int32 level = 3; // 等级
+	int32 quality = 4; // 品质
+	int32 allGrows   = 5; // 总资�?
+	int64 allAttribute   = 6; // 总属�?
+	int32 specialty = 7; // 特长
+}
+
+message C2S_heroList {
+		
+}
+
+message S2C_heroList_ack {
+	repeated HeroBase heroes = 1; // 英雄列表
+	repeated int32 growsItemCount = 2; // 天赋果子数量
+}
+
+message Skill {
+	int32 id = 1;	 // id
+	int32 level = 2; // 等级
+	int32 levelExp = 3; // �?要经�?
+	int32 pic       = 4; // 图片
+	string hint     = 5; // 文字描述
+	string name	    = 6; // 名字
+}
+
+message LinkHero {
+	repeated int32 ids = 1; 	// 英雄ids
+	repeated string names = 2;	// 英雄名字
+	repeated bool has = 3;  // 是不是拥�?
+	string name     = 4; 		// 名字
+	string hint     = 5; 		// 文字描述 
+}
+
+
+message C2S_heroDetail {
+	int32 id = 1; 
+}
+
+message S2C_heroDetail_ack {
+	int64 exp    = 1;	// 当前经验
+	int64 levelExp = 2; // 当前�?要经�?
+	int64 levelMoney = 3;// 当前�?要金�? 
+	repeated int32 grows = 4; // 资质
+	repeated int64 attributes = 5; // 属�??
+	repeated Skill skills = 6; // �?�?
+	repeated LinkHero linkHeros = 7; // 关联英雄	
+	int64 skillExp = 8; // �?能经�?
+	
+	int32 maxLevel = 9; // �?大等级等�?
+	
+	int64 growsExp = 10;
+	repeated int32 growsNeedExp = 12;
+	repeated int32 growsNeedCount = 13;
+}
+
+message C2S_upHeroLevel {
+	int32 id = 1; 
+	int32 count = 2;
+}
+
+
+message UpLevelData {
+	int64 levelExp = 1;
+	repeated int64 addAttributes = 2; // 属�??
+}
+
+message S2C_upHeroLevel_ack {
+	int64 startExp = 1;
+	int64 endExp = 2;
+	repeated UpLevelData datas = 3;	
+}
+
+message C2S_upHeroSkillLevel {
+	int32 id = 1; 
+	int32 skillId = 2;
+}
+
+message S2C_upHeroSkillLevel_ack {
+	int64 usedExp = 1;
+	int32 levelExp = 2; // �?要经�?
+	string hint     = 3; // 文字描述
+}
+
+
+message UpHeroLevelItem {
+	int32 id = 1;
+	int32 count = 2;
+	int32 need = 3;	
+}
+
+message C2S_getHeroTopLevelInfo {
+	int32 id = 1; 
+}
+
+message S2C_getHeroTopLevelInfo {
+	string curLevel = 1;
+	int32 levelTop = 2;
+	string nextLevel = 3;
+	int32 nextLevelTop = 4;
+	repeated int64 attributes = 5;
+	repeated UpHeroLevelItem items = 6;
+}
+
+message C2S_updateHeroTopLevel {
+	int32 id = 1; 
+}
+
+message S2C_updateHeroTopLevel {
+	bool success = 1;	
+	string error = 2;
+	repeated int32 attributes = 3;
+}
+
+
+message C2S_getUpdateHeroGrowsInfo {
+	int32 id = 1; 
+	int32 type = 2; 
+}
+
+message S2C_getUpdateHeroGrowsInfo {
+	int64 nextValue = 2;
+	int32 expPer = 3;
+	int32 countPer = 4;
+}
+
+message C2S_updateHeroGrows {
+	int32 id = 1; 
+	int32 type = 2; 
+	bool usedExp = 3;
+}
+
+message S2C_updateHeroGrows {
+	int64 growsExp = 1;
+	int32 growsNeedExp = 2;
+	int32 growsNeedCount = 3;
+	int64 attributes = 4; // 属�??
+	
+	bool success = 5;
+	bool levelUp = 6;
+	string error = 7;	
+
+	int64 nextValue = 9;
+	int32 expPer = 10;
+	int32 countPer = 11;
+	
+	int32 itemCount = 12;
+}
+
+
+message IndustryHero{
+  int32 id = 1;//id
+  string name = 2;//名字
+  int32 head = 3;
+  string level = 4;//等级
+  int64 strength = 5;
+  int64 wisdom = 6;
+  int64 charm = 7;
+  int64 politics = 8;
+  int32 workSta = 9;//空闲,商业,农业,征兵
+}
+
+message IndustryTimes{
+  int32 value = 1;
+  int32 maxValue = 2;
+  int64 nextGetSecond = 3;
+
+}
+
+message C2S_ReqIndustryInfo{
+
+}
+
+message S2C_ResIndustryInfo{
+  int64 money = 1;
+  int64 food = 2;
+  int64 soldier = 3;
+  int64 wisdomReward = 4;
+  int64 moneyReward = 5;
+  int64 politicsReward = 6;
+  int64 foodReward = 7;
+  int64 charmReward = 8;
+  int64 soldierReward = 9;
+  int64 foodCost = 10;
+  repeated IndustryTimes times = 11;
+  repeated bool lock = 12;
+  repeated int32 heroId = 13;
+  repeated string level = 14;
+
+}
+
+message C2S_ReqIndustryHeroList{
+
+}
+
+message S2C_ResIndustryHeroList{
+  repeated IndustryHero heroes = 1;
+
+}
+
+
+message C2S_ReqSetIndustryHero{
+  int32 seatId = 1;
+  int32 heroId = 2;
+
+}
+
+message C2S_ReqUseIndustry{
+  int32 index = 1;
+  int32 count = 2;
+
+}
+
+message S2C_ResUseIndustry{
+  repeated IndustryTimes times = 1;
+  int64 moneyAdd = 2;
+  int64 foodAdd = 3;
+  int64 soldierAdd = 4;
+
+}
+
+message C2S_ReqUseIndustryItem{
+  int32 index = 1;
+
+}
+
+message S2C_ResUseIndustryItem{
+  repeated IndustryTimes times = 1;
+
+}
+
+
+
+message C2S_getWareHousetems {
+	
+}
+
+enum ItemResultType {
+	gold = 0;
+	intimate =1;
+	beauty = 2;
+	growsEXP = 3;
+	skillEXP = 4;
+	money = 5;
+	food = 6;
+	soldier = 7;
+	strength = 8;
+	wisdom = 9;
+	charm = 10;
+	politics = 11;
+	score = 12;
+	prisoner = 13;
+	moneyGet = 14;
+	soldierGet = 15;
+	addHitNum = 16;
+	fame = 17;
+	energy = 18;
+	hero  = 20;	
+	item = 22;
+}
+
+message Item {
+	int32 id     = 1; // id
+	int32 icon   = 2; // 图标
+	string name = 3; // 名字
+	string hint = 4; // 提示
+	int32  count = 5; // 数量
+	int32  type = 6; // 物品类型
+	int32  effectType = 7; // 增益类型�?1属�?�，2资质经验�?3�?能经验）
+	bool canUsed = 8; // 
+}
+
+message HeroPromotion {
+	Item item	   = 1;
+	int32 upFromItemId = 2;
+	int32 upNeedCount  = 3;
+}
+
+message S2C_getWareHousetems {
+	repeated Item items = 1;
+	repeated Item clothes = 3;	
+	repeated HeroPromotion promotion = 4;
+}
+
+message C2S_itemInfo {
+	int32 id = 1;
+} 
+
+message S2C_itemInfo_ack {
+	int32 id     = 1;
+	int32 icon   = 2;	
+	string name = 3;
+	int32  count = 5;
+} 
+
+message ItemResult {
+	ItemResultType type = 1;
+	int64 value = 2;
+	ItemHeroInfo hero = 3;
+	Item item = 4;
+}
+
+
+message C2S_usedItem {
+	int32 id = 1;
+	int32 count = 2;
+	int32 des = 3;
+}
+
+message S2C_usedItem_ack {
+	bool succeed = 1;
+	string error = 2; 
+	repeated ItemResult result = 3; // 	
+}
+
+
+message ItemHeroInfo {
+	int32 id = 1;
+	string name = 2;
+	int32 level = 3;
+	int64 allAttribute = 4;
+	int32 specialty = 5; // 特长
+	int32 quality = 6; // 品质
+}
+
+message C2S_itemHeros {
+}
+
+message S2C_itemHeros {
+	repeated ItemHeroInfo heros = 1; 	
+}
+
+
+message C2S_makeItem {
+	int32 id = 1;
+}
+
+message S2C_makeItem {
+	bool succeed = 1; 	
+}
+
+message C2S_rename {
+	string name = 1;
+}
+
+message S2C_rename {
+	bool succeed = 1; 	
+	string error = 2;
+}
+
+
+
+message GiftItem {
+	int32 id = 1;
+	int64 count = 2;
+}
+
+message C2S_getGift {
+	string code = 1;
+}
+
+message S2C_getGift {
+	bool succeed = 1;
+	string error = 2; 
+	repeated GiftItem item = 3; 
+	int32 hero = 4; 
+	int32 wife = 5;
+}
+
+message LimitRewardItem{
+  int32 id = 1;
+  int32 count = 2;
+
+}
+
+message LimitRewardItems{
+  string des = 1;
+  int64 cost = 2;
+  int64 num = 3;
+  repeated LimitRewardItem item = 4;
+  bool getReward = 5;//是否达到领奖
+  bool Gotten = 6;//是否已经领取奖励
+  int32 level = 7;
+
+}
+
+message LimitRewardType{
+  int32 eventId = 1;
+  string title = 2;
+  int64 startDate = 3;
+  int64 endDate = 4;
+  int64 countDown = 5;
+  repeated LimitRewardItems items = 6;
+  int32 type = 7;
+
+
+}
+
+message C2S_ReqLimitRewardInfo{
+
+}
+
+message S2C_ResLimitRewardInfo{
+  repeated LimitRewardType reward = 1;
+
+}
+
+message C2S_ReqGetLimitReward{
+  int32 type = 1;
+  int32 index = 2;
+
+}
+
+message S2C_ResGetLimitReward{
+  LimitRewardType reward = 1;
+
+}
+
+
+message TopLobbyRankPlayer{
+  int64 id = 1;
+  string name = 2;
+  int32 level = 3;
+  int64 value = 4;
+  int64 intimacy = 5;
+  string gameLevel = 6;
+
+}
+
+message LobbyRankOfMe{
+  int64 value = 1;
+  int64 intimacy = 2;
+  string gameLevel = 3;
+
+}
+
+message TopLobbyRankPlayers{
+  repeated TopLobbyRankPlayer player = 1;
+
+}
+
+message C2S_ReqLobbyRankInfo{
+
+}
+
+message S2C_ResLobbyRankInfo{
+  repeated  TopLobbyRankPlayers players = 1;
+  repeated bool visited = 2;
+  LobbyRankOfMe myRank = 3;
+
+}
+
+message C2S_ReqRankVisited{
+  int32 index = 1;
+
+}
+
+message S2C_ResRankVisited{
+  int32 visitGold = 1;
+  repeated bool visited = 2;
+  string name = 3;
+  int32  head = 4;
+  int64 level = 5; // 官职
+  int32 curCloth = 6; // 当前时装
+
+}
+
+message C2S_openMainTask {}
+
+enum MainTaskState{
+    Doing = 0;
+    Complete= 1;
+    Got =2;
+}
+
+enum RewardType{
+    Res=0;
+    Item=1;
+    Hero=2;
+}
+
+message MainTaskInfo{
+    int32 id =1;
+    MainTaskState state =2;
+    int64 crtValue =3;
+    int64 targetValue=4;
+}
+
+message S2C_openMainTask{
+    MainTaskInfo task =1;
+    bool taskOver = 2;
+}
+
+message MainTaskReward{
+    int32 id = 1;
+    int64 count = 2;
+    RewardType type=3;
+}
+
+message C2S_tryGetMainTaskReward{
+}
+
+message S2C_tryGetMainTaskReward{
+    MainTaskInfo task =1;
+    repeated MainTaskReward rewards=2;
+    bool taskOver =3;
+}
+
+message S2C_TaskComplete{
+    int32 id = 1;
+}
+
+
+
+message C2S_sendMsg {
+	string text = 1;
+	bool isUnity = 2;
+}
+
+message S2C_sendMsg {
+	string error = 1; // 错误提示
+	bool isUnity = 2; // 联盟消息
+}
+
+message MsgInfo {
+	int64 msgId = 1;
+	int32 type = 2; // 1系统 2玩家 3联盟系统 4联盟
+	
+	int64 time = 3;
+	int64 userId = 4;
+	int32 head = 5;
+	int32 vipLevel = 6;
+	string name = 7;
+	string text = 8;
+	int32 fameId = 9; 
+	int32 level = 10; // vip 等级
+	int32 cloth = 11; // 衣服
+	
+	string link = 12; // 系统跳转
+}
+
+message S2C_updateMsg {
+	repeated MsgInfo msg = 1;
+}
+
+message C2S_getLastMsg {
+	int64 msgId = 1;
+}
+
+// 举报
+message C2S_report {
+	int64  id = 1;
+	string msg = 2;
+}
+
+message S2C_report {
+	bool success = 1;
+	string error = 2;
+}
+
+message PalacePlayerInfo{
+  int64 id = 1;
+  string name = 2;
+  int32 head = 3;
+  string level = 4;//官品
+  int32 vipLevel = 5;//vip等级
+  repeated int64 attributes = 6;//属�??
+  int64 allValue = 7;//势力
+  int64 score = 8;//政绩
+  int64 intimacy = 9;//亲密
+  string check = 10;//关卡
+  string kingWord = 11;//个�?�宣�?
+  int32 kingCloth = 12;
+  int32 kingName = 13;
+  repeated PalacePlayerDate player = 14;
+}
+
+message PalacePlayerDate{
+  int32 rank = 1;
+  string name = 2;
+  int64 date = 3;
+
+}
+
+message C2S_ReqPalaceInfo{
+
+
+}
+
+message S2C_ResPalaceInfo{
+  repeated PalacePlayerInfo playerInfo = 1;
+  int32 gold = 3;
+  bool getGold = 4;
+  string level = 5;
+}
+
+message C2S_ReqKingRank{
+
+}
+
+message C2S_ReqPalacePlayer{
+
+}
+
+message S2C_ResPalacePlayer{
+
+}
+
+message C2S_ReqSetPersonWord{
+  string word = 1;
+}
+
+message C2S_ReqPalaceGetGold{
+
+}
+
+message PayRewardItem{
+  int32 id = 1;
+  int32 icon = 2;
+  int32 count = 3;
+  string name = 4;
+  string des = 5;
+
+}
+
+message DailyPay{
+  string des = 1;
+  repeated PayRewardItem item = 2;
+  int64 pay = 3;
+  int64 maxPay = 4;
+  bool getReward = 5;
+  int32 id = 6;
+}
+
+message TotalPay{
+  string des = 1;
+  repeated PayRewardItem item = 2;
+  int64 pay = 3;
+  int64 maxPay = 4;
+  bool getReward = 5;
+  int32 id = 6;
+}
+
+message CountPay{
+  string des = 1;
+  repeated PayRewardItem item = 2;
+  int64 pay = 3;
+  int64 maxPay = 4;
+  bool getReward = 5;
+  int32 id = 6;
+}
+
+
+message C2S_ReqPayRewardInfo{
+
+}
+
+message S2C_ResPayRewardInfo{
+  repeated DailyPay dailyInfo = 1;
+  repeated TotalPay totalInfo = 2;
+  repeated CountPay countInfo = 3;
+  string todayPay = 4;
+  int64 startDate = 5;
+  int64 endDate = 6;
+  int64 countDown = 7;
+
+}
+
+message C2S_ReqGetPayReward{
+  int32 rewardId = 1;
+}
+
+
+message C2S_ReqPlayerInfo {
+}
+
+message playerLevelInfo{
+  int32 heroId = 1;
+  string hero = 2;//下一级解锁豪�?
+  repeated int32 maxValue = 3;//经营上限
+  string levelName = 4;//官名
+}
+
+message S2C_ResPlayerInfo {
+  int32 orderInServer = 1;                 //全服排行
+  repeated int64 attributes = 2;         // 属�??
+  int64 curExp = 3;                        //未使用的政绩
+  int64 nextExp = 4;                       //升官�?�?政绩
+  repeated bool king = 5;                  //�?有称�?
+  int32 curKing = 6;                       //当前称号
+  playerLevelInfo curLevelInfo = 7;
+  playerLevelInfo nextLevelInfo = 8;
+}
+
+message C2S_ReqLevelUp{
+
+}
+
+message S2C_ResLevelUp{
+  bool isUp = 1;              //升官结果
+  S2C_ResPlayerInfo playerInfo = 2;
+}
+
+message C2S_ReqChangeKing{
+  int32 kingid = 1;
+}//请求使用称号
+
+enum PrisonerErrorCode{
+  ok = 0;
+  fail = 1;
+  error_noGold = 103;//金币不够
+  error_noFamous = 105;//声望不够
+  error_noExtraAddition =106;//没有未铭刻属�?
+  error_additionNotMatch =107;//属�?�Id不匹�?
+  error_noTreasureWithId =108;//找不到指定ID的珍�?
+  error_prisonerComplete = 109;//犯人审查完毕
+}
+
+message PrisonerInfo{
+  int32 id = 1;
+  int32 crtCheckLevel = 2;
+  float crtHurtDef = 3;     //当前心理�?量百分比�?0-100
+  float crtBloodDef = 4;    //当前�?量百分比�?0-100
+  int64 getTime = 5;
+  int64 checkCompleteTime = 6;
+}
+
+message Famous{
+  int32 freeDailyFamous = 1;
+  int32 crtFamous = 2;
+  int32 famousLimit = 3;
+}
+
+message TreasureAddition{
+  int32 id = 1;
+  bool hasMark = 2;
+}
+
+message Treasure{
+  int32 id = 1;
+  repeated TreasureAddition additions = 2;
+  int32 level = 3;
+  int32 levelId = 4;
+  bool hasBindHero = 5;
+}
+
+message C2S_getPrisonerList {
+}
+
+message S2C_getPrisonerList {
+    repeated PrisonerInfo prisoners = 1;
+    Famous famousInfo = 2;
+}
+
+message C2S_beatPrisoner{
+  int32 id = 1;
+}
+
+message S2C_beatPrisoner{
+  PrisonerInfo info = 1;
+  bool completeLevel = 2; //新完成一个审查阶段，不包含血量审�?
+  bool completeCheck = 3; //新完成血量审�?
+  int32 rewardId = 4;
+  int32 rewardCount = 5;
+  Famous famous = 6;
+  Treasure treasure = 7;  //珍宝数据
+  bool newGetTreasure = 8;//是否新得到珍�?
+  int32 propId = 9;       //道具真实id，非index
+  PrisonerErrorCode code = 10;//错误�?
+}
+
+message C2S_refine{
+  int32 treasureId =1;//要洗练的珍宝ID
+  int32 index = 2;//要洗练属性的顺讯
+  int32 attId = 3;//要洗练属性的Id
+}
+
+message S2C_refine{
+  int32 treasureId = 1; //珍宝ID
+  int32 index = 2;      //新的属�?�位�?
+  int32 attId = 3;      //新的属�?�id
+  PrisonerErrorCode code  = 4;//错误�?
+}
+
+message C2S_openTreasure{}
+
+message S2C_openTreasure{
+  repeated Treasure treasures =1;
+}
+
+message C2S_markTreasure{
+  int32 id = 1;
+}
+
+message S2C_markTreasure{
+  PrisonerErrorCode code = 1;
+  int32 id = 2;
+  Treasure treasure = 3;
+}
+
+message  C2S_choseProp{
+  int32 id =1;
+}
+
+message  S2C_choseProp{
+  int32  id = 1;
+}
+
+message C2S_eventBack{
+  int32 id = 1;
+}
+
+message S2C_eventBack{
+  int32  id = 1;
+  PrisonerErrorCode code = 2;
+}
+
+message C2S_teachNow{
+  int32 id = 1; //犯人id
+}
+
+message S2C_teachNow{
+  PrisonerErrorCode code = 1;
+  int32 completeCount = 2;
+  PrisonerInfo info = 3;
+  repeated int32 resIds = 4;
+  repeated int32 resCounts = 5;
+  Famous famous = 6;
+}
+
+
+enum RedDotSystem{
+  DatingHouseMarryRequest = 0;//姻缘�? 提请请求  新的提亲请求
+  DatingHouseMarriedChild = 1;//姻缘�? 已婚子女  子女联姻成功
+  PartyEnemy = 2;             //宴会   仇人 新的捣乱信息
+  Sign = 3;                   //签到  可签�?
+  MonthCardReward = 4 ;        //月卡  可领取奖�?
+  YearCardReward = 5 ;         //年卡  可领取奖�?
+  FirstChargeReward = 6 ;      //首冲  可领取奖�?
+  GodShow = 7 ;                //神迹  vip等级提升
+  VipLevelUp = 8;             //Vip等级提升
+  DailyChargeReward = 9 ;      //每日充�??  领取奖励
+  TotalChargeReward = 10 ;      //累计充�??  领取奖励
+  TotalDayChargeReward = 11 ;   //累天充�??  领取奖励
+  ShopVipCanBuy = 12;           //商城VIP�? 满足购买条件
+  LimitReward = 13 ;            //限时奖励
+  TwoBeauty = 14 ;              //绝代双骄 满足任意可购买条件时
+  QingDing = 15 ;          //情定终身
+  QingDingRank = 16;           //情定终身 排行�?
+  ConferenceHall = 17;         //议政厅中，可挑战或�?�正在挑战中
+  PrisonTreasure = 18;         //大狱�? ，未选中刑具 or 当前名望>=15
+  GameLevel = 19;              //过关斩将，可出战豪杰> 0
+  VisitVisit = 20;             //微服私访 走访体力已满
+  VisitBuGua = 21;             //微服私访 免费卜卦
+  UnityEnterReq = 22;          //联盟 入盟申请
+  UnityDailyBuild = 23;        //联盟 每日建设
+  UnitySecret = 24 ;            //联盟 秘境
+  UnityShop = 25;              //联盟 商店
+  UnityNoble = 26 ;             //联盟 权贵
+  SchoolRiseChild = 27 ;        //私塾 培养子嗣
+  HeroUpdate10 = 28 ;           //豪杰 连升10�?
+  HeroGrowUpdate = 29;         //豪杰 资质提升
+  HeroSkillUpdate = 30 ;        //豪杰 �?能提�?
+  HeroPromote = 31 ;            //豪杰 提拔豪杰
+  DayFirstLogin = 32;          //每天第一次登�?
+  SaleGift = 33;               //优惠礼包
+  TeachQueen = 34 ;             //调教女王
+  MarryAllGirls = 35;          //广纳红颜
+  FlowerStreet = 36;           //花楼七日�?
+  PunishThief = 37 ;            //惩罚女贼
+  Palace = 38 ;                 //皇宫
+  CatchAssailant = 39;         //白夜缉凶
+  CountrySchool = 40;          //国子�?
+  Achievement = 41 ;            //成就
+  DailyTask = 42;              //日常任务
+  Email = 43;                  //邮箱
+  Rank = 44;                   //排行�?
+  WifeHouse = 45 ;              //群芳�?
+  Study = 46;                  //书房
+  Business = 47 ;              //经营
+  WorkHouse = 48;             //政务
+  Prison = 49;                //大狱
+  Party = 50;                 //宴会
+  VipReward= 51;            //vip 可领取奖�?
+}
+
+message S2C_redDotChange{
+  int64 byte = 1;
+}
+
+message C2S_changeRedDot{
+  RedDotSystem id = 1;
+}
+
+message S2C_changeRedDot{
+  RedDotSystem id = 1;
+  bool show =2;
+}
+
+message TopRushPlayer{
+  int64 id = 1;
+  int32 rank = 2;
+  int32 head = 3;
+  string name = 4;
+  int64 score = 5;
+  int32 level = 6;
+
+}
+
+message RushRewardItem{
+  int32 id = 1;
+  int32 count = 3;
+
+}
+
+message RushRewardItems{
+  int32 beginRank = 1;
+  int32 endRank = 2;
+  repeated RushRewardItem item = 3;
+
+}
+
+message RushReward{
+  repeated RushRewardItems items = 1;
+
+}
+
+message RushRankType{
+  int32 eventId = 1;
+  string eventName = 2;
+  int64 startDate = 3;
+  int64 endDate = 4;
+  int64 countDown = 5;
+  repeated TopRushPlayer players = 6;
+  RushReward reward = 7;
+  int32 title = 8;//称号
+  int64 value = 9;//角色涨幅�?
+  bool getReward = 10;//是否达到领奖
+  bool Gotten = 11;//是否已经领取奖励
+
+}
+
+message C2S_ReqRushRankInfo{
+
+}
+
+message S2C_ResRushRankInfo{
+  repeated RushRankType rankInfo = 1;
+
+}
+
+message C2S_ReqGetRushReward{
+  int32 eventId = 1;
+
+}
+
+message C2S_ReqGetCountDown{
+  int32 index = 1;
+}
+
+message S2C_ResGetCountDown{
+  int64 countDown = 1;
+}
+
+
+message SchoolHero {
+  int32 id = 1;
+  string name = 2;
+  int32 allGrows = 3;
+  int64 skillExp = 4;
+  int32 maxLearn = 5;
+  bool studying = 6;
+  int32 canstudy = 7;
+
+}
+
+message SeatInfo {
+  bool haveHero = 1;
+  int32 heroId = 2;
+  int32 value = 3;
+  bool double = 4;
+  bool finished = 5;
+  string name = 6;
+}
+
+
+message C2S_ReqSchoolSeatInfo {
+
+}
+
+message S2C_ResSchoolSeatInfo {
+  repeated SeatInfo seatInfo = 1;
+  int32 seatCost = 2;//�?1个席位消�?
+  int32 goldCost = 3;//双�?�元宝消�?
+  int64 gold = 4;
+}
+
+message C2S_ReqSchoolHeroList {
+
+}
+
+message S2C_ResSchoolHeroList {
+  repeated SchoolHero schoolHero = 1;
+  int32 getGrows = 2;
+  int32 getSkillExp = 3;
+}
+
+message C2S_ReqAddSeat {
+
+}
+
+
+message C2S_ReqSelectHero {
+  int32 id = 1;
+  int32 index = 2;
+}
+
+message C2S_ReqDoubleLearn {
+  int32 index = 1;//位置
+}
+
+message C2S_ReqStudyReward {
+  int32 index = 2;
+}
+
+message S2C_ResStudyReward {
+  int32 growsReward = 1;
+  int32 skillReward = 2;
+  int64 allattribues = 3;
+  string growsName = 4;
+}
+
+
+
+
+
+message signItem{
+  int32 id = 1;
+  string name = 2;
+  int32 icon = 3;
+  int32 count = 4;
+  string des = 5;
+}
+
+message SevenDay{
+  bool signed = 1;
+  repeated signItem item = 2;
+  bool canSign = 3;
+  bool nextDaySign = 4;
+  bool shouldSign = 5;
+}
+
+message C2S_ReqSevenSignInfo{
+
+}
+
+message S2C_ResSevenSignInfo{
+  repeated SevenDay day = 1;
+}
+
+message C2S_ReqSevenSign{
+  int32 index = 1;
+}
+
+
+message SingleItem {
+  int32 id = 1;
+  int32 itemId = 2;
+  int32 limited = 3;
+  int32 goldPrice = 4;
+  int32 nowCount = 5;
+
+}
+
+message SuperItem {
+  int32 id = 1;
+  int32 itemId = 2;
+  int32 limited = 3;
+  int32 goldPrice = 4;
+  int32 nowCount = 5;
+  repeated int32 childItemId = 6;
+  repeated int32 count = 7;
+
+}
+
+message VipItem {
+  int32 id = 1;
+  int32 itemId = 2;
+  int32 limited = 3;
+  int32 goldPrice = 4;
+  int32 nowCount = 5;
+  int32 vipLevel = 6;
+
+}
+
+message S2C_ShopInfo {
+  int64 gold = 1;
+  int32 vipLevel = 2;
+  repeated SingleItem singleItem = 3;
+  repeated SuperItem superItem = 4;
+  repeated VipItem vipItem = 5;
+
+}
+
+message C2S_ReqShopItemInfo {
+
+}
+
+message C2S_ReqBuyItem {
+  int32 type = 1;
+  int32 id = 2;
+
+}
+
+message S2C_ResBuyItem{
+  repeated int32 limited = 1;
+  int64 gold = 2;
+}
+
+
+message C2S_showLockEventSystem{
+
+}
+
+message S2C_showLockEventSystem{
+  repeated int32 ids = 1;
+
+}
+
+message C2S_lockEventSystemChange{
+
+}
+
+message S2C_lockEventSystemChange{
+  repeated int32 ids = 1;
+
+}
+
+message C2S_loginEventSystem{
+
+}
+
+message S2C_loginEventSystem{
+  repeated int32 ids = 1;
+
+}
+
+
+message C2S_showSystemOpen{
+}
+
+message S2C_showSystemOpen{
+  int32 id =1;
+  int32 level =2;
+  repeated int32 ids=3;
+}
+
+message C2S_showLockSystem{}
+
+message S2C_showLockSystem{
+  repeated int32 ids =1;
+}
+
+message C2S_lockSystemChange{}
+
+message S2C_lockSystemChange{
+  repeated int32 ids =1;
+}
+
+//命名规范：C2S客户�? HD活动 Tb（TwoBeauty�?  绝代双骄
+
+//打开活动页面
+message C2S_HD_TbOnopen {
+}
+message S2C_HD_TbOnopen {
+	int64 startDate = 1;
+	int64 endDate = 2;
+	int64 Countdown = 3;
+}
+//客户端到服务�?  打开绝代双骄页面
+message C2S_HD_TwoBeauty {
+
+}
+message S2C_HD_TwoBeauty {
+	repeated TwoBeautyInfo info = 1;
+}
+//客户�? 打开道具界面
+message C2S_HD_TbProps {
+}
+message S2C_HD_TbProps {
+	repeated TwoBeautyProps info = 1;
+}
+//绝代双骄信息
+message TwoBeautyInfo {
+	string heroName = 1;//豪杰名称 "hero"+id
+	string wifeName = 2;//妻子名称 "wife"+id
+	int32 heroAllGrow = 3;//豪杰总资�?
+	int32 wifeCharm = 4;//妻子魅力�?
+	int32 strength = 5;//豪杰  武力资质
+	int32 wisdom = 6;//豪杰  武力资质
+	int32 political = 7;//豪杰  武力资质
+	int32 charm = 8;//豪杰  武力资质
+	int32 itemID = 9;//消�?�物品ID
+	int32 itemCount = 10;//拥有物品数量
+	int32 itemSub = 11;//要消耗物品的数量
+	bool haved = 12;//是否拥有
+	int32 heroID = 13;//英雄ID  根据ID加载左边动画
+	int32 wifeID = 14;//红颜ID  根据ID加载右边边动�?
+}
+//绝代双骄活动道具信息
+message TwoBeautyProps {
+	int32 ShopItemID = 1;//兑换物品ID
+	int32 itemID = 2;//消�??  去兑换物品ID
+	int32 itemCount = 3;//拥有 消�?�数�?
+	int32 itemSub = 4;//消�?�数�?
+	string name = 5;//兑换物品名称	
+	string description = 6;//兑换物品描述
+	bool haved = 7;//是否已兑�?
+	string itemName = 8;
+}
+//兑换道具
+message C2S_HD_TbRedeemItem {
+	TwoBeautyProps info = 1;
+}
+message S2C_HD_TbRedeemItem {
+	HDTbCode code = 1;
+	int32 count = 2;//返回物品数量
+	int32 id = 3;//返回物品的ID
+}
+enum HDTbCode {
+	ok = 0;
+	fail = 1;
+	error_noItem = 1001;//道具不足
+} 
+//兑换红颜
+message C2S_HD_TbRedeemHongyan {
+	TwoBeautyInfo info = 1;
+}
+message S2C_HD_TbRedeemHongyan {
+	HDTbCode code = 1;
+	int32 heroID = 2;
+	int32 wifeID = 3;
+}
+
+enum UnityErrCode{
+  ok =0;
+  nameExist =1;
+  noGold =2;
+  ownUnity=3; //拥有联盟
+  memberFull=4;//满员�?
+  noUnity=5;//没有该联�?
+  noAuthority=6;//没有权限
+  noRequest=7;//申请不存�?
+  playerHasUnity=8;//玩家已加入联�?
+  notMember = 9;//联盟成员无此�?
+  noUser =10;//沒有此人�?
+  kickLeader =11;//踢到了盟�?
+  noSubLeader =12;//没有副盟�?
+  noChange =13;//没有发生职位更改
+  jobFull = 14;//职位已满
+  noBuildCount = 15;//没有建设次数
+  buildIdErr = 16;//建设id错误
+  noItem = 17;//没有道具
+  validSecretId = 18;//无效秘境Id
+  noWealth = 19;//财富不足
+  secretHasOpen = 20;//秘境已开�?
+  secretHasClose = 21;//秘境已关�?
+  secretBossDead = 22;//秘境boss已死
+  secretHasUsed =23;//当日已参加过该秘�?
+  noSecretData =24;//没有秘境信息
+  wrongSecretLv=25;//错误秘境等级
+  fail = 26;//失败
+
+}
+
+enum UnityJob{
+  Member = 0;
+  Elites = 1;
+  SubLeader = 2;
+  Leader = 3;
+}
+
+//我的联盟相关信息
+message SelfUnityData{
+  int64 id =1;    //我所在联盟ID
+  repeated int64 requestJoinUnity =2;//我所申请要加入的联盟ID列表
+}
+
+//联盟信息
+message UnityInfo{
+  int64 id =1;
+  int32 lv =2;
+  string name=3;
+  string masterName=4;
+  int64 influence=5;
+  int64 power=6;
+  int32 memberCount=7;
+  string adv=8;
+  bool allowRandomJoin=9;
+  int64 exp = 10;
+}
+
+message C2S_createUnity{
+  string name =1;
+  string adv =2;
+  bool randomJoin=3;
+}
+
+message S2C_createUnity{
+  UnityErrCode code = 1;
+  int64 id = 2;
+}
+
+//查询联盟
+message C2S_requestUnity{
+  string id = 1;
+}
+
+message S2C_requestUnity{
+  UnityInfo info =1;
+  SelfUnityData data=2;
+}
+
+//请求加入
+message C2S_requestJoin{
+  int64 id=1;
+}
+
+message S2C_requestJoin{
+  UnityErrCode code = 1;
+  int32 state =2;// 0 - 默认�? 1- 申请成功 2- 取消成功
+}
+
+//处理加入申请
+message C2S_dealWithJoinReq{
+  int64 requestUserId = 1;
+  int64 unityId = 2;
+  bool allowJoin = 3;
+}
+
+message RequestJoinData{
+  int64 id=1;
+  int32 level=2;
+  int64 power=3;//势力
+  string name=4;
+}
+
+message S2C_dealWithJoinReq{
+   UnityErrCode code =1;
+   repeated RequestJoinData list=2;
+}
+
+//�?键拒绝加盟申�?
+message C2S_refuseAllJoinRequest{}
+
+message S2C_refuseAllJoinRequest{
+  UnityErrCode code=1;
+}
+
+//随机加盟申请
+message C2S_randomJoinUnity{}
+
+message S2C_randomJoinUnity{
+  bool success = 1;
+}
+
+//改名�?
+message C2S_changeUnityName{
+  string name =1;
+}
+
+message S2C_changeUnityName{
+  UnityErrCode code =1;//ok 修改成功 noGold:金币不足 noAuthority:没有修改权限
+}
+
+//获取自己的unity信息
+message C2S_getMyUnityInfo{}
+
+message S2C_getMyUnityInfo{
+  UnityInfo info  = 1;
+  int32 isOpen = 2;//0 -close 1-open
+}
+
+//打开入盟申请界面
+message C2S_openJoinRequest{}
+
+message joinRequestInfo{
+  int64 userId = 1;
+  int32 level =2;
+  int64 power =3;
+  string name =4;
+  int64 time =5;
+}
+
+message S2C_openJoinRequest{
+  int64 unityId =1;
+  repeated joinRequestInfo list = 2;
+  int32 memberMax =3;
+  bool allowRandomJoin=4;
+}
+
+//处理加入请求
+message C2S_dealJoinRequest{
+  int64 unityId =1;
+  int64 userId =2;
+  bool agree=3;
+  bool refuseAll=4;
+}
+
+message S2C_dealJoinRequest{
+  int64 unityId =1;
+  repeated joinRequestInfo list = 2;
+  int32 memberMax =3;
+  bool allowRandomJoin=4;
+  UnityErrCode code = 5;
+}
+
+//更改允许随机加入
+message C2S_changeRandomJoin{
+  bool allowRandomJoin = 1;
+}
+
+message S2C_changeRandomJoin{
+  UnityErrCode code = 1;
+  bool allowRandomJon =2;
+}
+
+//打开联盟大厅界面
+message C2S_openHall{}
+message S2C_openHall{
+  UnityErrCode code =1;
+  UnityJob job =2;
+}
+
+
+//打开联盟成员界面
+message C2S_openMember{}
+message S2C_openMember{
+  UnityErrCode code =1;
+  int64 unityId =2;
+  repeated UnityMember members =3;
+  int32 memberMax=4;
+  UnityJob job =5;
+  int32 onlineMember=6;
+}
+
+message UnityMember{
+  int64 id =1;
+  string name =2;
+  int32 buildType=3;//0-普�?�建�? 1-道具建设
+  int32 vipLevel=4;
+  UnityJob job=5;
+  int32 level=6;
+  int32 attribute=7;
+  int64 power=8;
+  bool online=9;
+  int64 offlineTime =10;
+  int64 joinTime =11;
+}
+
+//打开更改职位界面
+message C2S_openChangeJob{
+  int32 id = 1;
+}
+
+message S2C_openChangeJob{
+  int32 memberCount = 1;
+  int32 elitesCount = 2;
+  int32 subLeaderCount = 3;
+  int32 unityLevel = 4;
+  int64 userId = 5;
+  int64 unityId = 6;
+  int32 userHeadId = 7;
+  int32 userCloth = 8;
+  UnityErrCode code = 9;
+}
+
+//更改职位
+message C2S_changeUserJob{
+  int64 id = 1;
+  UnityJob newJob=2;
+}
+
+message S2C_changeUserJob{
+  UnityErrCode code =1;
+  int64 id = 2;
+  UnityMember userData =3;
+  UnityJob myJob =4;
+}
+
+//踢人
+message C2S_kickOut{
+  int64 id = 1;
+}
+
+message S2C_kickOut{
+  UnityErrCode code =1;
+}
+
+//更换盟主
+message C2S_changeLeader{
+  int64 id = 1;
+}
+
+message S2C_changeLeader{
+  UnityErrCode code = 1;
+}
+
+//打开联盟详细信息界面
+message C2S_openDetails{}
+
+message S2C_openDetails{
+  UnityJob myJob = 1;
+  int64 id = 2;
+  string leaderName = 3;
+  int32 level = 4;
+  int64 exp = 5;
+  int64 influence = 6;
+  int32 wealth = 7;
+  int64 power = 8;
+  int32 memberCount = 9;
+  string notice = 10;
+  string adv = 11;
+  string unityName = 12;
+  UnityErrCode code = 13;
+}
+
+//修改联盟信息
+message C2S_changeUnityInfo{
+  string adv = 1;
+  string notice = 2;
+}
+
+message S2C_changeUnityInfo{
+  UnityErrCode code = 1;
+  string adv = 2;
+  string notice = 3;
+}
+
+//解散联盟
+message C2S_dismissUnity{
+  int64 unityId = 1;
+}
+
+message S2C_dismissUnity{
+  UnityErrCode code = 1;
+}
+
+
+message UnityRankInfo{
+  int64 id = 1;
+  string name =2;
+  int32 level =3;
+  bool hasRequest =4;
+  string leader =5;
+  int32 member =6;
+  int64 power =7;
+  int64 influence =8;
+}
+//打开联盟榜单
+message C2S_openUnityRank{}
+
+message S2C_openUnityRank{
+  bool hasUnity = 1;
+  string unityName = 2;
+  int32 unityRank =3;
+  repeated UnityRankInfo list =4;
+}
+
+//打开建设界面
+message C2S_openBuild{}
+message S2C_openBuild{
+  UnityErrCode code =1;
+  int64 gold =2;
+  int32 qiangMeng =3;
+  int32 qiangMeng2 =4;
+  int32 buildId =5;
+}
+
+//建设联盟
+message C2S_buildUnity{
+  int32 buildId =1;
+}
+
+//�?启秘�?
+message C2S_openSecret{
+  int32 secretId = 1;
+  int32 openType = 2;//0- 元宝 1 - 财富
+}
+
+message S2C_openSecret{
+  UnityErrCode code = 1;
+  int32 secretId = 2;
+}
+
+//显示秘境列表
+message C2S_showSecretList{}
+
+enum SecretLevelState{
+  ready = 0;
+  opening =1;
+  close =2;
+}
+message SecretLevelData{
+  int32 lv =1;
+  int64 crtHp=2;
+  int64 crtTime=3;
+  SecretLevelState state = 4;
+}
+message S2C_showSecretList{
+  UnityErrCode code = 1;
+  repeated  SecretLevelData list = 2;
+}
+
+//进入秘境
+message C2S_enterSecret{
+  int32 level = 1;
+}
+
+message S2C_enterSecret{
+  UnityErrCode code = 1;
+  int64 crtHp =  2;
+  int32 heroId = 3;
+  int64 heroAtk = 4;
+  int32 level = 5;
+  secretKillerInfo killInfo =6;
+}
+
+message secretKillerInfo{
+  string killer = 1;
+  int64 time = 2;
+  int32 bossLv = 3;
+}
+
+//显示�?启秘境界�?
+message C2S_showOpenSecret{
+  int32 level =1;
+}
+
+message S2C_showOpenSecret{
+  UnityErrCode code = 1;
+  int64 wealth = 2;
+  int64 gold = 3;
+  int32 level = 4;
+  secretKillerInfo killInfo =5;
+}
+
+//攻击秘境boss
+message C2S_fightSecretBoss{
+  int32 level = 1;
+}
+
+message S2C_fightSecretBoss{
+  UnityErrCode code = 1;
+  int32 level =2;
+  int64 crtHp =3;
+  int32 score =4;
+  bool isKillHit =5;
+  int32 myLv = 6;
+  int32 myHead = 7;
+  int32 myCloth = 8;
+  int32 heroId = 9;
+  int64 heroAtk = 10;
+  int64 dmg = 11;
+  string myName =12;
+}
+
+//显示更换英雄界面
+message C2S_showChangeHero{
+  int32  level = 1;
+}
+
+enum  fightBossHeroState{
+  alive = 0;  //未出战过
+  dead = 1;   //出战死亡
+  relive =2;  //复活
+  reDead =3;  //复活又死�?
+}
+
+message fightBossHero{
+  int32 id = 1;
+  int32 level =2;
+  int32 strengthGrow =3;
+  int64 atk =4;
+  fightBossHeroState state =5;
+}
+
+message S2C_showChangeHero{
+  UnityErrCode code = 1;
+  int32 level = 2;
+  repeated fightBossHero heroList = 3;
+  int32 fightHero = 4;
+}
+
+//显示击杀列表
+message C2S_showKillList{
+  int32 level = 1;
+}
+
+message S2C_showKillList{
+  UnityErrCode code = 1;
+   repeated  secretKillerInfo killList =2;
+}
+
+//切换出战英雄
+message C2S_changeSecretHero{
+  int32 level = 1;
+  int32 heroId =2;
+}
+
+message S2C_changeSecretHero{
+  UnityErrCode code = 1;
+  int32 level = 2;
+  int32 heroId =3;
+  int64 heroAtk =4;
+  int64 crtHp =5;
+}
+
+message C2S_reliveSecretHero{
+  int32 level =1;
+  int32 heroId =2;
+}
+
+message S2C_reliveSecretHero{
+  UnityErrCode code =1;
+  int32 level =2;
+  int32 heroId =3;
+  fightBossHeroState newState =4;
+}
+//联盟  权贵 U 联盟 N权贵
+enum UNCode {
+    ok = 0;
+    fail = 1;
+    error_noDrawNum = 2;//没有足够的拉拢次�?
+    error_noTime = 3;
+    error_noItem = 4;//物品不足
+    noUnity = 5;
+    notMember =6;
+    validNobleId = 7;
+    noAuthority = 8;
+    alreadyInUnity = 9;
+}
+//获取有几个权�?
+message C2S_UN {
+    
+}
+message S2C_UN {
+    repeated UNRole roles = 1;
+    bool isSetTarget = 2;//只有盟主副盟主显�?  设为目标
+    UNCode code = 3;
+}
+message UNRole {
+    int32 id = 1;//权贵id 
+    int32 icon = 2;//权贵icon
+    string name = 3;//权贵名称
+    bool isTarget = 4;//是否拉拢目标
+    bool isMyNoble = 5;//是否为我的权�?
+}
+//客户�?  权贵信息
+message C2S_UNInfo {
+    int32 nobleID = 1;
+}
+message S2C_UNInfo {
+    int32 pic = 1;
+    string alliance = 2;//当前属于哪个联盟
+    int64 time = 3;//如果时间 = 0  就是不显示保护时�? （秒�?
+    string nobleName = 4;//权贵名称
+    int64 fFeel = 5;//与当前权贵的好感�?
+    repeated string additionTxt = 6;//权贵加成
+    UNCode code = 7;
+}
+
+
+//把某个权贵设为目�?
+message C2S_UNSetTarget {
+    int32 nobleID = 1;
+}
+message S2C_UNSetTarget {
+    UNCode code = 1;
+    UNRole role = 2;
+}
+
+//排行榜数�?
+message UNRankData {
+    int64 rank = 1;
+    string name = 2;
+    int64 fFeel = 3;
+}
+//打开排行�?
+message C2S_UNRank {
+    int32 nobleID = 1;//哪个权贵的排行榜
+}
+message S2C_UNRank {
+    repeated UNRankData rankdatas = 1;//排行榜数�?
+    UNRankData myData = 2;//我的排行榜数�?
+    UNCode code = 3;
+}
+message C2S_UNShihaoOpen {
+    int32 funType = 1;//双数银币 单数元宝 0,1示好 2,3离间 4,5拉拢
+    int32 nobleID = 2;//对哪个权贵进行操�?
+}
+message S2C_UNShihaoOpen {
+    int64 belongF = 1;//�?属联盟好感度
+    string belongName = 2;//�?属联盟名�?
+    int64 mF = 3;//我的联盟的好感度
+    string rate = 4;//成功�?
+    string lastNum = 5;//剩余拉拢次数
+    repeated string jiangli = 6;//有什么奖�? 使用字号FA8872
+    repeated UNRole items = 7;//联盟消�?�物品�??
+    UNCode code = 8;
+}
+//查询是否能够拉拢
+message C2S_UNQueryDraw {
+    int32 nobleID = 1;//对哪个权贵进行操�?
+}
+message S2C_UNQueryDraw {
+    UNCode code = 1;
+    int64 drawInfluenceNeed = 2;//拉拢影响力要�?
+    int64 drawFavorNeed = 3;//拉拢友好度要�?
+    string name = 4;//权贵名字
+}
+
+//功能  示好  离间  拉拢
+message C2S_UNFunOK {
+    int32 nobleID = 1;
+    int32 funType = 2;
+}
+message S2C_UNFunOK {
+    UNCode code = 1;
+    repeated string rewardStr = 2;//功能  奖励文本�?
+    string defeatWord = 3;//失败讲话
+    int32 pic = 4;//形象
+    string nobleName = 5;//权贵名字
+}
+
+message C2S_queryMyNoble{}
+
+message S2C_queryMyNoble{
+    UNCode code  =1;
+    repeated int32 nobleList =2;
+}
+
+message UnityShopItem{
+  int32 id = 1;
+  int32 level = 2;
+  int32 devoteCost = 3;
+  int32 limit = 4;
+
+}
+
+message C2S_ReqUnityShopInfo{
+
+}
+
+message S2C_ResUnityShopInfo {
+  int64 devote = 1;
+  int32 level = 2;
+  repeated UnityShopItem item = 3;
+
+}
+
+message C2S_ReqBuyUnityItem{
+  int32 index = 1;
+
+}
+
+
+message C2S_getVisitInfo {
+}
+
+message S2C_getVisitInfo {
+	bool hasUnlocked = 1;
+	int32 maxVisitCount = 2;
+	int32 currentVisitCount = 3;
+	int32 specialVisitCount = 4;
+	int32 specialVisitId = 5;
+	int32 remainRecoverSce = 6;
+}
+
+enum VisitErrCode{
+	ok = 0;
+	noGold=1;
+}
+
+message C2S_getBuGua {
+}
+
+message specialVisitInfo{
+	int32 specialVisitId = 1;
+	int32 specialVisitCount =2;
+	int32 wifeId = 3;
+}
+
+
+message S2C_getBuGua{
+	int32 buGuaCost = 1;
+	specialVisitInfo specialVisit = 2;
+}
+
+
+message C2S_buGua{}
+
+message S2C_buGua{
+	int32 buGuaCost = 1;//本次消�??
+	specialVisitInfo specialVisit = 2;
+	VisitErrCode code =3;
+	int32 nextBuGuaCost = 4;//下次消�??
+}
+
+message C2S_refreshVisitCount{}
+
+message S2C_refreshVisitCount{
+	int32 remainVisitCount = 1;
+	int32 maxVisitCount = 2;
+	int32 remainSeconds = 3;
+}
+
+message C2S_visit{}
+
+message S2C_visit{
+	int32 visitId = 1;
+	int32 girlFamiliarValue = 2;
+	int32 girlFamiliarMax = 3;
+	int32 resId = 4;
+	int32 resCount = 5;
+	specialVisitInfo specialVisit = 6;
+	int32 getNewWifeId = 7;
+	string dialogText = 8;
+	int32 girlIntimacyValue = 9;
+	int32 girlIntimacyMax = 10;
+}
+
+message C2S_buildDetail{
+	int32 buildId = 1;
+}
+
+message buildInfo{
+	int32 visitId = 1;
+	int32 girlFamiliarValue  = 2;
+	int32 girlFamiliarMax = 3;
+	int32 girlIntimacyValue = 4;
+	int32 girlIntimacyMax = 5;
+	int32 girlHasUnlock = 6;
+	string unlockCondition = 7;
+}
+
+message S2C_buildDetail{
+	int32 buildId = 1;
+	repeated buildInfo buildList = 2;
+}
+
+message  C2S_useEnergy{
+	int32 itemId = 1;
+}
+
+message S2C_useEnergy{
+	int32 succeed = 1;
+}
+
+
+
+
+
+message WifeBase {
+	int32 id = 1;    // id
+	string name = 2; // 名字
+	int32 intimacy = 3; // 亲密�?
+	int32 charm = 4; // 魅力	
+}
+
+message LockedWife {
+	int32 id = 1;    // id
+	string name = 2; // 名字
+	string lockHint = 3; // 解锁条件
+	string hint = 5; // 提示
+}
+
+
+message WifeItem {
+	int32 id     = 1;
+	int32 icon   = 2;	
+	string name = 3;
+	string hint = 4;
+	int32  count = 5;
+}
+
+message C2S_wives {
+}
+
+message S2C_wives_ack {
+	int32 value = 1; // 
+	int32 maxValue = 2; //
+	int32 nextGetSecond = 3;
+	
+	repeated WifeBase unlockedGirls = 4;
+	repeated LockedWife lockedGirls = 5;	
+	
+	repeated WifeItem items = 6;
+}
+
+
+message WifeSkill {
+	int32 id = 1;    // id
+	string name = 2; // 名字
+	int32 level = 3; // 等级	
+	string curHint = 5; // 提示1
+	string nextHint = 6; // 提示2
+	int32 upLevelExp = 7; // 升级经验
+	int32 unlockIntimacy = 9; // 解锁亲密�?
+}
+
+message WifeLinkSkill {
+	string linkName = 1;	// 英雄名字
+	bool has = 2;  // 是不是拥�?
+	string name     = 3; 		// 名字
+	repeated string hints     = 4; // 提示
+}
+
+
+message C2S_wifeDetail {
+	int32 id = 1; 
+}
+
+message S2C_wifeDetail_ack {
+	int32 id = 1; // id
+	string hint = 2; // 说话
+	int32 childrenCount   = 3; // 孩子数量
+	int32 unlockMakeValue = 4; // 解锁�?要的亲密�?	
+
+	int64 skillExp = 8; // �?能经�?
+	
+	int32 needGold = 9; // 宠信�?要元宝数�?
+}
+
+message C2S_wifeSkill {
+	int32 id = 1; 
+}
+
+message S2C_wifeSkill_ack {
+	repeated WifeSkill skills = 6; // �?�?
+	repeated WifeLinkSkill linkHeros = 7; // 关联英雄	
+	int64 skillExp = 8; // �?能经�?
+}
+
+
+
+
+message C2S_makeOne {
+	int32 id = 1;
+	bool supper = 2;
+	bool x = 3;
+	bool notChild = 4; // 不生�?
+}
+
+message S2C_makeOne_ack {	
+	int32 id = 1;
+	int32 childSex = 2; // 1�? 2�?
+	int32 childValue = 3; // 
+	string hint = 4; // 对话
+	int32 unlockMakeValue = 5;
+	bool x = 6;
+	int32 needGold = 7; // 宠信�?要元宝数�?
+	int32 addIntimate = 8; // 增加亲密�?
+	int32 addSkillExp = 9; // 增加�?能经�?
+	string childValueText = 10; // 
+}
+
+
+message C2S_updateWifeTime {
+}
+
+message S2C_updateWifeTime_ack{
+	int32 value = 1;
+	int32 nextGetSecond = 2;
+}
+
+message C2S_updateSkill {
+	int32 id = 1;
+	int32 skillId = 2;
+}
+
+message S2C_updateSkill_ack{
+	string error = 1;
+	WifeSkill data = 2;
+	int64 skillExp = 8; // �?能经�?
+}
+
+
+
+message RoleInfo {
+  repeated int64 resources = 1;
+  int64 curExp = 3;                        //未使用的政绩
+  int64 nextExp = 4;                       //升官�?�?政绩
+}
+
+message C2S_ReqWorkInfo {
+
+}
+
+message PoliticsInfo {
+  int32 id = 1;
+  string des = 2;
+  string optionL = 3;
+  string optionR = 4;
+  string rewardLType = 5;
+  string rewardRType = 6;
+  int32 rewardLValue = 7;
+  int32 rewardRValue = 8;
+
+}
+
+message S2C_ResWorkInfo {
+  int32 value = 1;
+  int32 maxValue = 2;
+  int32 nextGetSecond = 3;
+
+  RoleInfo roleInfo = 4;
+
+  int32 politicsItemCount = 5;
+  PoliticsInfo politicsInfo = 6;
+}
+
+message C2S_ReqSelect {
+  int32 selectId = 1;
+}
+
+message S2C_ResSelected {
+  S2C_ResWorkInfo info = 1;
+}
+
+message C2S_ReqUsePoliticsItem {
+
+}
+
+message C2S_ReqUpdateWorkTime {
+
+}
+
+message S2C_ResUpdateWorkTime {
+  int32 value = 1;
+  int32 nextGetSecond = 2;
+}

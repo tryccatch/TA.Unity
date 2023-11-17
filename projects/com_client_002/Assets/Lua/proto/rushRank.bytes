@@ -1,0 +1,53 @@
+
+”
+
+rushRank.protoproto.RushRank"¡
+ThreePlayer
+id (Rid
+rank (Rrank
+head (Rhead
+name (	Rname
+score (Rscore
+level (Rlevel
+curCloth (RcurCloth"I
+	TopPlayer
+rank (Rrank
+name (	Rname
+score (Rscore"~
+RushRankType
+eventId (ReventId
+	startDate (R	startDate
+endDate (RendDate
+	countDown (R	countDown"
+C2S_ReqRushRankType"O
+S2C_ResRushRankType8
+rankType (2.proto.RushRank.RushRankTypeRrankType"6
+C2S_ReqRushRankThreePlayer
+eventId (ReventId"[
+S2C_ResRushRankThreePlayer=
+threePlayer (2.proto.RushRank.ThreePlayerRthreePlayer"-
+C2S_ReqMyRushRank
+eventId (ReventId"§
+S2C_ResMyRushRank
+rank (Rrank
+canGet (RcanGet
+gotten (Rgotten
+value (Rvalue
+name (	Rname$
+isUnityMaster (RisUnityMaster"4
+C2S_ReqRushRankTopPlayer
+eventId (ReventId"S
+S2C_ResRushRankTopPlayer7
+	topPlayer (2.proto.RushRank.TopPlayerR	topPlayer"0
+C2S_ReqGetRushReward
+eventId (ReventId"/
+C2S_ReqGetCountDown
+eventId (ReventId"3
+S2C_ResGetCountDown
+	countDown (R	countDown"
+C2S_ReqRushEvent"@
+S2C_ResRushEvent
+eventId (ReventId
+rank (	Rrank",
+S2C_RefreshRushState
+state (Rstatebproto3

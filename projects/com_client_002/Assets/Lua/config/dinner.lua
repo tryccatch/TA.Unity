@@ -1,0 +1,20 @@
+return {
+	{
+		id=1,
+		type=0,
+		gold=1000,
+		item={121,5,122,5},
+		numMax=10,
+		time=1440,
+		point=5000
+	},
+	{
+		id=2,
+		type=1,
+		gold=5000,
+		item={123,5,124,5},
+		numMax=50,
+		time=1440,
+		point=5000
+	}
+}

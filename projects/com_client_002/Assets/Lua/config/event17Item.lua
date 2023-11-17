@@ -1,0 +1,26 @@
+return {
+	{
+		id=1,
+		ShopItemID=115,
+		itemID=73,
+		num=10
+	},
+	{
+		id=2,
+		ShopItemID=116,
+		itemID=73,
+		num=10
+	},
+	{
+		id=3,
+		ShopItemID=117,
+		itemID=73,
+		num=10
+	},
+	{
+		id=4,
+		ShopItemID=118,
+		itemID=73,
+		num=10
+	}
+}

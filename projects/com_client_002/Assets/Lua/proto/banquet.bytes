@@ -1,0 +1,140 @@
+
+Û
+banquet.protoproto.Banquet"§
+BanquetInfo
+id (Rid
+name (	Rname
+supper (Rsupper
+state (Rstate
+count (Rcount
+lastTime (RlastTime
+score (Rscore"¤
+EndBanquetInfo
+supper (Rsupper
+score (Rscore
+goCount1 (RgoCount1
+goCount2 (RgoCount2
+names (	Rnames
+scores (Rscores"K
+MakeBanquetItem
+id (Rid
+count (Rcount
+need (Rneed",
+C2S_getBanquetInfo
+lastId (RlastId"á
+S2C_getBanquetInfo
+score (Rscore
+hasSelf (RhasSelf0
+other (2.proto.Banquet.BanquetInfoRother
+
+canGoCount (R
+canGoCount
+
+goMaxCount (R
+goMaxCount
+goCount1 (RgoCount1
+goCount2 (RgoCount22
+item (2.proto.Banquet.MakeBanquetItemRitem=
+
+endBanquet	 (2.proto.Banquet.EndBanquetInfoR
+endBanquet"?
+C2S_makeBanquet
+supper (Rsupper
+share (Rshare"y
+S2C_makeBanquet
+success (Rsuccess
+error (	Rerror6
+info (2".proto.Banquet.S2C_getBanquetDetalRinfo"!
+C2S_findBanquet
+id (Rid"[
+S2C_findBanquet
+success (Rsuccess.
+info (2.proto.Banquet.BanquetInfoRinfo"™
+ComeBanquetInfo
+id (Rid
+name (	Rname
+type (Rtype
+head (Rhead
+level (Rlevel
+time (Rtime
+pos (Rpos"%
+C2S_getBanquetDetal
+id (Rid"±
+S2C_getBanquetDetal
+id (Rid
+name (	Rname
+head (Rhead
+level (Rlevel
+count (Rcount
+maxCount (RmaxCount
+supper (Rsupper
+score (Rscore
+lastTime	 (RlastTime:
+comeInfo
+ (2.proto.Banquet.ComeBanquetInfoRcomeInfo
+cloth (Rcloth">
+C2S_updateBanquetDetal
+id (Rid
+index (Rindex"¿
+S2C_updateBanquetDetal:
+comeInfo (2.proto.Banquet.ComeBanquetInfoRcomeInfo
+score (Rscore
+isEnd (RisEnd=
+
+endBanquet (2.proto.Banquet.EndBanquetInfoR
+endBanquet"C
+C2S_sitDown
+id (Rid
+type (Rtype
+pos (Rpos"=
+S2C_sitDown
+success (Rsuccess
+error (	Rerror"J
+BanquetTopInfo
+id (Rid
+name (	Rname
+score (Rscore"
+C2S_getBanquetTopList"|
+S2C_getBanquetTopList3
+infos (2.proto.Banquet.BanquetTopInfoRinfos
+myPos (RmyPos
+myScore (RmyScore"J
+BanquetBonus
+id (Rid
+count (Rcount
+score (Rscore"
+C2S_getBanquetBonusInfo"ö
+S2C_getBanquetBonusInfo1
+bonus (2.proto.Banquet.BanquetBonusRbonus"
+refreshCount (RrefreshCount(
+refreshAllCount (RrefreshAllCount(
+refreshLastTime (RrefreshLastTime
+score (Rscore
+needGold (RneedGold"
+C2S_refreshBanquetBonusInfo"‰
+S2C_refreshBanquetBonusInfo
+success (Rsuccess
+error (	Rerror:
+info (2&.proto.Banquet.S2C_getBanquetBonusInfoRinfo"4
+C2S_getBonus
+index (Rindex
+id (Rid">
+S2C_getBonus
+success (Rsuccess
+error (	Rerror"~
+
+BanquetHis
+supper (Rsupper
+count1 (Rcount1
+count2 (Rcount2
+time (Rtime
+score (Rscore"\
+BanquetEnemy
+id (Rid
+name (	Rname
+score (Rscore
+time (Rtime"
+C2S_getBanquetHis"s
+S2C_getBanquetHis+
+his (2.proto.Banquet.BanquetHisRhis1
+enemy (2.proto.Banquet.BanquetEnemyRenemybproto3

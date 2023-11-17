@@ -1,0 +1,116 @@
+
+½
+heroes.protoproto.Heroes"Î
+HeroBase
+id (Rid
+name (	Rname
+level (Rlevel
+quality (Rquality
+allGrows (RallGrows"
+allAttribute (RallAttribute
+	specialty (R	specialty
+red (Rred"
+C2S_heroList"
+C2S_heroRedDot"j
+S2C_heroList_ack.
+heroes (2.proto.Heroes.HeroBaseRheroes&
+growsItemCount (RgrowsItemCount"ƒ
+Skill
+id (Rid
+level (Rlevel
+levelExp (RlevelExp
+pic (Rpic
+hint (	Rhint
+name (	Rname"l
+LinkHero
+ids (Rids
+names (	Rnames
+has (Rhas
+name (	Rname
+hint (	Rhint" 
+C2S_heroDetail
+id (Rid"›
+S2C_heroDetail_ack
+exp (Rexp
+levelExp (RlevelExp
+
+levelMoney (R
+levelMoney
+grows (Rgrows
+
+attributes (R
+attributes+
+skills (2.proto.Heroes.SkillRskills4
+	linkHeros (2.proto.Heroes.LinkHeroR	linkHeros
+skillExp (RskillExp
+maxLevel	 (RmaxLevel
+growsExp
+ (RgrowsExp"
+growsNeedExp (RgrowsNeedExp&
+growsNeedCount (RgrowsNeedCount"7
+C2S_upHeroLevel
+id (Rid
+count (Rcount"O
+UpLevelData
+levelExp (RlevelExp$
+addAttributes (RaddAttributes"z
+S2C_upHeroLevel_ack
+startExp (RstartExp
+endExp (RendExp/
+datas (2.proto.Heroes.UpLevelDataRdatas"@
+C2S_upHeroSkillLevel
+id (Rid
+skillId (RskillId"d
+S2C_upHeroSkillLevel_ack
+usedExp (RusedExp
+levelExp (RlevelExp
+hint (	Rhint"K
+UpHeroLevelItem
+id (Rid
+count (Rcount
+need (Rneed")
+C2S_getHeroTopLevelInfo
+id (Rid"è
+S2C_getHeroTopLevelInfo
+curLevel (	RcurLevel
+levelTop (RlevelTop
+	nextLevel (	R	nextLevel"
+nextLevelTop (RnextLevelTop
+
+attributes (R
+attributes3
+items (2.proto.Heroes.UpHeroLevelItemRitems"(
+C2S_updateHeroTopLevel
+id (Rid"h
+S2C_updateHeroTopLevel
+success (Rsuccess
+error (	Rerror
+
+attributes (R
+attributes"@
+C2S_getUpdateHeroGrowsInfo
+id (Rid
+type (Rtype"n
+S2C_getUpdateHeroGrowsInfo
+	nextValue (R	nextValue
+expPer (RexpPer
+countPer (RcountPer"S
+C2S_updateHeroGrows
+id (Rid
+type (Rtype
+usedExp (RusedExp"×
+S2C_updateHeroGrows
+growsExp (RgrowsExp"
+growsNeedExp (RgrowsNeedExp&
+growsNeedCount (RgrowsNeedCount
+
+attributes (R
+attributes
+success (Rsuccess
+levelUp (RlevelUp
+error (	Rerror
+	nextValue	 (R	nextValue
+expPer
+ (RexpPer
+countPer (RcountPer
+	itemCount (R	itemCountbproto3

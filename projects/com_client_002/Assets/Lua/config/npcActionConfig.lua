@@ -1,0 +1,21 @@
+return {
+	{
+		id=1,
+		npc_1_idle=1,
+		npc_1_run=8,
+		npc_1_attack=5,
+		npc_1_die=4,
+		npc_2_idle=1,
+		npc_2_run=8,
+		npc_2_attack=5,
+		npc_2_die=4,
+		npc_3_idle=1,
+		npc_3_run=8,
+		npc_3_attack=5,
+		npc_3_die=4,
+		npc_4_idle=1,
+		npc_4_run=8,
+		npc_4_attack=5,
+		npc_4_die=4
+	}
+}

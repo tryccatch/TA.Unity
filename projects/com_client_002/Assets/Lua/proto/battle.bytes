@@ -1,0 +1,69 @@
+
+†
+battle.protoproto.Battle"
+C2S_getBattleInfo"¦
+BattlePlayerInfo
+strength (Rstrength
+soldier (Rsoldier
+name (	Rname
+head (Rhead
+speech (	Rspeech
+
+soldierMax (R
+soldierMax
+leaderId (RleaderId
+	soldierId (R	soldierId"
+soldierCount	 (RsoldierCount
+
+canLevelUp
+ (R
+canLevelUp"û
+S2C_getBattleInfo
+levelExp (RlevelExp"
+levelNextExp (RlevelNextExp2
+self (2.proto.Battle.BattlePlayerInfoRself4
+other (2.proto.Battle.BattlePlayerInfoRother
+name (	Rname
+hint (	Rhint
+	gameIndex (R	gameIndex
+gameStep	 (RgameStep 
+gameStepMax
+ (RgameStepMax
+
+background (R
+background
+storyId (RstoryId"8
+BattleResultItem
+id (Rid
+count (Rcount"
+C2S_fighting"Ç
+S2C_fighting$
+lostCountSelf (RlostCountSelf&
+lostCountOther (RlostCountOther3
+info (2.proto.Battle.S2C_getBattleInfoRinfo4
+items (2.proto.Battle.BattleResultItemRitems"È
+BossBattleHero
+id (Rid
+name (	Rname
+level (Rlevel$
+strengthGrows (RstrengthGrows
+strength (Rstrength
+	canBattle (R	canBattle
+	canRelive (R	canRelive"
+C2S_getBossInfo"½
+S2C_getBossInfo
+hp (Rhp
+maxHP (RmaxHP
+head (Rhead
+name (	Rname
+hint (	Rhint4
+heroes (2.proto.Battle.BossBattleHeroRheroes
+code (Rcode"*
+C2S_fightingBoss
+heroId (RheroId"Å
+S2C_fightingBoss
+lostHP (RlostHP3
+info (2.proto.Battle.S2C_getBattleInfoRinfo4
+items (2.proto.Battle.BattleResultItemRitems
+heroId (RheroId
+wifeId (RwifeIdbproto3
