@@ -1,12 +1,24 @@
 using UnityEngine;
 
-public class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
+public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
 {
     private static T instance;
 
     public static T Instance
     {
-        get => instance;
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<T>();
+                if (instance == null)
+                {
+                    GameObject go = new(typeof(T).Name);
+                    instance = go.AddComponent<T>();
+                }
+            }
+            return instance;
+        }
     }
 
     protected virtual void Awake()
