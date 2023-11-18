@@ -65,14 +65,14 @@ SdkMgr.init()
 
 local waitingNet = false
 local NetState = {
-    WaitSDKInit = 1, -- 等待SDK初始化
-    StartConnect = 2, -- 开始连接
-    Connecting = 3, -- 正在连接
-    Connected = 4, -- 已连接
-    DisConnect = 5, -- 断线
-    AutoReConnect = 6, -- 自动重连
+    WaitSDKInit = 1,     -- 等待SDK初始化
+    StartConnect = 2,    -- 开始连接
+    Connecting = 3,      -- 正在连接
+    Connected = 4,       -- 已连接
+    DisConnect = 5,      -- 断线
+    AutoReConnect = 6,   -- 自动重连
     ManualReConnect = 7, -- 手动重连
-    FailToConnect = 8   -- 重连失败，退回登录
+    FailToConnect = 8    -- 重连失败，退回登录
 }
 
 crtNetState = NetState.WaitSDKInit
@@ -99,7 +99,7 @@ function tryLog(...)
 end
 
 local failMsgBox
-function main_update (value)
+function main_update(value)
     --timer = timer + CS.UnityEngine.Time.deltaTime
     --if timer < 1 then
     --    return
@@ -178,8 +178,8 @@ end
 function receiveNetMsg()
     tryLog("111 receive net msg:", crtNetState, getCrtStateName())
     if crtNetState == NetState.WaitSDKInit or
-            crtNetState == NetState.StartConnect or
-            crtNetState == NetState.FailToConnect then
+        crtNetState == NetState.StartConnect or
+        crtNetState == NetState.FailToConnect then
         tryLog("111 receive net msg: wait sdk init return")
         return
     end
@@ -203,8 +203,8 @@ function receiveNetMsg()
     end
 
     if crtNetState == NetState.Connecting
-            or crtNetState == NetState.AutoReConnect
-            or crtNetState == NetState.ManualReConnect then
+        or crtNetState == NetState.AutoReConnect
+        or crtNetState == NetState.ManualReConnect then
         tryLog("111 receive net msg: init connect")
         clearRetryWindow()
         initConnected()
@@ -303,7 +303,6 @@ function mainRestart(logout)
         crtNetState = NetState.WaitSDKInit
         SdkMgr.logOut()
     end
-
 end
 
 function stopForKickout()
@@ -351,13 +350,11 @@ function autoReConnect()
         --    crtNetState = NetState.ManualReConnect
         --end
         crtNetState = NetState.ManualReConnect
-
     else
         autoReConnectCount = autoReConnectCount + 1
         tryLog("111 autoReConnect: try connect ------------次数：", autoReConnectCount)
         tryConnect()
         crtNetState = NetState.Connecting
-
     end
 end
 
@@ -415,12 +412,11 @@ function manualReConnect()
 
         tryLog("111 manualReConnect: show retry window")
         retryWindow = UI.showCounterBox("正在尝试连接……",
-                manualReConnectTime, "重试", btnYesFunc, btCloseFun, timeOverFun)
+            manualReConnectTime, "重试", btnYesFunc, btCloseFun, timeOverFun)
         tryConnect()
         retryWindow:SetParent(reconnectParent)
         manualReConnectCount = manualReConnectCount + 1
     end
-
 end
 
 function backToLogin()

@@ -33,7 +33,7 @@ public class ResTools
         var verPackage = getPackageVer(keyWithChannel);
         var verDownload = getDownloadVer(keyWithChannel);
 
-        Debug.Log("¶Ô±È°æ±¾ÎÄ¼þ£º" + verPackage + "£¬" + verDownload);
+        Debug.Log("ï¿½Ô±È°æ±¾ï¿½Ä¼ï¿½ï¿½ï¿½" + verPackage + "ï¿½ï¿½" + verDownload);
         Object prefab;
         if (verDownload > verPackage)
         {
@@ -62,7 +62,7 @@ public class ResTools
         {
            
             var bundle = AssetBundle.LoadFromFile(Path.Combine(Application.persistentDataPath,resKeyWithChannel));
-            Debug.Log("¼ÓÔØÏÂÔØAB:" + Path.Combine(Application.persistentDataPath, resKeyWithChannel));
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½AB:" + Path.Combine(Application.persistentDataPath, resKeyWithChannel));
             if (bundle == null)
             {
                 Debug.Log("can't found res:" + resKeyWithChannel);
@@ -143,7 +143,7 @@ public class ResTools
             var bundle = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, realRes));
 #else
             var bundle = AssetBundle.LoadFromFile(Application.dataPath+"!assets/"+realRes);
-            Debug.Log("¼ÓÔØ Package android AB:"+(Application.dataPath+"!assets/"+realRes));
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ Package android AB:"+(Application.dataPath+"!assets/"+realRes));
 #endif
             if (bundle == null) {
                 Debug.Log("can't found res:" + realRes);
@@ -168,7 +168,8 @@ public class ResTools
         return prefab;
     }
 
-    public static byte[] ReadLuaBytes(string res) {
+    public static byte[] ReadLuaBytes(ref string res)
+    {
 
 
 #if UNITY_EDITOR && (!TestLoad)
@@ -235,11 +236,11 @@ public class ResTools
         key = key.ToLower();
         if (filemap != null && filemap.ContainsKey(key)) {
             key = filemap[key];
-            Debug.Log("ÓÐÓ³ÉäÍ¼Æ¬ÐÅÏ¢:Ô­Ê¼Â·¾¶=" + tempPath + "£¬value=" + key);
+            Debug.Log("ï¿½ï¿½Ó³ï¿½ï¿½Í¼Æ¬ï¿½ï¿½Ï¢:Ô­Ê¼Â·ï¿½ï¿½=" + tempPath + "ï¿½ï¿½value=" + key);
         }
         else
         {
-            Debug.Log("Ã»ÓÐÓ³ÉäÍ¼Æ¬ÐÅÏ¢:Ô­Ê¼Â·¾¶=" + tempPath + "£¬value=" + key);
+            Debug.Log("Ã»ï¿½ï¿½Ó³ï¿½ï¿½Í¼Æ¬ï¿½ï¿½Ï¢:Ô­Ê¼Â·ï¿½ï¿½=" + tempPath + "ï¿½ï¿½value=" + key);
         }
         return key;
     }
@@ -316,7 +317,7 @@ public class ResTools
     {
         if(texturePool.Values.Count > maxCacheTexCount)
         {
-            Debug.Log("ÊÍ·Å×ÊÔ´ÁË");
+            Debug.Log("ï¿½Í·ï¿½ï¿½ï¿½Ô´ï¿½ï¿½");
             var list = new List<KeyValuePair<string, TexCounter>>();
             foreach(var item in texturePool)
             {
@@ -343,8 +344,8 @@ public class ResTools
     static string downloadAddr = "http://127.0.0.1:9788/";
     static string hotFixAddr = "http://127.0.0.1:9788/";
 
-    static Dictionary<string, int> pakageVer;//´æ´¢±¾µØver.ver
-    static Dictionary<string, int> downloadVer;//´æ´¢ÏÂÔØver.ver
+    static Dictionary<string, int> pakageVer;//ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ver.ver
+    static Dictionary<string, int> downloadVer;//ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ver.ver
     static Dictionary<string, int> netVer;
     static List<string> pkgChannelFile;
     static List<string> netChannelFile;
@@ -401,21 +402,21 @@ public class ResTools
         netChannelFile = new List<string>();
 
         var data = LoadPackage("ver", "ver",true);
-        //Debug.Log("1. ¼ÓÔØ±¾µØ°æ±¾ÎÄ¼þ:"+(data == null));
+        //Debug.Log("1. ï¿½ï¿½ï¿½Ø±ï¿½ï¿½Ø°æ±¾ï¿½Ä¼ï¿½:"+(data == null));
 
         if (data != null) {
             LoadVer(pakageVer, (data as TextAsset).text);
         }
 
         var channelFile = LoadPackage("channelfile", "channelfile",true);
-        //Debug.Log("1. ¼ÓÔØ±¾µØchannelFile:" + (channelFile == null));
+        //Debug.Log("1. ï¿½ï¿½ï¿½Ø±ï¿½ï¿½ï¿½channelFile:" + (channelFile == null));
         if (channelFile != null)
             LoadChannelFile(pkgChannelFile,(channelFile as TextAsset).text);
 
         try
         {
             var bytes = File.ReadAllBytes(Application.persistentDataPath + "/ver");
-            //Debug.Log("¼ÓÔØÏÂÔØ°æ±¾ÎÄ¼þ£º" + (bytes == null));
+            //Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø°æ±¾ï¿½Ä¼ï¿½ï¿½ï¿½" + (bytes == null));
             var text = System.Text.Encoding.Default.GetString(bytes);
             LoadVer(downloadVer, text);
         }
@@ -464,7 +465,7 @@ public class ResTools
         {
             var cls = new AndroidJavaClass("com.xreal.agame.UnityPlayerActivity");
             var ver = cls.CallStatic<int>("GetVer");
-            //Debug.Log("¿Í»§¶Ë°æ±¾ºÅ£º" + ver);
+            //Debug.Log("ï¿½Í»ï¿½ï¿½Ë°æ±¾ï¿½Å£ï¿½" + ver);
             return ver;
         } catch(System.Exception) { }
 #endif
@@ -479,7 +480,7 @@ public class ResTools
         Debug.Log(Application.persistentDataPath);
 
         var maxValue = Mathf.Max(getDownloadVer("ver"), getPackageVer("ver"));
-        //Debug.Log("×î´ó°æ±¾ºÅ£º" + maxValue);
+        //Debug.Log("ï¿½ï¿½ï¿½æ±¾ï¿½Å£ï¿½" + maxValue);
         com.StartDownload(addr + "?code=" + GetVerCode() + "&ver=" + maxValue+"&channel="+ChannelMgr.channel, (step, bytes) => {
 
             if (step == -1)
@@ -496,7 +497,7 @@ public class ResTools
                 Games.Coresdk.Unity.ConfigLoader.payAddr = lines[1];
 #endif
                 hotFixAddr = lines[2];
-                //Debug.Log("ÈÈ¸üµØÖ·£º" + hotFixAddr);
+                //Debug.Log("ï¿½È¸ï¿½ï¿½ï¿½Ö·ï¿½ï¿½" + hotFixAddr);
                 downloadAddr = lines[3];
                 var isUpdate = lines[4];
                 if(isUpdate == "forceUpdate")
@@ -588,7 +589,7 @@ public class ResTools
                 if (strs.Length == 2)
                 {
                     filemap.Add(strs[0],strs[1]);
-                    //Debug.Log("³õÊ¼»¯FileMap:" + line);
+                    //Debug.Log("ï¿½ï¿½Ê¼ï¿½ï¿½FileMap:" + line);
                 }
             }
         }

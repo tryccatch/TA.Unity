@@ -19,7 +19,7 @@ public static class SensitiveCheck
         if (hasInit)
             return;
         hasInit = !hasInit;
-        var bytes = ResTools.ReadLuaBytes(fileName);
+        var bytes = ResTools.ReadLuaBytes(ref fileName);
         var content = Encoding.UTF8.GetString(bytes);
 
         

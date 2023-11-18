@@ -94,7 +94,7 @@ public class LuaRunner : MonoBehaviour
 
     private byte[] Loader(ref string fileName)
     {
-        return ResTools.ReadLuaBytes(fileName);
+        return ResTools.ReadLuaBytes(ref fileName);
     }
 
     void EnterGame()
