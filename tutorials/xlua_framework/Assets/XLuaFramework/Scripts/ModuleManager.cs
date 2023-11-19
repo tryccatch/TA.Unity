@@ -21,16 +21,18 @@ public class ModuleManager : Singleton<ModuleManager>
             {
                 ModuleABConfig moduleABConfig = await AssetLoader.Instance.LoadAssetBundleConfig(moduleConfig.moduleName);
 
-                if (moduleABConfig != null)
-                {
-                    Debug.Log("模块包含的AB包总数量: " + moduleABConfig.BundleArray.Count);
-
-                    return true;
-                }
-                else
+                if (moduleABConfig == null)
                 {
                     return false;
                 }
+
+                Debug.Log("模块包含的AB包总数量: " + moduleABConfig.BundleArray.Count);
+
+                Hashtable Path2AssetRef = AssetLoader.Instance.ConfigAssembly(moduleABConfig);
+
+                AssetLoader.Instance.base2Assets.Add(moduleConfig.moduleName, Path2AssetRef);
+
+                return true;
             }
         }
         else
