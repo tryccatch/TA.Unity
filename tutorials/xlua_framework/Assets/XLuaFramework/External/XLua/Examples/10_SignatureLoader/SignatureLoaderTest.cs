@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.IO;
+using UnityEngine;
 using XLua;
-using System.IO;
 
 namespace XLuaTest
 {

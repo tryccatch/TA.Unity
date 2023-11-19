@@ -8,8 +8,6 @@
 
 using UnityEngine;
 using XLua;
-using System.Collections.Generic;
-using System;
 
 namespace XLuaTest
 {

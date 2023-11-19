@@ -1,7 +1,6 @@
-﻿using System;
+﻿using CSObjectWrapEditor;
 using UnityEditor;
 using UnityEngine;
-using CSObjectWrapEditor;
 using XLua;
 
 namespace XLuaTest

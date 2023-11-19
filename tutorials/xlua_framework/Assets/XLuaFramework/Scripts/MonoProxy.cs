@@ -1,10 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using XLua;
-using UnityEngine.Networking;
 
 /// <summary>
 /// MonoBehaviour的代理类

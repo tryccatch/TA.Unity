@@ -2,11 +2,11 @@
 
 namespace XLua
 {
-    using UnityEngine;
-    using UnityEditor;
     using System.Net.Sockets;
     using System.Text;
     using System.Threading;
+    using UnityEditor;
+    using UnityEngine;
 
     [InitializeOnLoad]
     public class Report
