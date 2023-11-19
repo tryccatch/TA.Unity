@@ -24,6 +24,8 @@ public class AssetLoader : Singleton<AssetLoader>
     /// </summary>
     public Dictionary<string, Hashtable> update2Assets;
 
+    public Dictionary<string, BundleRef> name2BundleRef;
+
     /// <summary>
     /// 模块资源加载器的构造函数
     /// </summary>
@@ -32,6 +34,8 @@ public class AssetLoader : Singleton<AssetLoader>
         base2Assets = new Dictionary<string, Hashtable>();
 
         update2Assets = new Dictionary<string, Hashtable>();
+
+        name2BundleRef = new Dictionary<string, BundleRef>();
     }
 
     /// <summary>
@@ -64,7 +68,7 @@ public class AssetLoader : Singleton<AssetLoader>
     /// <returns></returns>
     public Hashtable ConfigAssembly(ModuleABConfig moduleABConfig)
     {
-        Dictionary<string, BundleRef> name2BundleRef = new Dictionary<string, BundleRef>();
+        /* Dictionary<string, BundleRef> name2BundleRef = new Dictionary<string, BundleRef>();
 
         foreach (KeyValuePair<string, BundleInfo> keyValue in moduleABConfig.BundleArray)
         {
@@ -73,7 +77,7 @@ public class AssetLoader : Singleton<AssetLoader>
             BundleInfo bundleInfo = keyValue.Value;
 
             name2BundleRef[bundleName] = new BundleRef(bundleInfo);
-        }
+        } */
 
         Hashtable Path2AssetRef = new Hashtable();
 
@@ -188,13 +192,6 @@ public class AssetLoader : Singleton<AssetLoader>
     /// <param name="moduleName">模块名字</param>
     /// <param name="assetPath">资源的相对路径</param>
     /// <returns></returns>
-    /// <summary>
-    /// 在AB包模式下加载 AssetRef 对象
-    /// </summary>
-    /// <typeparam name="T">要加载的资源类型</typeparam>
-    /// <param name="moduleName">模块名字</param>
-    /// <param name="assetPath">资源的相对路径</param>
-    /// <returns></returns>
     private AssetRef LoadAssetRef_Runtime<T>(string moduleName, string assetPath) where T : UnityEngine.Object
     {
         if (string.IsNullOrEmpty(assetPath))
@@ -202,22 +199,15 @@ public class AssetLoader : Singleton<AssetLoader>
             return null;
         }
 
-        // 先查找update路径下的容器，再查找base路径下容器
-
-        BaseOrUpdate witch = BaseOrUpdate.Update;
-
         Hashtable module2AssetRef;
 
-        if (update2Assets.TryGetValue(moduleName, out module2AssetRef) == false)
+        if (GlobalConfig.HotUpdate == true)
         {
-            witch = BaseOrUpdate.Base;
-
-            if (base2Assets.TryGetValue(moduleName, out module2AssetRef) == false)
-            {
-                Debug.LogError("未找到资源对应的模块：moduleName " + moduleName + " assetPath " + assetPath);
-
-                return null;
-            }
+            module2AssetRef = update2Assets[moduleName];
+        }
+        else
+        {
+            module2AssetRef = base2Assets[moduleName];
         }
 
         AssetRef assetRef = (AssetRef)module2AssetRef[assetPath];
@@ -240,7 +230,7 @@ public class AssetLoader : Singleton<AssetLoader>
         {
             if (oneBundleRef.bundle == null)
             {
-                string bundlePath = BundlePath(witch, moduleName, oneBundleRef.bundleInfo.bundle_name);
+                string bundlePath = BundlePath(oneBundleRef.witch, moduleName, oneBundleRef.bundleInfo.bundle_name);
 
                 oneBundleRef.bundle = AssetBundle.LoadFromFile(bundlePath);
             }
@@ -259,7 +249,7 @@ public class AssetLoader : Singleton<AssetLoader>
 
         if (bundleRef.bundle == null)
         {
-            bundleRef.bundle = AssetBundle.LoadFromFile(BundlePath(witch, moduleName, bundleRef.bundleInfo.bundle_name));
+            bundleRef.bundle = AssetBundle.LoadFromFile(BundlePath(bundleRef.witch, moduleName, bundleRef.bundleInfo.bundle_name));
         }
 
         if (bundleRef.children == null)

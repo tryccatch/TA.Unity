@@ -63,6 +63,8 @@ public class Downloader : Singleton<Downloader>
 
         if (downloadSize == 0)
         {
+            Clear(moduleConfig, removeList);
+
             return;
         }
 

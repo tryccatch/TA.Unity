@@ -23,11 +23,19 @@ public class BundleRef
     public List<AssetRef> children;
 
     /// <summary>
+    /// 记录这个BundleRef对应的AB文件需要从哪里加载
+    /// </summary>
+    public BaseOrUpdate witch;
+
+    /// <summary>
     /// BundleRef的构造函数
     /// </summary>
     /// <param name="bundleInfo"></param>
-    public BundleRef(BundleInfo bundleInfo)
+    /// <param name="witch"></param>
+    public BundleRef(BundleInfo bundleInfo, BaseOrUpdate witch)
     {
         this.bundleInfo = bundleInfo;
+
+        this.witch = witch;
     }
 }
