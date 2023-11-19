@@ -12,8 +12,8 @@ public class Main : MonoBehaviour
         ModuleConfig launchModule = new ModuleConfig()
         {
             moduleName = "Launch",
-            moduleVersion = "20210902121943",
-            moduleUrl = "http://192.168.0.7:8000"
+            moduleVersion = "20231119153456",
+            moduleUrl = "http://192.168.31.212:8000"
         };
 
         bool result = await ModuleManager.Instance.Load(launchModule);
@@ -47,7 +47,7 @@ public class Main : MonoBehaviour
     {
         Instance = this;
 
-        GlobalConfig.HotUpdate = false;
+        GlobalConfig.HotUpdate = true;
 
         GlobalConfig.BundleMode = true;
 
