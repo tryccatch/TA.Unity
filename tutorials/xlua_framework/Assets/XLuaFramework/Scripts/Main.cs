@@ -21,10 +21,23 @@ public class Main : MonoBehaviour
         if (result == true)
         {
             // 在这里 把代码控制权交给Lua 完毕！
+
             Debug.Log("Lua 代码开始...");
 
             AssetLoader.Instance.Clone("Launch", "Assets/GAssets/Launch/Sphere.prefab");
+
+            GameObject pizzaCat = AssetLoader.Instance.Clone("Launch", "Assets/GAssets/Launch/PizzaCat.prefab");
+
+            pizzaCat.GetComponent<SpriteRenderer>().sprite =
+                AssetLoader.Instance.CreateAsset<Sprite>("Launch", "Assets/GAssets/Launch/Sprite/header.png", pizzaCat);
         }
+    }
+
+    public void Update()
+    {
+        // 执行卸载策略
+
+        AssetLoader.Instance.Unload(AssetLoader.Instance.base2Assets);
     }
 
     /// <summary>
