@@ -12,7 +12,12 @@ using UnityEngine.Networking;
 /// </summary>
 public class Downloader : Singleton<Downloader>
 {
-    public async Task<bool> Download(ModuleConfig moduleConfig)
+    /// <summary>
+    /// 下载器唯一的对外API 下载指定模块
+    /// </summary>
+    /// <param name="moduleConfig"></param>
+    /// <returns></returns>
+    public async Task Download(ModuleConfig moduleConfig)
     {
         // 用来存放热更下来的资源的 本地路径
 
@@ -26,24 +31,39 @@ public class Downloader : Singleton<Downloader>
 
         request.downloadHandler = new DownloadHandlerFile(string.Format("{0}/{1}_temp.json", updatePath, moduleConfig.moduleName.ToLower()));
 
-        Debug.Log("下载到本地路径: " + updatePath);
+        Debug.Log("请求下载到本地路径: " + updatePath);
 
         await request.SendWebRequest();
 
         if (string.IsNullOrEmpty(request.error) == false)
         {
-            Debug.LogError($"下载模块{moduleConfig.moduleName}的AB配置文件：{request.error}");
+            Debug.LogWarning($"下载模块{moduleConfig.moduleName}的AB配置文件：{request.error}");
 
-            return false;
+            bool result = await ShowMessageBox("网络异常，请检查网络后点击 继续下载", "继续下载", "退出游戏");
+
+            if (result == false)
+            {
+                Application.Quit();
+
+                return;
+            }
+
+            await Download(moduleConfig);
+
+            return;
         }
 
-        List<BundleInfo> downloadList = await GetDownloadList(moduleConfig.moduleName);
+        Tuple<List<BundleInfo>, BundleInfo[]> tuple = await GetDownloadList(moduleConfig.moduleName);
+
+        List<BundleInfo> downloadList = tuple.Item1;
+
+        BundleInfo[] removeList = tuple.Item2;
 
         long downloadSize = CalculateSize(downloadList);
 
         if (downloadSize == 0)
         {
-            return true;
+            return;
         }
 
         bool boxResult = await ShowMessageBox(moduleConfig, downloadSize);
@@ -52,25 +72,23 @@ public class Downloader : Singleton<Downloader>
         {
             Application.Quit();
 
-            return false;
+            return;
         }
 
-        List<BundleInfo> remainList = await ExecuteDownload(moduleConfig, downloadList);
+        await ExecuteDownload(moduleConfig, downloadList);
 
-        if (remainList.Count > 0)
-        {
-            return false;
-        }
+        Clear(moduleConfig, removeList);
 
-        return true;
+        return;
     }
 
     /// <summary>
     /// 执行下载行为
     /// </summary>
-    /// <param name="bundleInfoList"></param>
-    /// <returns>返回的List包含的是还未下载的Bundle</returns>
-    private async Task<List<BundleInfo>> ExecuteDownload(ModuleConfig moduleConfig, List<BundleInfo> bundleList)
+    /// <param name="moduleConfig"></param>
+    /// <param name="bundleList"></param>
+    /// <returns></returns>
+    private async Task ExecuteDownload(ModuleConfig moduleConfig, List<BundleInfo> bundleList)
     {
         while (bundleList.Count > 0)
         {
@@ -96,15 +114,29 @@ public class Downloader : Singleton<Downloader>
             }
         }
 
-        return bundleList;
+        if (bundleList.Count > 0)
+        {
+            bool result = await ShowMessageBox("网络异常，请检查网络后点击 继续下载", "继续下载", "退出游戏");
+
+            if (result == false)
+            {
+                Application.Quit();
+
+                return;
+            }
+
+            await ExecuteDownload(moduleConfig, bundleList);
+
+            return;
+        }
     }
 
-    /// <summary>
-    /// 对于给定模块，返回其所有需要下载的BundleInfo组成的List
+    //// <summary>
+    /// 对于给定模块，返回其所有需要下载的BundleInfo组成的List和需要删除的本地Bundle数组
     /// </summary>
     /// <param name="moduleName"></param>
     /// <returns></returns>
-    private async Task<List<BundleInfo>> GetDownloadList(string moduleName)
+    private async Task<Tuple<List<BundleInfo>, BundleInfo[]>> GetDownloadList(string moduleName)
     {
         ModuleABConfig serverConfig = await AssetLoader.Instance.LoadAssetBundleConfig(BaseOrUpdate.Update, moduleName, moduleName.ToLower() + "_temp.json");
 
@@ -117,21 +149,23 @@ public class Downloader : Singleton<Downloader>
 
         // 注意：这里不用判断localConfig是否存在 本地的localConfig确实可能不存在，比如在此模块第一次热更新之前，本地update路径下啥都没有
 
-        List<BundleInfo> diffList = CalculateDiff(moduleName, localConfig, serverConfig);
-
-        return diffList;
+        return CalculateDiff(moduleName, localConfig, serverConfig);
     }
 
     /// <summary>
-    /// 通过两个AB资源配置文件，对比出有差异的Bundle
+    /// 通过两个AB资源配置文件，返回出有差异需要下载的Bundle列表和需要删除的本地Bundle数组
     /// </summary>
     /// <param name="moduleName"></param>
     /// <param name="localConfig"></param>
     /// <param name="serverConfig"></param>
     /// <returns></returns>
-    private List<BundleInfo> CalculateDiff(string moduleName, ModuleABConfig localConfig, ModuleABConfig serverConfig)
+    private Tuple<List<BundleInfo>, BundleInfo[]> CalculateDiff(string moduleName, ModuleABConfig localConfig, ModuleABConfig serverConfig)
     {
+        // 记录需要下载的bundle文件列表
+
         List<BundleInfo> bundleList = new List<BundleInfo>();
+
+        // 记录需要删除的本地bundle文件列表
 
         Dictionary<string, BundleInfo> localBundleDic = new Dictionary<string, BundleInfo>();
 
@@ -145,7 +179,8 @@ public class Downloader : Singleton<Downloader>
             }
         }
 
-        // 找到那些差异的bundle文件，放到bundleList容器中
+        // 1. 找到那些差异的bundle文件，放到bundleList容器中
+        // 2. 对于那些遗留在本地的无用的bundle文件，把它过滤在localBundleDic容器里
 
         foreach (BundleInfo bundleInfo in serverConfig.BundleArray.Values)
         {
@@ -161,37 +196,13 @@ public class Downloader : Singleton<Downloader>
             }
         }
 
-        string updatePath = GetUpdatePath(moduleName);
-
         // 对于那些遗留在本地的无用的bundle文件，要清除，不然本地文件越积累越多
 
         BundleInfo[] removeList = localBundleDic.Values.ToArray();
 
-        for (int i = removeList.Length - 1; i >= 0; i--)
-        {
-            BundleInfo bundleInfo = removeList[i];
+        // 返回 需要下载的Bundle列表和需要删除的本地Bundle数组
 
-            string filePath = string.Format("{0}/" + bundleInfo.bundle_name, updatePath);
-
-            File.Delete(filePath);
-        }
-
-        // 删除旧的配置文件
-
-        string oldFile = string.Format("{0}/{1}.json", updatePath, moduleName.ToLower());
-
-        if (File.Exists(oldFile))
-        {
-            File.Delete(oldFile);
-        }
-
-        // 用新的配置文件替代之
-
-        string newFile = string.Format("{0}/{1}_temp.json", updatePath, moduleName.ToLower());
-
-        File.Move(newFile, oldFile);
-
-        return bundleList;
+        return new Tuple<List<BundleInfo>, BundleInfo[]>(bundleList, removeList);
     }
 
     /// <summary>
@@ -295,5 +306,66 @@ public class Downloader : Singleton<Downloader>
         sizeStr += $"{b}[B]";
 
         return sizeStr;
+    }
+
+    /// <summary>
+    /// 模块热更新完成后的善后工作
+    /// </summary>
+    /// <param name="moduleConfig"></param>
+    /// <param name="removeList"></param>
+    private void Clear(ModuleConfig moduleConfig, BundleInfo[] removeList)
+    {
+        string moduleName = moduleConfig.moduleName;
+
+        string updatePath = GetUpdatePath(moduleName);
+
+        // 删除不需要的本地bundle文件列表
+
+        for (int i = removeList.Length - 1; i >= 0; i--)
+        {
+            BundleInfo bundleInfo = removeList[i];
+
+            string filePath = string.Format("{0}/" + bundleInfo.bundle_name, updatePath);
+
+            File.Delete(filePath);
+        }
+
+        // 删除旧的配置文件
+
+        string oldFile = string.Format("{0}/{1}.json", updatePath, moduleName.ToLower());
+
+        if (File.Exists(oldFile))
+        {
+            File.Delete(oldFile);
+        }
+
+        // 用新的配置文件替代
+
+        string newFile = string.Format("{0}/{1}_temp.json", updatePath, moduleName.ToLower());
+
+        File.Move(newFile, oldFile);
+    }
+
+    /// <summary>
+    /// 新增给网络失败时的弹出对话框
+    /// </summary>
+    /// <param name="messageInfo"></param>
+    /// <param name="first"></param>
+    /// <param name="second"></param>
+    /// <returns></returns>
+    private static async Task<bool> ShowMessageBox(string messageInfo, string first, string second)
+    {
+        MessageBox messageBox = new MessageBox(messageInfo, first, second);
+
+        MessageBox.BoxResult result = await messageBox.GetReplyAsync();
+
+        messageBox.Close();
+
+        if (result == MessageBox.BoxResult.First)
+        {
+            return true;
+        }
+
+        return false;
     }
 }
