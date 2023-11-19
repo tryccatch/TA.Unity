@@ -1,8 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Main : MonoBehaviour
 {
-    public void Awake()
+    public async void Awake()
     {
         InitGlobal();
 
@@ -10,15 +12,17 @@ public class Main : MonoBehaviour
         ModuleConfig launchModule = new ModuleConfig()
         {
             moduleName = "Launch",
-            moduleVersion = "20231119130924",
-            moduleUrl = "http://127.0.0.1:8000"
+            moduleVersion = "20210902121943",
+            moduleUrl = "http://192.168.0.7:8000"
         };
 
-        ModuleManager.Instance.Load(launchModule, (success) =>
+        bool result = await ModuleManager.Instance.Load(launchModule);
+
+        if (result == true)
         {
             // 在这里 把代码控制权交给Lua 完毕！
             Debug.Log("Lua 代码开始...");
-        });
+        }
     }
 
     /// <summary>
@@ -30,7 +34,7 @@ public class Main : MonoBehaviour
 
         GlobalConfig.HotUpdate = false;
 
-        GlobalConfig.BundleMode = false;
+        GlobalConfig.BundleMode = true;
 
         DontDestroyOnLoad(gameObject);
     }

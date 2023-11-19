@@ -1,4 +1,7 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -6,59 +9,33 @@ using UnityEngine;
 /// </summary>
 public class ModuleManager : Singleton<ModuleManager>
 {
-    /// <summary>
-    /// 加载一个模块 唯一对外API函数
-    /// </summary>
-    /// <param name="moduleConfig"></param>
-    /// <param name="moduleAction"></param>
-    public void Load(ModuleConfig moduleConfig, Action<bool> moduleAction)
+    public async Task<bool> Load(ModuleConfig moduleConfig)
     {
         if (GlobalConfig.HotUpdate == false)
         {
             if (GlobalConfig.BundleMode == false)
             {
-                moduleAction(true);
+                return true;
             }
             else
             {
-                LoadAssetBundleConfig(moduleConfig, moduleAction);
+                ModuleABConfig moduleABConfig = await AssetLoader.Instance.LoadAssetBundleConfig(moduleConfig.moduleName);
+
+                if (moduleABConfig != null)
+                {
+                    Debug.Log("模块包含的AB包总数量: " + moduleABConfig.BundleArray.Count);
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
         else
         {
-            Downloader.Instance.Download(moduleConfig, (downloadResult) =>
-            {
-                if (downloadResult == true)
-                {
-                    if (GlobalConfig.BundleMode == true)
-                    {
-                        LoadAssetBundleConfig(moduleConfig, moduleAction);
-                    }
-                    else
-                    {
-                        Debug.LogError("配置错误！HotUpdate == true && BundleMode == false");
-                    }
-                }
-                else
-                {
-                    Debug.LogError("下载失败！");
-                }
-            });
+            return await Downloader.Instance.Download(moduleConfig);
         }
-    }
-
-    private void LoadAssetBundleConfig(ModuleConfig moduleConfig, Action<bool> moduleAction)
-    {
-        AssetLoader.Instance.LoadAssetBundleConfig(moduleConfig.moduleName, (assetConfigResult) =>
-        {
-            if (assetConfigResult == true)
-            {
-                moduleAction(true);
-            }
-            else
-            {
-                Debug.LogError("LoadAssetBundleConfig 出错！");
-            }
-        });
     }
 }
