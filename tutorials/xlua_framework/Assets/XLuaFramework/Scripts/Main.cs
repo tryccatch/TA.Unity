@@ -22,6 +22,8 @@ public class Main : MonoBehaviour
         {
             // 在这里 把代码控制权交给Lua 完毕！
             Debug.Log("Lua 代码开始...");
+
+            AssetLoader.Instance.Clone("Launch", "Assets/GAssets/Launch/Sphere.prefab");
         }
     }
 

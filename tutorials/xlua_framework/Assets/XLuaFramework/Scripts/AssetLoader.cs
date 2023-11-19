@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -110,5 +111,181 @@ public class AssetLoader : Singleton<AssetLoader>
         }
 
         return Path2AssetRef;
+    }
+
+    /// <summary>
+    /// 克隆一个GameObject对象
+    /// </summary>
+    /// <param name="moduleName">模块的名字</param>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public GameObject Clone(string moduleName, string path)
+    {
+        AssetRef assetRef = LoadAssetRef<GameObject>(moduleName, path);
+
+        if (assetRef == null || assetRef.asset == null)
+        {
+            return null;
+        }
+
+        GameObject gameObject = UnityEngine.Object.Instantiate(assetRef.asset) as GameObject;
+
+        if (assetRef.children == null)
+        {
+            assetRef.children = new List<GameObject>();
+        }
+
+        assetRef.children.Add(gameObject);
+
+        return gameObject;
+    }
+
+    /// <summary>
+    /// 加载 AssetRef 对象
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="moduleName">模块名字</param>
+    /// <param name="assetPath">资源的相对路径</param>
+    /// <returns></returns>
+    private AssetRef LoadAssetRef<T>(string moduleName, string assetPath) where T : UnityEngine.Object
+    {
+#if UNITY_EDITOR
+        if (GlobalConfig.BundleMode == false)
+        {
+            return LoadAssetRef_Editor<T>(moduleName, assetPath);
+        }
+        else
+        {
+            return LoadAssetRef_Runtime<T>(moduleName, assetPath);
+        }
+#else
+        return LoadAssetRef_Runtime<T>(moduleName, assetPath);
+#endif
+    }
+
+    /// <summary>
+    /// 在编辑器模式下加载 AssetRef 对象
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="moduleName">模块名字</param>
+    /// <param name="assetPath">资源的相对路径</param>
+    /// <returns></returns>
+    private AssetRef LoadAssetRef_Editor<T>(string moduleName, string assetPath) where T : UnityEngine.Object
+    {
+#if UNITY_EDITOR
+        if (string.IsNullOrEmpty(assetPath))
+        {
+            return null;
+        }
+
+        AssetRef assetRef = new AssetRef(null);
+
+        assetRef.asset = AssetDatabase.LoadAssetAtPath<T>(assetPath);
+
+        return assetRef;
+#else
+        return null;
+#endif
+    }
+
+    /// <summary>
+    /// 在AB包模式下加载 AssetRef 对象
+    /// </summary>
+    /// <typeparam name="T">要加载的资源类型</typeparam>
+    /// <param name="moduleName">模块名字</param>
+    /// <param name="assetPath">资源的相对路径</param>
+    /// <returns></returns>
+    private AssetRef LoadAssetRef_Runtime<T>(string moduleName, string assetPath) where T : UnityEngine.Object
+    {
+        if (string.IsNullOrEmpty(assetPath))
+        {
+            return null;
+        }
+
+        Hashtable module2AssetRef;
+
+        bool moduleExsit = base2Assets.TryGetValue(moduleName, out module2AssetRef);
+
+        if (moduleExsit == false)
+        {
+            Debug.LogError("未找到资源对应的模块：moduleName " + moduleName + " assetPath " + assetPath);
+
+            return null;
+        }
+
+        AssetRef assetRef = (AssetRef)module2AssetRef[assetPath];
+
+        if (assetRef == null)
+        {
+            Debug.LogError("未找到资源：moduleName " + moduleName + " path " + assetPath);
+
+            return null;
+        }
+
+        if (assetRef.asset != null)
+        {
+            return assetRef;
+        }
+
+        // 1. 处理assetRef依赖的BundleRef列表
+
+        foreach (BundleRef oneBundleRef in assetRef.dependencies)
+        {
+            if (oneBundleRef.bundle == null)
+            {
+                string bundlePath = BundlePath(moduleName, oneBundleRef.bundleInfo.bundle_name);
+
+                oneBundleRef.bundle = AssetBundle.LoadFromFile(bundlePath);
+            }
+
+            if (oneBundleRef.children == null)
+            {
+                oneBundleRef.children = new List<AssetRef>();
+            }
+
+            oneBundleRef.children.Add(assetRef);
+        }
+
+        // 2. 处理assetRef属于的那个BundleRef对象
+
+        BundleRef bundleRef = assetRef.bundleRef;
+
+        if (bundleRef.bundle == null)
+        {
+            bundleRef.bundle = AssetBundle.LoadFromFile(BundlePath(moduleName, bundleRef.bundleInfo.bundle_name));
+        }
+
+        if (bundleRef.children == null)
+        {
+            bundleRef.children = new List<AssetRef>();
+        }
+
+        bundleRef.children.Add(assetRef);
+
+        // 3. 从bundle中提取asset
+
+        assetRef.asset = assetRef.bundleRef.bundle.LoadAsset<T>(assetRef.assetInfo.asset_path);
+
+        if (typeof(T) == typeof(GameObject) && assetRef.assetInfo.asset_path.EndsWith(".prefab"))
+        {
+            assetRef.isGameObject = true;
+        }
+        else
+        {
+            assetRef.isGameObject = false;
+        }
+
+        return assetRef;
+    }
+
+    /// <summary>
+    /// 工具函数 根据模块名字和bundle名字，返回其实际资源路径
+    /// </summary>
+    /// <param name="moduleName"></param>
+    /// <param name="bundleName"></param>
+    /// <returns></returns>
+    private string BundlePath(string moduleName, string bundleName)
+    {
+        return Application.streamingAssetsPath + "/" + moduleName + "/" + bundleName;
     }
 }
