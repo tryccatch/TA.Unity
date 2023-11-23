@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Collections;
 using System;
 
+# pragma warning disable 0618
+
 namespace XLuaTest
 {
     public class Coroutine_Runner : MonoBehaviour

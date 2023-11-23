@@ -13,6 +13,8 @@ using XLua;
 //using System.Reflection;
 //using System.Linq;
 
+# pragma warning disable 0618
+
 //配置的详细介绍请看Doc下《XLua的配置.doc》
 public static class ExampleGenConfig
 {
