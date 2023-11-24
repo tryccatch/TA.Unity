@@ -19,7 +19,7 @@ Shader "TA/03_Shader"
             struct v2f
             {
                 float4 position : SV_POSITION;
-                float3 temp : COLOR0;
+                float3 temp : COLOR0;   // 这个语义可以由用户自定义，一般存储颜色
             };
 
             v2f vert(a2v v)

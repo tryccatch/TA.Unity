@@ -16,7 +16,7 @@ Shader "TA/02_Shader"
             // 基本作用 -> 返回模型对应的屏幕上的每一个像素的颜色值
             #pragma fragment frag
 
-            // 通过语义告诉系统参数的作用 POSITION -> 传入模型空间顶点坐标 SV_POSITION -> 返回剪裁空间顶点坐标(ScreenView)
+            // 通过语义告诉系统参数的作用 POSITION -> 传入模型空间顶点坐标 SV_POSITION -> 返回剪裁空间顶点坐标(System Value)
             float4 vert(float4 v : POSITION) : SV_POSITION
             {
                 return UnityObjectToClipPos(v);
