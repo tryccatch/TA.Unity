@@ -1,88 +1,0 @@
-
-ô
-wives.protoproto.Wives"`
-WifeBase
-id (Rid
-name (	Rname
-intimacy (Rintimacy
-charm (Rcharm"`
-
-LockedWife
-id (Rid
-name (	Rname
-lockHint (	RlockHint
-hint (	Rhint"l
-WifeItem
-id (Rid
-icon (Ricon
-name (	Rname
-hint (	Rhint
-count (Rcount"
-	C2S_wives"Œ
-S2C_wives_ack
-value (Rvalue
-maxValue (RmaxValue$
-nextGetSecond (RnextGetSecond;
-unlockedGirls (2.proto.Wives.WifeBaseRunlockedGirls9
-lockedGirls (2.proto.Wives.LockedWifeRlockedGirls+
-items (2.proto.Wives.WifeItemRitems"Ã
-	WifeSkill
-id (Rid
-name (	Rname
-level (Rlevel
-curHint (	RcurHint
-nextHint (	RnextHint
-
-upLevelExp (R
-upLevelExp&
-unlockIntimacy	 (RunlockIntimacy"g
-WifeLinkSkill
-linkName (	RlinkName
-has (Rhas
-name (	Rname
-hints (	Rhints" 
-C2S_wifeDetail
-id (Rid"À
-S2C_wifeDetail_ack
-id (Rid
-hint (	Rhint$
-childrenCount (RchildrenCount(
-unlockMakeValue (RunlockMakeValue
-skillExp (RskillExp
-needGold	 (RneedGold"
-C2S_wifeSkill
-id (Rid"™
-S2C_wifeSkill_ack.
-skills (2.proto.Wives.WifeSkillRskills8
-	linkHeros (2.proto.Wives.WifeLinkSkillR	linkHeros
-skillExp (RskillExp"_
-C2S_makeOne
-id (Rid
-supper (Rsupper
-x (Rx
-notChild (RnotChild"±
-S2C_makeOne_ack
-id (Rid
-childSex (RchildSex
-
-childValue (R
-childValue
-hint (	Rhint(
-unlockMakeValue (RunlockMakeValue
-x (Rx
-needGold (RneedGold 
-addIntimate (RaddIntimate 
-addSkillExp	 (RaddSkillExp&
-childValueText
- (	RchildValueText"
-C2S_updateWifeTime"T
-S2C_updateWifeTime_ack
-value (Rvalue$
-nextGetSecond (RnextGetSecond";
-C2S_updateSkill
-id (Rid
-skillId (RskillId"s
-S2C_updateSkill_ack
-error (	Rerror*
-data (2.proto.Wives.WifeSkillRdata
-skillExp (RskillExpbproto3

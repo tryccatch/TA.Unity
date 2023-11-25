@@ -1,130 +1,0 @@
-
-á
-BattleHall.protoproto.BattleHall"é
-BattleHallOpponent
-name (	Rname
-head (Rhead
-level (Rlevel
-id (Rid
-value (Rvalue
-cloth (Rcloth"∞
-BattleHallHero
-id (Rid
-name (	Rname
-level (Rlevel
-	promotion (R	promotion
-grows (Rgrows
-attribue (Rattribue
-state (Rstate"
-C2S_battleHallInfo"Ë
-S2C_battleHallInfo
-heroId (RheroId
-hasGame (RhasGame@
-opponent (2$.proto.BattleHall.BattleHallOpponentRopponent
-lastTime (RlastTime
-item1 (Ritem1
-item2 (Ritem2
-canBuy (RcanBuy"
-C2S_battleHallGoInfo"Ë
-S2C_battleHallGoInfo6
-heros (2 .proto.BattleHall.BattleHallHeroRheros 
-opLiveCount (RopLiveCount
-
-opAllCount (R
-opAllCount
-opName (	RopName
-opValue (RopValue4
-self (2 .proto.BattleHall.BattleHallHeroRself
-hp (Rhp
-maxHp (RmaxHp
-	addAttack	 (R	addAttack
-addSkill
- (RaddSkill
-items (Ritems"
-selectedItem (RselectedItem
-	itemValue (R	itemValue
-value (Rvalue 
-continueWin (RcontinueWin"Y
-C2S_battleHallFight
-type (Rtype
-oppoId (RoppoId
-heroId (RheroId"√
-S2C_battleHallFight
-success (Rsuccess
-error (	Rerror:
-info (2&.proto.BattleHall.S2C_battleHallGoInfoRinfo@
-opponent (2$.proto.BattleHall.BattleHallOpponentRopponent".
-C2S_battleHallGo
-selected (Rselected"¯
-S2C_battleHallGo
-win (Rwin
-addValue (RaddValue
-addExp (RaddExp
-selectId (RselectId
-hp (Rhp
-attacks (Rattacks
-cirts (RcirtsB
-nextInfo	 (2&.proto.BattleHall.S2C_battleHallGoInfoRnextInfo"3
-C2S_battleHallBuyItem
-selected (Rselected"3
-S2C_battleHallBuyItem
-selected (Rselected"
-C2S_battleHallTop6"N
-S2C_battleHallTop68
-heroes (2 .proto.BattleHall.BattleHallHeroRheroes"d
-BattleHallTopScore
-id (Rid
-name (	Rname
-score (Rscore
-level (Rlevel"
-C2S_battleHallDayTop"å
-S2C_battleHallDayTop:
-datas (2$.proto.BattleHall.BattleHallTopScoreRdatas8
-self (2$.proto.BattleHall.BattleHallTopScoreRself"
-C2S_battleHallAllTop"å
-S2C_battleHallAllTop:
-datas (2$.proto.BattleHall.BattleHallTopScoreRdatas8
-self (2$.proto.BattleHall.BattleHallTopScoreRself"
-C2S_battleHallLog"ë
-BattleHallLog
-name (	Rname
-value (Rvalue
-heroId (RheroId
-count (Rcount
-score (Rscore
-time (Rtime"è
-BattleHallEnemy
-id (Rid
-name (	Rname
-level (Rlevel
-allValue (RallValue
-head (Rhead
-time (Rtime"É
-S2C_battleHallLog3
-logs (2.proto.BattleHall.BattleHallLogRlogs9
-enemys (2!.proto.BattleHall.BattleHallEnemyRenemys"*
-C2S_battleHallHeroes
-type (Rtype"P
-S2C_battleHallHeroes8
-heroes (2 .proto.BattleHall.BattleHallHeroRheroes"$
-C2S_battleHallFind
-id (Rid"û
-S2C_battleHallFind
-success (Rsuccess
-name (	Rname
-head (Rhead
-allValue (RallValue
-level (Rlevel
-cloth (Rcloth"≤
-BattleHallNotice
-time (Rtime
-userId (RuserId
-name (	Rname
-heroId (RheroId
-oppoName (	RoppoName
-count (Rcount
-isAll (RisAll",
-C2S_battleHallUpdateNotice
-id (Rid"X
-S2C_battleHallUpdateNotice:
-notice (2".proto.BattleHall.BattleHallNoticeRnoticebproto3

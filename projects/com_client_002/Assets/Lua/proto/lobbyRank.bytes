@@ -1,30 +1,0 @@
-
-˜
-lobbyRank.protoproto.LobbyRank"ž
-TopLobbyRankPlayer
-id (Rid
-name (	Rname
-level (Rlevel
-value (Rvalue
-intimacy (Rintimacy
-	gameLevel (	R	gameLevel"_
-LobbyRankOfMe
-value (Rvalue
-intimacy (Rintimacy
-	gameLevel (	R	gameLevel"R
-TopLobbyRankPlayers;
-player (2#.proto.LobbyRank.TopLobbyRankPlayerRplayer"
-C2S_ReqLobbyRankInfo"¨
-S2C_ResLobbyRankInfo>
-players (2$.proto.LobbyRank.TopLobbyRankPlayersRplayers
-visited (Rvisited6
-myRank (2.proto.LobbyRank.LobbyRankOfMeRmyRank"*
-C2S_ReqRankVisited
-index (Rindex"¦
-S2C_ResRankVisited
-	visitGold (R	visitGold
-visited (Rvisited
-name (	Rname
-head (Rhead
-level (Rlevel
-curCloth (RcurClothbproto3

@@ -1,94 +1,0 @@
-
-£
-BattleLevel.protoproto.BattleLevel"y
-BattleLevelOpponent
-name (	Rname
-head (Rhead
-level (Rlevel
-id (Rid
-value (Rvalue"Ë
-BattleLevelHero
-id (Rid
-name (	Rname
-level (Rlevel
-	promotion (R	promotion
-grows (Rgrows
-attribue (Rattribue
-state (Rstate
-quality (Rquality"
-C2S_BattleLevelInfo"¡
-S2C_BattleLevelInfo
-heroId (RheroId
-hasGame (RhasGameB
-opponent (2&.proto.BattleLevel.BattleLevelOpponentRopponent
-bigLevel (RbigLevel
-
-smallLevel (R
-smallLevel
-
-levelCount (R
-levelCount
-	oppoCount (R	oppoCount
-oppoLive (RoppoLive 
-maxBigLevel	 (RmaxBigLevel$
-maxSmallLevel
- (RmaxSmallLevel
-canCount (RcanCount
-maxCount (RmaxCount"
-C2S_BattleLevelGoInfo"‘
-S2C_BattleLevelGoInfo8
-heros (2".proto.BattleLevel.BattleLevelHeroRheros 
-opLiveCount (RopLiveCount
-
-opAllCount (R
-opAllCount
-opName (	RopName
-opValue (RopValue6
-self (2".proto.BattleLevel.BattleLevelHeroRself
-hp (Rhp
-maxHp (RmaxHp
-	addAttack	 (R	addAttack
-addSkill
- (RaddSkill
-items (Ritems"
-selectedItem (RselectedItem
-	itemValue (R	itemValue
-value (Rvalue 
-continueWin (RcontinueWin"
-selectedHero (RselectedHero"Z
-C2S_BattleLevelFight
-type (Rtype
-oppoId (RoppoId
-heroId (RheroId"È
-S2C_BattleLevelFight
-success (Rsuccess
-error (	Rerror<
-info (2(.proto.BattleLevel.S2C_BattleLevelGoInfoRinfoB
-opponent (2&.proto.BattleLevel.BattleLevelOpponentRopponent"/
-C2S_BattleLevelGo
-selected (Rselected"û
-S2C_BattleLevelGo
-win (Rwin
-addValue (RaddValue
-addExp (RaddExp
-selectId (RselectId
-hp (Rhp
-attacks (Rattacks
-cirts (RcirtsD
-nextInfo	 (2(.proto.BattleLevel.S2C_BattleLevelGoInfoRnextInfo"4
-C2S_BattleLevelBuyItem
-selected (Rselected"4
-S2C_BattleLevelBuyItem
-selected (Rselected"e
-BattleLevelTopScore
-id (Rid
-name (	Rname
-score (Rscore
-level (Rlevel"
-C2S_BattleLevelAllTop"‘
-S2C_BattleLevelAllTop<
-datas (2&.proto.BattleLevel.BattleLevelTopScoreRdatas:
-self (2&.proto.BattleLevel.BattleLevelTopScoreRself"
-C2S_BattleLevelHeroes"S
-S2C_BattleLevelHeroes:
-heroes (2".proto.BattleLevel.BattleLevelHeroRheroesbproto3

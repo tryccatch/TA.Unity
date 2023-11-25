@@ -1,45 +1,0 @@
-
-¢
-school.protoproto.School"º
-
-SchoolHero
-id (Rid
-name (	Rname
-allGrows (RallGrows
-skillExp (RskillExp
-maxLearn (RmaxLearn
-studying (Rstudying
-canstudy (Rcanstudy"ú
-SeatInfo
-haveHero (RhaveHero
-heroId (RheroId
-value (Rvalue
-double (Rdouble
-finished (Rfinished
-name (	Rname"
-C2S_ReqSchoolSeatInfo"ó
-S2C_ResSchoolSeatInfo2
-seatInfo (2.proto.School.SeatInfoRseatInfo
-seatCost (RseatCost
-goldCost (RgoldCost
-gold (Rgold"
-C2S_ReqSchoolHeroList"è
-S2C_ResSchoolHeroList8
-
-schoolHero (2.proto.School.SchoolHeroR
-schoolHero
-getGrows (RgetGrows 
-getSkillExp (RgetSkillExp"
-C2S_ReqAddSeat"9
-C2S_ReqSelectHero
-id (Rid
-index (Rindex"*
-C2S_ReqDoubleLearn
-index (Rindex"*
-C2S_ReqStudyReward
-index (Rindex"ö
-S2C_ResStudyReward 
-growsReward (RgrowsReward 
-skillReward (RskillReward"
-allattribues (Rallattribues
-	growsName (	R	growsNamebproto3
