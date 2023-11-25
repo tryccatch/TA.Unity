@@ -1,4 +1,4 @@
-Shader "TA/04_Vertex_Diffuse"
+Shader "TA/05_Diffuse_Fragment"
 {
     Properties
     {
@@ -27,35 +27,38 @@ Shader "TA/04_Vertex_Diffuse"
             struct v2f
             {
                 float4 position : SV_POSITION;
-                float3 color : COLOR;
+                float3 worldNormalDir : COLOR;
             };
 
             v2f vert(a2v v)
             {
                 v2f f;
+
                 f.position = UnityObjectToClipPos(v.vertex);
-
-                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.rgb;
-
-                fixed3 normalDir = normalize(mul(v.normal, (float3x3)unity_WorldToObject));
-
-                fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);  //光方向
-
-                fixed3 diffuse = _LightColor0.rgb * max(0, dot(normalDir,lightDir)) * _Diffuse.rgb; 
-
-                f.color = diffuse + ambient;
-
+                
+                f.worldNormalDir = mul(v.normal, (float3x3)unity_WorldToObject);
+                
                 return f;
             }
 
             float4 frag(v2f f) : SV_Target
             {
-                return fixed4(f.color, 1);
+                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.rgb;
+
+                fixed3 normalDir = normalize(f.worldNormalDir);
+
+                fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);  // 光方向
+
+                fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * max(0, dot(normalDir,lightDir));     // 漫反射颜色
+
+                fixed3 tempColor = diffuse + ambient;
+
+                return fixed4(tempColor, 1);
             }
 
             ENDCG
         }
     }
 
-    Fallback "VertexLit"
+    Fallback "Diffuse"
 }
