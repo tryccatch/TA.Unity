@@ -1,58 +1,83 @@
-Shader "Unlit/River"
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "TA/Rever"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
+        _MainTex ("Main Tex", 2D) = "white" {}
+        _Color ("Color Tint", Color) = (1, 1, 1, 1)
+        _Magnitude ("Distortion Magnitude", Float) = 1
+        _Frequency ("Distortion Frequency", Float) = 1
+        _InvWaveLength ("Distortion Inverse Wave Length", Float) = 10
+        _Speed ("Speed", Float) =0.5
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
-        LOD 100
+        Tags { "Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent" "DisableBatching" = "True" }
 
         Pass
         {
+            Tags { "LingtMode" ="ForwardBase" }
+
+            ZWrite Off
+            Blend SrcAlpha OneMinusSrcAlpha
+            Cull Off
+
             CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-            // make fog work
-            #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
 
-            struct appdata
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile_fog
+
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
+            fixed3 _Color;
+            float _Magnitude;
+            float _Frequency;
+            float _InvWaveLength;
+            float _Speed;
+
+            struct a2v
             {
                 float4 vertex : POSITION;
-                float2 uv : TEXCOORD0;
+                float4 texcoord : TEXCOORD0;
             };
 
             struct v2f
             {
+                float4 pos : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                UNITY_FOG_COORDS(1)
-                float4 vertex : SV_POSITION;
             };
 
-            sampler2D _MainTex;
-            float4 _MainTex_ST;
-
-            v2f vert (appdata v)
+            v2f vert(a2v v)
             {
-                v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                UNITY_TRANSFER_FOG(o,o.vertex);
-                return o;
+                v2f f;
+
+                float4 offset;
+                offset.xyz = float3(0.0, 0.0, 0.0);
+                offset.x = sin(_Frequency * _Time.y + v.vertex * _InvWaveLength + v.vertex.y * _InvWaveLength + v.vertex.z * _InvWaveLength) * _Magnitude;
+                f.pos = UnityObjectToClipPos(v.vertex + offset);
+
+                f.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+                f.uv += float2(0.0, _Time.y * _Speed);
+
+                return f;
             }
 
-            fixed4 frag (v2f i) : SV_Target
+            float4 frag(v2f f) : SV_Target
             {
-                // sample the texture
-                fixed4 col = tex2D(_MainTex, i.uv);
-                // apply fog
-                UNITY_APPLY_FOG(i.fogCoord, col);
-                return col;
+                fixed4 c = tex2D(_MainTex, f.uv);
+                c.rgb *= _Color.rgb;
+
+                return c;
             }
+
+
             ENDCG
         }
     }
+
+    Fallback "Transparent/VertexLit"
 }
