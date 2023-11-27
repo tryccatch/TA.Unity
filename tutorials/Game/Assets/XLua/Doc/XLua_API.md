@@ -1,6 +1,9 @@
-## C# API
+# C# API
+
 ### LuaEnv类
+
 #### object[] DoString(string chunk, string chunkName = "chuck", LuaTable env = null)
+
 描述：
 
     执行一个代码块。
@@ -14,7 +17,7 @@
 
     代码块里return语句的返回值;
     比如：return 1, “hello”，DoString返回将包含两个object的数组， 一个是double类型的1， 一个是string类型的“hello”
-    
+
 例如：
 
     LuaEnv luaenv = new LuaEnv();
@@ -38,7 +41,7 @@
 
     代表该代码块的delegate或者LuaFunction类；
 
-#### LuaTable Global;
+#### LuaTable Global
 
 描述：
 
@@ -64,7 +67,7 @@
 #### void Dispose()
 
 描述：
-    
+
     Dispose该LuaEnv。
 
 > LuaEnv的使用建议：全局就一个实例，并在Update中调用GC方法，完全不需要时调用Dispose
@@ -76,7 +79,6 @@
 描述：
 
     获取在key下，类型为T的value，如果不存在或者类型不匹配，返回null；
-
 
 #### T GetInPath<T>(string path)
 
@@ -111,7 +113,7 @@
 #### void SetMetaTable(LuaTable metaTable)
 
 描述：
-    
+
     设置metaTable为table的metatable
 
 ### LuaFunction类
@@ -155,28 +157,26 @@
 描述：
 
     访问一个C#静态成员
-    
+
 例如：
 
     Print(CS.UnityEngine.Vector3.one)
 
-
 #### CS.namespace.enum.field
 
 描述：
-    
+
     访问一个枚举值
 
 #### typeof函数
 
 描述：
-    
+
     类似C#里头的typeof关键字，返回一个Type对象，比如GameObject.AddComponent其中一个重载需要一个Type参数
 
 例如：
 
     newGameObj:AddComponent(typeof(CS.UnityEngine.ParticleSystem))
-
 
 #### 无符号64位支持
 
@@ -201,9 +201,9 @@
 ##### uint64.remainder
 
 描述：
-    
+
     无符号数取模。
-    
+
 ##### uint64.parse
 
 描述：
@@ -212,20 +212,22 @@
 #### xlua.structclone
 
 描述：
-    
+
     克隆一个c#结构体
-	
-#### xlua.private_accessible(class)		
+
+#### xlua.private_accessible(class)  
+
 描述：
-    
+
     让一个类的私有字段，属性，方法等可用
 例子：
 
-    xlua.private_accessible(CS.UnityEngine.GameObject)	
+    xlua.private_accessible(CS.UnityEngine.GameObject) 
 
 #### xlua.get_generic_method
+
 描述：
-    
+
     获取一个泛型方法
 例子：
 
@@ -248,11 +250,11 @@ bar(2, nil)
 #### cast函数
 
 描述：
-    
+
     指明以特定的接口访问对象，这在实现类无法访问的时候（比如internal修饰）很有用，这时可以这么来（假设下面的calc对象实现了C#的PerformentTest.ICalc接口）
 
 例子：
-    
+
     cast(calc, typeof(CS.PerformentTest.ICalc))
 
 然后就木有其它API了
@@ -272,7 +274,6 @@ bar(2, nil)
 
 ### 基本数据类型
 
-
 |C#类型|Lua类型|
 |-|-|
 |sbyte，byte，short，ushort，int，uint，double，char，float|number|
@@ -291,24 +292,24 @@ bar(2, nil)
 |class或者 struct的实例|userdata，table|
 |method，delegate|function|
 
-#### LuaTable：
+#### LuaTable
 
 C#侧指明从Lua侧输入（包括C#方法的输入参数或者Lua方法的返回值）LuaTable类型，则要求Lua侧为table。或者Lua侧的table，在C#侧未指明类型的情况下转换成LuaTable。
 
-#### LuaFunction：
+#### LuaFunction
 
 C#侧指明从Lua侧输入（包括C#方法的输入参数或者Lua方法的返回值）LuaFunction类型，则要求Lua侧为function。或者Lua侧的function，在C#侧未指明类型的情况下转换成LuaFunction。
 
-#### LuaUserData：
+#### LuaUserData
 
 对应非C# Managered对象的lua userdata。
 
-#### class或者 struct的实例:
+#### class或者 struct的实例
 
 从C#传一个class或者struct的实例，将映射到Lua的userdata，并通过__index访问该userdata的成员
 C#侧指明从Lua侧输入指定类型对象，Lua侧为该类型实例的userdata可以直接使用；如果该指明类型有默认构造函数，Lua侧是table则会自动转换，转换规则是：调用构造函数构造实例，并用table对应字段转换到c#对应值后赋值各成员。
 
-#### method， delegate：
+#### method， delegate
 
 成员方法以及delegate都是对应lua侧的函数。
 C#侧的普通参数以及引用参数，对应lua侧函数参数；C#侧的返回值对应于Lua的第一个返回值；引用参数和out参数则按序对应于Lua的第2到第N个参数。

@@ -1042,10 +1042,12 @@ namespace CSObjectWrapEditor
 #if !XLUA_GENERAL
         static void clear(string path)
         {
+            var tempPath = path.Remove(path.Length - 1);
             if (Directory.Exists(path))
             {
-                Directory.Delete(path, true);
-                AssetDatabase.DeleteAsset(path.Substring(path.IndexOf("Assets") + "Assets".Length));
+                Directory.Delete(tempPath, true);
+                AssetDatabase.DeleteAsset(tempPath.Substring(tempPath.IndexOf("Assets")) + ".meta");
+                AssetDatabase.DeleteAsset(tempPath.Substring(tempPath.IndexOf("Assets")));
 
                 AssetDatabase.Refresh();
             }
